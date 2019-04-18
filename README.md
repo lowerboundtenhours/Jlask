@@ -1,5 +1,6 @@
 # Jlask 
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b81ad71174be406a8e1a89488a2a0212)](https://app.codacy.com/app/amjltc295/Jlask?utm_source=github.com&utm_medium=referral&utm_content=lowerboundtenhours/Jlask&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.com/lowerboundtenhours/Jlask.svg?branch=master)](https://travis-ci.com/lowerboundtenhours/Jlask)
 [![Coverage Status](https://coveralls.io/repos/github/lowerboundtenhours/Jlask/badge.svg?branch=master)](https://coveralls.io/github/lowerboundtenhours/Jlask?branch=master)
 
