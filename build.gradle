@@ -2,8 +2,6 @@ buildscript {
     dependencies {
         classpath 'org.jacoco:jacoco-maven-plugin:0.8.2'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
-        // classpath 'org.sonarqube.gradle:gradle-sonarqube-plugin:1.0'
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7'
     }
     repositories {
         mavenCentral()
@@ -15,13 +13,8 @@ buildscript {
     }
 }
 
-//plugins {
-//    id "org.sonarqube" version "2.6"
-//}
-
 apply plugin: 'application'
 apply plugin: 'jacoco'
-apply plugin: 'org.sonarqube'
 apply plugin: 'com.github.kt3k.coveralls'
 
 group 'fr.uparis10.pascalpoizat'
@@ -65,14 +58,6 @@ jacocoTestReport {
         xml.enabled = true // coveralls plugin depends on xml format report
         html.enabled = true
         html.destination = file("${buildDir}/jacocoHtml")
-    }
-}
-
-sonarqube {
-    properties {
-        //property "sonar.projectName", "PROJECT NAME"
-        //property "sonar.projectKey", "PROJECT KEY"
-        property "sonar.jacoco.reportPaths", "${buildDir}/jacoco/test.exec"
     }
 }
 
