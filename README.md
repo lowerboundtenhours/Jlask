@@ -12,6 +12,10 @@ Flask in Java
 
 ## Run
 
+## Disclaimer
+
+This project is partially based on [pascalpoizat/template-java-project](https://github.com/pascalpoizat/template-java-project)
+
 ## Authors
 
 Ya-Liang Chang (Allen) [amjltc295](https://github.com/amjltc295)
