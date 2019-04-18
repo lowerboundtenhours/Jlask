@@ -1,0 +1,99 @@
+buildscript {
+    dependencies {
+        classpath 'org.jacoco:jacoco-maven-plugin:0.8.2'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
+        // classpath 'org.sonarqube.gradle:gradle-sonarqube-plugin:1.0'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+        // you can also use this for your local cache:
+        // mavenLocal()
+    }
+}
+
+//plugins {
+//    id "org.sonarqube" version "2.6"
+//}
+
+apply plugin: 'application'
+apply plugin: 'jacoco'
+apply plugin: 'org.sonarqube'
+apply plugin: 'com.github.kt3k.coveralls'
+
+group 'fr.uparis10.pascalpoizat'
+version '0.1'
+
+dependencies {
+    testCompile "org.testng:testng:6.9.10"
+    compile "org.apache.logging.log4j:log4j-api:2.5"
+    compile "org.apache.logging.log4j:log4j-core:2.5"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.5.0"
+}
+
+repositories {
+    mavenCentral()
+    // you can also use this for your local cache:
+    // mavenLocal()
+}
+
+mainClassName = 'fr.paris10.pascalpoizat.templates.javaproject.Principal'
+
+defaultTasks 'run'
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+test {
+    useTestNG()
+    include '**'
+}
+
+jacoco {
+  toolVersion = '0.8.2'
+  reportsDir = file("${buildDir}/reports/jacoco") // this is the default
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+        html.destination = file("${buildDir}/jacocoHtml")
+    }
+}
+
+sonarqube {
+    properties {
+        //property "sonar.projectName", "PROJECT NAME"
+        //property "sonar.projectKey", "PROJECT KEY"
+        property "sonar.jacoco.reportPaths", "${buildDir}/jacoco/test.exec"
+    }
+}
+
+// Added to send coverage information to codacy
+// see https://github.com/codacy/codacy-coverage-reporter
+configurations { codacy }
+repositories {
+    maven { url "https://jitpack.io" }
+    maven { url "http://dl.bintray.com/typesafe/maven-releases" }
+}
+dependencies {
+    codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
+}
+task sendCoverageToCodacy(type: JavaExec, dependsOn: jacocoTestReport) {
+    main = "com.codacy.CodacyCoverageReporter"
+    classpath = configurations.codacy
+    args = [
+            "report",
+            "-l",
+            "Java",
+            "-r",
+            "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    ]
+}
