@@ -1,3 +1,8 @@
+# See https://support.codacy.com/hc/en-us/articles/207279819-Coverage to get codacy project token and https://docs.travis-ci.com/user/environment-variables/ to encrypt it
+env:
+  matrix:
+    secure: "Zpm+8JGVL32a70AFVfxsi/1HhpDFODJiHoLHkZ1rgvurmAKP/nRUSgwhHr4vBwR2RshmM8CoOTmGaC/X5vNLnxGbB/NbrNXqeU9Jt42dOYI2q23RaQlXHf5EQJr9Ck6bSIFwLSdIM8B4xEONVvmr36bQ1YVG5VgHYYuiEsDpSCsS+uD4jPab0Ig1A1dcz94ZanrdRAVAf15qcXFTt1275x4UEG5X8r8joWhdHT1m9pvvVgw6ZJ3R538wbBHLlJTanhwZ6oQflEAjhZ6OpZ8sDqpVDbu2/QV0ILPRFvX7sr3F2K5G0wvti0BMM4j5ubVdb/DbnAK+vNJOY8yhK3QXNuWupY5Fv5q67GKozOID/C3/AQyL90Nd8vzIrl5RDSUTnxikrdjckCXfgWqk9P+UG8zZamkvFqTNwYoTcbImz0zdny1Wgm+FjNE7xkxmobums+IIGkUoiTmRABmhNn+czDS5pKscnH6FDWK36GmAEvDQk+59GAAp+Kpo2UnDGgCbPeIUbDHjLbIRwG4R1wtwWuExeXBQ6GU3z4rzGIg30mKXesyAuQR6i9HJzG3tRSO29QT2pWiXl2z8R2DmLRLZah0F4cgndC6Vh7VTh2vVJ1ne6ImFDVSRTN53cv4l+etXdeMqA4CoEbZdCM6zns2BN6Ys6aDIYHZbJqNsE+2/vxE="
+
 language: java
 
 sudo: false
