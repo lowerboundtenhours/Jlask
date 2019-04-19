@@ -1,84 +1,48 @@
+apply plugin: 'idea'
+
+ext {
+  log4jVersion = '2.9.1'
+}
+
 buildscript {
-    dependencies {
-        classpath 'org.jacoco:jacoco-maven-plugin:0.8.2'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
-    }
-    repositories {
-        mavenCentral()
-        maven {
-            url 'https://plugins.gradle.org/m2/'
-        }
-        // you can also use this for your local cache:
-        // mavenLocal()
-    }
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+  }
 }
 
-apply plugin: 'application'
-apply plugin: 'jacoco'
-apply plugin: 'com.github.kt3k.coveralls'
-
-group 'fr.uparis10.pascalpoizat'
-version '0.1'
-
-dependencies {
-    testCompile "org.testng:testng:6.9.10"
-    compile "org.apache.logging.log4j:log4j-api:2.5"
-    compile "org.apache.logging.log4j:log4j-core:2.5"
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.5.0"
+allprojects {
+  repositories {
+    mavenLocal()
+    mavenCentral() // maven { url: 'http://jcenter.bintray.com' }
+  }
 }
 
-repositories {
-    mavenCentral()
-    // you can also use this for your local cache:
-    // mavenLocal()
+apply from: file('gradle/check.gradle')
+// apply from: file('gradle/heroku/clean.gradle')
+
+subprojects {
+  apply plugin: 'com.github.johnrengelman.shadow'
+  apply plugin: 'java'
+
+  group = "io.jeffchao.${rootProject.name}"
+
+  dependencies {
+    implementation 'com.google.guava:guava:23.0'
+
+    testImplementation 'junit:junit:4.12'
+
+    compile "org.apache.logging.log4j:log4j-api:$log4jVersion"
+    compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+    compile "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
+
+    testCompile 'org.mockito:mockito-core:2.11.0'
+
+  }
+
+  // apply from: file("$rootProject.projectDir/gradle/heroku/stage.gradle")
+
 }
 
-mainClassName = 'fr.paris10.pascalpoizat.templates.javaproject.Principal'
-
-defaultTasks 'run'
-
-jar {
-    manifest {
-        attributes 'Main-Class': mainClassName
-    }
-}
-
-test {
-    useTestNG()
-    include '**'
-}
-
-jacoco {
-  toolVersion = '0.8.2'
-  reportsDir = file("${buildDir}/reports/jacoco") // this is the default
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-        html.destination = file("${buildDir}/jacocoHtml")
-    }
-}
-
-// Added to send coverage information to codacy
-// see https://github.com/codacy/codacy-coverage-reporter
-configurations { codacy }
-repositories {
-    maven { url "https://jitpack.io" }
-    maven { url "http://dl.bintray.com/typesafe/maven-releases" }
-}
-dependencies {
-    codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
-}
-task sendCoverageToCodacy(type: JavaExec, dependsOn: jacocoTestReport) {
-    main = "com.codacy.CodacyCoverageReporter"
-    classpath = configurations.codacy
-    args = [
-            "report",
-            "-l",
-            "Java",
-            "-r",
-            "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-    ]
-}
