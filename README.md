@@ -9,8 +9,17 @@
 Flask in Java
 
 ## Build
+```
+./gradlew build
+```
 
 ## Run
+
+## Fix style
+We use [google-java-format](https://github.com/google/google-java-format). One could use gradle to fix style errors:
+```
+./gradlew goJF
+```
 
 ## Disclaimer
 

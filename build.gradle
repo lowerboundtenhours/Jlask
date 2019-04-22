@@ -2,6 +2,7 @@ buildscript {
     dependencies {
         classpath 'org.jacoco:jacoco-maven-plugin:0.8.2'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
+        classpath "gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.8"
     }
     repositories {
         mavenCentral()
@@ -16,6 +17,7 @@ buildscript {
 apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: "com.github.sherter.google-java-format"
 
 group 'tw.edu.ntu.lowerbound10hours'
 version '0.1'
