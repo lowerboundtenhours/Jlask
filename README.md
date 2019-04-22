@@ -16,10 +16,12 @@ Flask in Java
 ## Run
 
 ## Fix style
-We use [google-java-format](https://github.com/google/google-java-format). One could use gradle to fix style errors:
+We use [google-java-format](https://github.com/google/google-java-format). One could use gradle to fix style errors (**please stash or commit changes first!**):
 ```
+# NOTE: please commit first!
 ./gradlew goJF
 ```
+See https://github.com/sherter/google-java-format-gradle-plugin for details.
 
 ## Disclaimer
 
