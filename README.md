@@ -6,7 +6,10 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/88819ccd3f7c4624b397221615827236)](https://www.codacy.com/app/amjltc295/Jlask?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lowerboundtenhours/Jlask&amp;utm_campaign=Badge_Grade)
 [![Coverage Status](https://coveralls.io/repos/github/lowerboundtenhours/Jlask/badge.svg?branch=master)](https://coveralls.io/github/lowerboundtenhours/Jlask?branch=master)
 
+<img src='./doc/Jlask.png' width="400">
+
 Flask in Java
+
 
 ## Build
 ```
