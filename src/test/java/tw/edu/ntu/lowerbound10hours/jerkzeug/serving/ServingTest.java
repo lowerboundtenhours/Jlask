@@ -1,4 +1,4 @@
-package tw.edu.ntu.lowerbound10hours.jerkzeug;
+package tw.edu.ntu.lowerbound10hours.jerkzeug.serving;
 
 import static org.testng.Assert.*;
 
@@ -13,7 +13,7 @@ public class ServingTest {
   @org.testng.annotations.Test
   public void testMakeServer() throws Exception {
     InetAddress host = InetAddress.getByName("127.0.0.1");
-    int port = 8000;
+    int port = 8001;
     BaseWSGIServer server = Serving.makeServer(host, port);
     assertEquals(server.getPort(), port);
     assertEquals(server.getHost(), host);
