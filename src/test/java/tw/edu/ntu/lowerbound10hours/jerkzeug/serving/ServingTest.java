@@ -18,4 +18,12 @@ public class ServingTest {
     assertEquals(server.getPort(), port);
     assertEquals(server.getHost(), host);
   }
+
+  @org.testng.annotations.Test
+  public void testServeForever() throws Exception {
+    InetAddress host = InetAddress.getByName("127.0.0.1");
+    int port = 8002;
+    BaseWSGIServer server = Serving.makeServer(host, port);
+    server.serveForever();
+  }
 }
