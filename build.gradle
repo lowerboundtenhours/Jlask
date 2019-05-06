@@ -18,6 +18,8 @@ apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: "com.github.sherter.google-java-format"
+apply plugin: 'war'
+apply from: 'https://raw.github.com/gretty-gradle-plugin/gretty/master/pluginScripts/gretty.plugin'
 
 group 'tw.edu.ntu.lowerbound10hours'
 version '0.1'
