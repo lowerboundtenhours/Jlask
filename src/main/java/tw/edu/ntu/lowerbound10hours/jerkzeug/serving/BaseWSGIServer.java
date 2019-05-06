@@ -1,7 +1,10 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug.serving;
 
-import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
@@ -23,16 +26,21 @@ public class BaseWSGIServer {
     this.host = host;
     this.port = port;
     this.app = app;
-    //TODO: handle address family
+    // TODO: handle address family
     this.server = HttpServer.create(new InetSocketAddress(host, port), 0);
+    this.server.createContext("/test", new MyHandler());
+    this.server.setExecutor(null); // creates a default executor
   }
 
   public void serveForever() throws Exception {
-    //TODO: is this forever?
+    System.out.printf("Server started on %s:%s\n", host, port);
     this.shutdownSignal = false;
     try {
       this.server.start();
-      //TODO: handle keyboard interrupt
+      while (!Thread.currentThread().isInterrupted()) Thread.sleep(100);
+      // TODO: handle keyboard interrupt
+    } catch (InterruptedException e) {
+
     } finally {
       this.server.stop(0);
     }
@@ -50,12 +58,22 @@ public class BaseWSGIServer {
     this.handler = handler;
   }
 
-  //TODO: 
-  //passthrough_errors
-  //ssl_context
-  //fd
+  static class MyHandler implements HttpHandler {
+    public void handle(HttpExchange t) throws IOException {
+      String response = t.getRequestURI().getPath();
+      t.sendResponseHeaders(200, response.length());
+      OutputStream os = t.getResponseBody();
+      os.write(response.getBytes());
+      os.close();
+    }
+  }
+
+  // TODO:
+  // passthrough_errors
+  // ssl_context
+  // fd
   //
-  //log()
-  //handle_error()
-  //get_request
+  // log()
+  // handle_error()
+  // get_request
 }
