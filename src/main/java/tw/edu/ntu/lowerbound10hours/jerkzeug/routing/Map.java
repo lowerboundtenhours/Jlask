@@ -3,6 +3,7 @@ package tw.edu.ntu.lowerbound10hours.jerkzeug.routing;
 import java.util.List;
 
 public class Map {
+    String defaultSubDomain = "";
     public Map(List<RuleFactory> rules) {
 
     }
