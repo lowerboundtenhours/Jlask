@@ -3,6 +3,8 @@ buildscript {
         classpath 'org.jacoco:jacoco-maven-plugin:0.8.2'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath "gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.8"
+        classpath "gradle.plugin.org.gretty:gretty:2.3.1"
+        classpath (group: 'com.sahlbach.gradle', name: 'gradle-jetty-eclipse-plugin', version: '1.9.+')
     }
     repositories {
         mavenCentral()
@@ -18,8 +20,7 @@ apply plugin: 'application'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: "com.github.sherter.google-java-format"
-apply plugin: 'war'
-apply from: 'https://raw.github.com/gretty-gradle-plugin/gretty/master/pluginScripts/gretty.plugin'
+apply plugin: "org.gretty"
 
 group 'tw.edu.ntu.lowerbound10hours'
 version '0.1'
@@ -29,6 +30,9 @@ dependencies {
     compile "org.apache.logging.log4j:log4j-api:2.5"
     compile "org.apache.logging.log4j:log4j-core:2.5"
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.5.0"
+    // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server
+    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.18.v20190429'
+
 }
 
 repositories {
