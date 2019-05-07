@@ -1,15 +1,13 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug.serving;
 
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 
 public class BaseWSGIServer {
