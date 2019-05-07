@@ -1,12 +1,15 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug.serving;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 
 public class BaseWSGIServer {
@@ -17,8 +20,8 @@ public class BaseWSGIServer {
   private int port;
   private Application app;
 
-  private HttpServer server;
-  private HttpHandler handler = new WSGIRequestHandler();
+  private Server server;
+  private AbstractHandler handler;
 
   private boolean shutdownSignal = false;
 
@@ -27,9 +30,10 @@ public class BaseWSGIServer {
     this.port = port;
     this.app = app;
     // TODO: handle address family
-    this.server = HttpServer.create(new InetSocketAddress(host, port), 0);
-    this.server.createContext("/test", new MyHandler());
-    this.server.setExecutor(null); // creates a default executor
+    this.server = new Server(new InetSocketAddress(host, port));
+    this.handler = new WSGIRequestHandler(app);
+    // this.server.createContext("/test", new MyHandler());
+    // this.server.setExecutor(null); // creates a default executor
   }
 
   public void serveForever() throws Exception {
@@ -38,11 +42,10 @@ public class BaseWSGIServer {
     try {
       this.server.start();
       while (!Thread.currentThread().isInterrupted()) Thread.sleep(100);
-      // TODO: handle keyboard interrupt
     } catch (InterruptedException e) {
-
+      System.out.printf("Keyboard InterruptedException; server exit");
     } finally {
-      this.server.stop(0);
+      this.server.join();
     }
   }
 
@@ -54,11 +57,11 @@ public class BaseWSGIServer {
     return this.port;
   }
 
-  public void setHandler(HttpHandler handler) {
+  public void setHandler(AbstractHandler handler) {
     this.handler = handler;
   }
 
-  static class MyHandler implements HttpHandler {
+  static class TestHandler implements HttpHandler {
     public void handle(HttpExchange t) throws IOException {
       String response = t.getRequestURI().getPath();
       t.sendResponseHeaders(200, response.length());
