@@ -30,18 +30,17 @@ public class BaseWSGIServer {
     // TODO: handle address family
     this.server = new Server(new InetSocketAddress(host, port));
     this.handler = new WSGIRequestHandler(app);
+    this.server.setHandler(this.handler);
     // this.server.createContext("/test", new MyHandler());
     // this.server.setExecutor(null); // creates a default executor
   }
 
   public void serveForever() throws Exception {
-    System.out.printf("Server started on %s:%s\n", host, port);
     this.shutdownSignal = false;
     try {
       this.server.start();
       while (!Thread.currentThread().isInterrupted()) Thread.sleep(100);
     } catch (InterruptedException e) {
-      System.out.printf("Keyboard InterruptedException; server exit");
     } finally {
       this.server.join();
     }
