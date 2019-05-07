@@ -13,7 +13,7 @@ public class Write {
   }
 
   public void write(String data) {
-    //TODO: handle header_sent
+    // TODO: handle header_sent
     this.writer.printf(data);
   }
 }

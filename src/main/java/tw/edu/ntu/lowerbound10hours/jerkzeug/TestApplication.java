@@ -1,7 +1,6 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug;
 
 import java.util.Map;
-import java.util.ArrayList;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
 
 public class TestApplication extends Application {
@@ -10,6 +9,5 @@ public class TestApplication extends Application {
     startResponse.startResponse(200, null, false);
     startResponse.getWrite().write("This is a test response from TestApplication");
     return ApplicationIter;
-
   }
 }

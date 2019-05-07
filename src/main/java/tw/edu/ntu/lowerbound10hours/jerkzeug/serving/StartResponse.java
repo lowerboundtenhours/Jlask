@@ -1,9 +1,7 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug.serving;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import org.eclipse.jetty.http.HttpHeader;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 
 public class StartResponse {
   private Write write;
@@ -14,16 +12,17 @@ public class StartResponse {
     this.handler = handler;
   }
 
-  public Write startResponse(Integer status, ArrayList<HttpHeader> responseHeaders, Boolean excInfo) {
+  public Write startResponse(
+      Integer status, ArrayList<HttpHeader> responseHeaders, Boolean excInfo) {
     if (excInfo) {
       try {
         if (this.handler.checkHeadersSent()) {
-          //TODO: reraise excInfo
+          // TODO: reraise excInfo
         }
       } finally {
-        //TODO: set excInfo to None
+        // TODO: set excInfo to None
       }
-    } else { 
+    } else {
       assert this.handler.checkHeadersSet();
     }
     this.handler.addHeadersSet(status);
