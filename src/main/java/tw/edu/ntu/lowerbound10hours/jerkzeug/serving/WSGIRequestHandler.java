@@ -68,21 +68,14 @@ public class WSGIRequestHandler extends AbstractHandler {
 
 		try {
       this.execute(this.app);
+      //TODO: check where to put these three lines for Jetty
+      response.setContentType("text/html; charset=utf-8");
+      response.setStatus(HttpServletResponse.SC_OK);
+      baseRequest.setHandled(true);
     } catch (Exception e) {
       //TODO: handle connection drop 
       //TODO: handle other exceptions
     }
-
-    /*
-    response.setContentType("text/html; charset=utf-8");
-    response.setStatus(HttpServletResponse.SC_OK);
-
-    PrintWriter out = response.getWriter();
-
-    out.println("<h1> hi2 </h1>");
-
-    baseRequest.setHandled(true);
-    */
 
   }
 

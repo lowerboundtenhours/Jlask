@@ -28,6 +28,15 @@ public class StartResponse {
     }
     this.handler.addHeadersSet(status);
     this.handler.addHeadersSet(responseHeaders);
+
+    return this.write;
+  }
+
+  public WSGIRequestHandler getHandler() {
+    return this.handler;
+  }
+
+  public Write getWrite() {
     return this.write;
   }
 }
