@@ -90,7 +90,7 @@ public class WSGIRequestHandler extends AbstractHandler {
   }
 
   private void execute(Application app) {
-    //TODO ApplicationIter type is unknown
+    //TODO[important]: ApplicationIter type is unknown
     ApplicationIter<String> applicationIter = app.call(this.environ, this.startResponse);
     try {
       applicationIter.forEach((data) -> {
