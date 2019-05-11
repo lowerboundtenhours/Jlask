@@ -5,13 +5,16 @@ import org.eclipse.jetty.http.HttpHeader;
 
 public class StartResponse {
   private Write write;
-  private WSGIRequestHandler handler;
+  private WsgiRequestHandler handler;
 
-  public StartResponse(Write write, WSGIRequestHandler handler) {
+  public StartResponse(Write write, WsgiRequestHandler handler) {
     this.write = write;
     this.handler = handler;
   }
 
+  /**
+   * Model the start_response() inner function in Werkzeug serving.py run_wsgi()
+   */
   public Write startResponse(
       Integer status, ArrayList<HttpHeader> responseHeaders, Boolean excInfo) {
     if (excInfo) {
@@ -31,7 +34,7 @@ public class StartResponse {
     return this.write;
   }
 
-  public WSGIRequestHandler getHandler() {
+  public WsgiRequestHandler getHandler() {
     return this.handler;
   }
 

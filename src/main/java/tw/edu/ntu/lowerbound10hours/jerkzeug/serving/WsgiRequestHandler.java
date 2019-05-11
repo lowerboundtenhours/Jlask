@@ -12,7 +12,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.ApplicationIter;
 
-public class WSGIRequestHandler extends AbstractHandler {
+public class WsgiRequestHandler extends AbstractHandler {
   private Application app;
   private Map<String, Object> environ;
   private Write write;
@@ -21,10 +21,14 @@ public class WSGIRequestHandler extends AbstractHandler {
   private ArrayList<Object> headersSet;
   private ArrayList<Object> headersSent;
 
-  public WSGIRequestHandler(Application app) {
+  public WsgiRequestHandler(Application app) {
     this.app = app;
   }
 
+  /**
+   * The entry point when Jetty get a request.
+   * This function will finally call app.call(), writen by the user
+   */
   public void handle(
       String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -38,7 +42,7 @@ public class WSGIRequestHandler extends AbstractHandler {
     try {
       this.handleOneRequest(target, baseRequest, request, response);
     } catch (Exception e) {
-
+      e.printStackTrace();
     }
   }
 
@@ -50,10 +54,10 @@ public class WSGIRequestHandler extends AbstractHandler {
     //
 
     // TODO: Check if request is parsed by Jetty
-    this.runWSGI(target, baseRequest, request, response);
+    this.runWsgi(target, baseRequest, request, response);
   }
 
-  private void runWSGI(
+  private void runWsgi(
       String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     // TODO: handle 100-continue in header
