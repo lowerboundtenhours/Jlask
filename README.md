@@ -18,7 +18,14 @@ Flask in Java
 
 ## Run
 
-## Fix style
+## See all checkstyle error
+1. Download the checkstyle jar file from https://github.com/checkstyle/checkstyle/releases
+2. Run 
+```
+java -jar checkstyle-8.19-all.jar -c checkstyle.xml <filenames to check>
+```
+
+## Fix style (only fixable ones)
 We use [google-java-format](https://github.com/google/google-java-format). One could use gradle to fix style errors (**please stash or commit changes first!**):
 ```
 # NOTE: please commit first!
