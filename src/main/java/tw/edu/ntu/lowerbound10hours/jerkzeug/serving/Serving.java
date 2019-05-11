@@ -3,9 +3,7 @@ package tw.edu.ntu.lowerbound10hours.jerkzeug.serving;
 import java.net.InetAddress;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 
-/**
- * Model serving.py in Python Werkzeug.
- */
+/** Model serving.py in Python Werkzeug. */
 public class Serving {
   public static BaseWsgiServer makeServer(InetAddress host, int port, Application app)
       throws Exception {
@@ -13,10 +11,7 @@ public class Serving {
     return server;
   }
 
-  /**
-   * Model serving.py run_simple() in Python Werkzeug.
-   * Create a server and run it forever.
-   */
+  /** Model serving.py run_simple() in Python Werkzeug. Create a server and run it forever. */
   public static void runSimple(InetAddress hostname, int port, Application application)
       throws Exception {
     // TODO

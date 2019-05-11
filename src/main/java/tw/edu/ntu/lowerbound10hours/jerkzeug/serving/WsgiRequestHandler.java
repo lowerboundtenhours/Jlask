@@ -26,8 +26,8 @@ public class WsgiRequestHandler extends AbstractHandler {
   }
 
   /**
-   * The entry point when Jetty get a request.
-   * This function will finally call app.call(), writen by the user
+   * The entry point when Jetty get a request. This function will finally call app.call(), writen by
+   * the user
    */
   public void handle(
       String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)

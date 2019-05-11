@@ -12,9 +12,7 @@ public class StartResponse {
     this.handler = handler;
   }
 
-  /**
-   * Model the start_response() inner function in Werkzeug serving.py run_wsgi()
-   */
+  /** Model the start_response() inner function in Werkzeug serving.py run_wsgi() */
   public Write startResponse(
       Integer status, ArrayList<HttpHeader> responseHeaders, Boolean excInfo) {
     if (excInfo) {

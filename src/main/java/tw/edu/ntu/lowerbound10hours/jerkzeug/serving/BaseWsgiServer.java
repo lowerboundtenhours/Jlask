@@ -10,9 +10,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 
-/**
- * A WSGI server based on Jetty.
- */
+/** A WSGI server based on Jetty. */
 public class BaseWsgiServer {
   protected boolean multithread = false;
   protected boolean multiprocess = false;
@@ -26,9 +24,7 @@ public class BaseWsgiServer {
 
   private boolean shutdownSignal = false;
 
-  /**
-   * Initialize the server given address and application.
-   */
+  /** Initialize the server given address and application. */
   public BaseWsgiServer(InetAddress host, int port, Application app) throws Exception {
     this.host = host;
     this.port = port;
@@ -42,8 +38,8 @@ public class BaseWsgiServer {
   }
 
   /**
-   * Start the jetty server and listen to requests.
-   * Note that this will cause an infinte loop that could only be terminated by ctrl+c.
+   * Start the jetty server and listen to requests. Note that this will cause an infinte loop that
+   * could only be terminated by ctrl+c.
    */
   public void serveForever() throws Exception {
     this.shutdownSignal = false;

@@ -1,9 +1,7 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug.serving;
 
-import org.testng.annotations.Test;
-import static org.testng.Assert.assertEquals;
-
 import java.net.InetAddress;
+import org.testng.annotations.Test;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.TestApplication;
 

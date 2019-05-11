@@ -1,8 +1,7 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug.serving;
 
-import org.testng.annotations.Test;
-
 import java.net.InetAddress;
+import org.testng.annotations.Test;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.TestApplication;
 
