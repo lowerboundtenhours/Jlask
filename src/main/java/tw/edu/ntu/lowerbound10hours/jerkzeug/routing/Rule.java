@@ -35,9 +35,13 @@ public class Rule implements RuleFactory {
         /** compile the regular expression and stores it */
         ArrayList<String> regex_parts = new ArrayList<String>();
         for (ParseResult result: Utilities.parseRuleHelper(this.rule)) {
-            regex_parts.add(String.format(
-                "(?<%s>%s)", result.variable, result.converter.regex
-            ));
+            // if converter is null, it's a static url part
+            if (result.converter == null) regex_parts.add(result.variable);
+            else {
+                regex_parts.add(String.format(
+                    "(?<%s>%s)", result.variable, result.converter.regex
+                ));
+            }
         }
         regex_parts.add("\\|");
         // the second part "(?<!/)(?P<__suffix__>/?)" currently not supported.
@@ -52,17 +56,56 @@ public class Rule implements RuleFactory {
         
         return null;
     }
+
+    public Map getMap() {
+        return this.map;
+    }
+    public String getRule() {
+        return this.rule;
+    }
+    public Pattern getRegex() {
+        return this.regex;
+    }
 }
 
 
 class ParseResult {
     public Converter converter;
-    public String[] arguments;
+    public String arguments;
     public String variable;
+    public ParseResult(Converter converter, String arguments, String variable) {
+        this.converter = converter;
+        this.arguments = arguments;
+        this.variable = variable;
+    }
 }
 class Utilities {
+    static private final Pattern rule_re = Pattern.compile(
+        "(?<static>[^<]*)<(?:(?<converter>[a-zA-Z_][a-zA-Z0-9_]*)(?:\\((?<args>.*?)\\))?\\:)?(?<variable>[a-zA-Z_][a-zA-Z0-9_]*)>"
+    );
+    static private final String[] targets = {"static", "converter", "args", "variable"};
     static public ArrayList<ParseResult> parseRuleHelper(String rule) {
-        return null;
+        Matcher matcher = rule_re.matcher(rule);
+        ArrayList<ParseResult> results = new ArrayList<ParseResult>();
+        while (matcher.find()) {
+            String static_part = matcher.group("static");
+            Converter converter = newConverter(matcher.group("converter"));
+            String args = matcher.group("args");
+            String variable = matcher.group("variable");
+
+            if (static_part != null) results.add(new ParseResult(null, null, static_part));
+            results.add(new ParseResult(converter, args, static_part));
+        }
+        return results;
+    }
+    static private Converter newConverter(String converterStr) {
+        if (converterStr == null) return null;
+        if (converterStr.equals("int")) {
+            return new IntegerConverter();
+        } else {
+            // TODO: implement a converter not found exception?
+            return new IntegerConverter();
+        }
     }
 }
 
