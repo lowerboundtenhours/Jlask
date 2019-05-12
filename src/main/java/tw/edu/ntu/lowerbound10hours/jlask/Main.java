@@ -4,10 +4,13 @@ import java.net.InetAddress;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.TestApplication;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
+import tw.edu.ntu.lowerbound10hours.jinjava.Demo;
 
 public class Main {
   /** A example for Jlask. */
   public static void main(String[] args) throws Exception {
+    Demo demo = new Demo();
+    demo.run();
     InetAddress host = InetAddress.getByName("127.0.0.1");
     int port = 8013;
     Application testApp = new TestApplication();
