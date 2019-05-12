@@ -2,6 +2,8 @@ package tw.edu.ntu.lowerbound10hours.jerkzeug.routing;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,8 +61,16 @@ public class Rule implements RuleFactory {
          * is assembled by the Map. If matched, return converted values in a dict.
          * Otherwise null will be returned.
          */
-        
-        return null;
+        Matcher matcher = this.regex.matcher(rule);
+        if(matcher.find()) {
+            HashMap<String, Integer> ret = new HashMap<String, Integer>();
+            Set<String> groupNames = this.getNamedGroupCandidates(this.regex);
+            for (String groupName: groupNames) {
+                ret.put(groupName, Integer.parseInt(matcher.group(groupName)));
+            }
+            return ret;
+        }
+        else return null;
     }
 
     public Map getMap() {
@@ -71,6 +81,15 @@ public class Rule implements RuleFactory {
     }
     public Pattern getRegex() {
         return this.regex;
+    }
+	private Set<String> getNamedGroupCandidates(Pattern regexPattern) {
+        String regex = regexPattern.pattern();
+        Set<String> namedGroups = new TreeSet<String>();
+        Matcher m = Pattern.compile("\\(\\?<([a-zA-Z][a-zA-Z0-9]*)>").matcher(regex);
+        while (m.find()) {
+            namedGroups.add(m.group(1));
+        }
+        return namedGroups;
     }
 }
 
@@ -94,6 +113,7 @@ class RuleParseResult {
     }
 }
 
+// Helper class for parsing rule to segments
 class RuleParser {
     private final Pattern rule_re = Pattern.compile(
             "(?<static>[^<]*)<(?:(?<converter>[a-zA-Z_][a-zA-Z0-9_]*)(?:\\((?<args>.*?)\\))?\\:)?(?<variable>[a-zA-Z_][a-zA-Z0-9_]*)>"
