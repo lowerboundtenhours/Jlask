@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class Rule implements RuleFactory {
     public String rule;
     public String endpoint;
-    public String subDomain = null;
+    public String subdomain = null;
     private Map map = null;
     private Pattern regex;
 
@@ -16,9 +16,9 @@ public class Rule implements RuleFactory {
         this.rule = string;
         this.endpoint = endpoint;
     }
-    public Rule(String string, String endpoint, String subDomain) {
+    public Rule(String string, String endpoint, String subdomain) {
         this.rule = string;
-        this.subDomain = subDomain;
+        this.subdomain = subdomain;
         this.endpoint = endpoint;
     }
     @Override
@@ -31,7 +31,7 @@ public class Rule implements RuleFactory {
     public void bind(Map map, boolean rebind) {
         if (this.map != null && rebind) throw new RuntimeException("Already bound.");
         this.map = map;
-        if (this.subDomain == null) this.subDomain = map.defaultSubDomain;
+        if (this.subdomain == null) this.subdomain = map.defaultSubdomain;
         this.compile();
     }
 
@@ -73,7 +73,6 @@ public class Rule implements RuleFactory {
         return this.regex;
     }
 }
-
 
 class RuleParseResult {
     public RegexConverter converter;
