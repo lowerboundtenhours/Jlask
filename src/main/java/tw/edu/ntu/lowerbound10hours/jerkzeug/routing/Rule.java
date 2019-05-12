@@ -7,16 +7,19 @@ import java.util.regex.Pattern;
 
 public class Rule implements RuleFactory {
     public String rule;
+    public String endpoint;
     public String subDomain = null;
     private Map map = null;
     private Pattern regex;
 
-    public Rule(String string, Object endpoint) {
+    public Rule(String string, String endpoint) {
         this.rule = string;
+        this.endpoint = endpoint;
     }
-    public Rule(String string, Object endpoint, String subDomain) {
+    public Rule(String string, String endpoint, String subDomain) {
         this.rule = string;
         this.subDomain = subDomain;
+        this.endpoint = endpoint;
     }
     @Override
     public ArrayList<Rule> getRules() {
