@@ -1,3 +1,9 @@
+package tw.edu.ntu.lowerbound10hours.jlask.session;
+
+import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
+import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
+import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
+
 public class SessionInterface {
     public SessionInterface() {
     }

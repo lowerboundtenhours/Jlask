@@ -1,6 +1,6 @@
-import java.util.*;
+package tw.edu.ntu.lowerbound10hours.jlask.session;
 
-class Session {
+public class Session {
     
     public Session() {
 

@@ -1,4 +1,7 @@
+package tw.edu.ntu.lowerbound10hours.jlask;
+
 import java.util.ArrayList;
+
 public abstract class View {
 
     /*
