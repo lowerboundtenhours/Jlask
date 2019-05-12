@@ -10,7 +10,8 @@ import java.util.regex.Pattern;
 public class Rule implements RuleFactory {
     public String rule;
     public String endpoint;
-    public String subdomain = null;
+    public String subdomain;
+    public String host;
     private Map map = null;
     private Pattern regex;
 
@@ -18,10 +19,11 @@ public class Rule implements RuleFactory {
         this.rule = string;
         this.endpoint = endpoint;
     }
-    public Rule(String string, String endpoint, String subdomain) {
+    public Rule(String string, String endpoint, String subdomain, String host) {
         this.rule = string;
-        this.subdomain = subdomain;
         this.endpoint = endpoint;
+        this.subdomain = subdomain;
+        this.host = host;
     }
     @Override
     public ArrayList<Rule> getRules() {
@@ -39,20 +41,24 @@ public class Rule implements RuleFactory {
 
     public void compile() {
         /** compile the regular expression and stores it */
-        ArrayList<String> regex_parts = new ArrayList<String>();
+        ArrayList<String> regexParts = new ArrayList<String>();
+
+        if (this.map.hostMatching) regexParts.add(this.host);
+        else regexParts.add(this.subdomain);
+        regexParts.add("\\|");
+
         RuleParser ruleParser = new RuleParser();
         for (RuleParseResult result: ruleParser.parse(this.rule)) {
             // if converter is null, it's a static url part
-            if (result.converter == null) regex_parts.add(result.variable);
+            if (result.converter == null) regexParts.add(result.variable);
             else {
-                regex_parts.add(String.format(
+                regexParts.add(String.format(
                     "(?<%s>%s)", result.variable, result.converter.getRegex()
                 ));
             }
         }
         // the second part "(?<!/)(?P<__suffix__>/?)" currently not supported.
-        // regex_parts.add("\\|");
-        String regex = String.format("^%s", String.join("", regex_parts));
+        String regex = String.format("^%s", String.join("", regexParts));
         this.regex = Pattern.compile(regex);
     }
 
@@ -61,8 +67,8 @@ public class Rule implements RuleFactory {
          * is assembled by the Map. If matched, return converted values in a dict.
          * Otherwise null will be returned.
          */
-        Matcher matcher = this.regex.matcher(rule);
-        if(matcher.find()) {
+        Matcher matcher = this.regex.matcher(path);
+        if(matcher.matches()) {
             HashMap<String, Integer> ret = new HashMap<String, Integer>();
             Set<String> groupNames = this.getNamedGroupCandidates(this.regex);
             for (String groupName: groupNames) {
@@ -83,6 +89,8 @@ public class Rule implements RuleFactory {
         return this.regex;
     }
 	private Set<String> getNamedGroupCandidates(Pattern regexPattern) {
+        /**  Find the names of named groups cause Java regex does not support to do so
+         */
         String regex = regexPattern.pattern();
         Set<String> namedGroups = new TreeSet<String>();
         Matcher m = Pattern.compile("\\(\\?<([a-zA-Z][a-zA-Z0-9]*)>").matcher(regex);
@@ -137,7 +145,6 @@ class RuleParser {
             // When the whole rule is static
             results.add(new RuleParseResult(null, null, rule));
         }
-        System.out.println("parsed results: " + results);
         return results;
     }
     private RegexConverter newConverter(String converterStr) {

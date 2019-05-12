@@ -1,6 +1,7 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug.routing;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import org.testng.annotations.Test;
@@ -27,31 +28,29 @@ public class RuleTest{
         assertNotNull(rule.getRegex());
     }
 
+    private Map getMapWithRule(Rule rule) {
+        ArrayList<RuleFactory> rules = new ArrayList<RuleFactory>();
+        rules.add(rule);
+        return new Map(rules);
+    }
     @Test
     public void testCompileRegex() {
         Rule rule = new Rule("/about/<int:year>/<int:month>", "about");
-        rule.compile();
-        Pattern ans = Pattern.compile("^/about/(?<year>-?\\d+)/(?<month>-?\\d+)");
-        assertEquals(rule.getRegex().pattern(), ans.pattern());
+        Map map = this.getMapWithRule(rule);
+        Pattern answer = Pattern.compile("^\\|/about/(?<year>-?\\d+)/(?<month>-?\\d+)");
+        assertEquals(rule.getRegex().pattern(), answer.pattern());
     }
-    // public void compile() {
-    //     /** compile the regular expression and stores it */
-    //     ArrayList<String> regex_parts = new ArrayList<String>();
-    //     for (ParseResult result: Utilities.parseRuleHelper(this.rule)) {
-    //         regex_parts.add(String.format(
-    //             "(?<%s>%s)", result.variable, result.converter.regex
-    //         ));
-    //     }
-    //     regex_parts.add("\\|");
-    //     // the second part "(?<!/)(?P<__suffix__>/?)" currently not supported.
-    //     String regex = String.format("^%s", String.join("", regex_parts));
-    //     this.regex = Pattern.compile(regex);
-    // }
-    // public HashMap<String, Integer> match(String path) {
-    //     /**Check if the rule matched a given path in the form "subdomain|/path" and
-    //      * is assembled by the Map. If matched, return converted values in a dict.
-    //      * Otherwise null will be returned.
-    //      */
-    //     return null;
-    // }
+
+    @Test
+    public void testMatch() {
+        Rule rule = new Rule("/about/<int:year>/<int:month>", "about");
+        Map map = this.getMapWithRule(rule);
+
+        HashMap<String, Integer> matchedResult = rule.match("|/about/1996/11");
+
+        HashMap<String, Integer> answer = new HashMap<>();
+        answer.put("year", new Integer(1996));
+        answer.put("month", new Integer(11));
+        assertEquals(matchedResult, answer);
+    }
 }

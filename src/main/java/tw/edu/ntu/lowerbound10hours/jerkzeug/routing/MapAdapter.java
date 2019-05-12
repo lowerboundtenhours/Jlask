@@ -17,21 +17,26 @@ public class MapAdapter {
         this.pathInfo = pathInfo;
         this.defaultMethod = defaultMethod;
     }
-    public Pair<Rule, HashMap<String, Integer>> match() {
-        return null;
+    public Pair<String, HashMap<String, Integer>> match(String pathInfo) {
+        return this.match(pathInfo, this.defaultMethod.toUpperCase());
     }
-    public Pair<Rule, HashMap<String, Integer>> match(String pathInfo, String method) {
+    public Pair<String, HashMap<String, Integer>> match(String pathInfo, String method) {
+        /** Search through all rules in the bound map, return the first rule
+         * that match this pathInfo and its corresponding arguments.
+         */
         StringBuilder sb = new StringBuilder();
         if (this.map.hostMatching) sb.append(this.serverName);
         else sb.append(this.subdomain);
-        sb.append("|").append(this.pathInfo);
+        sb.append("|");
+        sb.append(pathInfo);
         String path = sb.toString();
+
 
         for (Rule rule: this.map.rules) {
             HashMap<String, Integer> returnValue = rule.match(path);
             if (returnValue == null) continue;
             // TODO: raise RequestSlash or RequestRedirect under some circumstances
-            return new Pair<>(rule, returnValue);
+            return new Pair<>(rule.endpoint, returnValue);
         }
         throw new RuntimeException("All rules not matched");  // TODO: use a custom NotFound excpetion.
     }
