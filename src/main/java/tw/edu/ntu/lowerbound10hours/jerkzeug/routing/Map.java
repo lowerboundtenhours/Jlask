@@ -11,6 +11,7 @@ public class Map {
   public String defaultSubdomain = "";
   public boolean hostMatching = false;
 
+  /** The map class stores all the URL rules and some configuration parameters. */
   public Map(List<RuleFactory> ruleFactories, String defaultSubdomain, boolean hostMatching) {
     for (RuleFactory ruleFactory : ruleFactories) {
       this.add(ruleFactory);
@@ -27,8 +28,9 @@ public class Map {
     for (Rule rule : ruleFactory.getRules()) {
       rule.bind(this, false);
       this.rules.add(rule);
-      if (!this.rulesByEndpoint.containsKey(rule.endpoint))
+      if (!this.rulesByEndpoint.containsKey(rule.endpoint)) {
         this.rulesByEndpoint.put(rule.endpoint, new ArrayList<Rule>());
+      }
       this.rulesByEndpoint.get(rule.endpoint).add(rule);
     }
     this.remap = true;

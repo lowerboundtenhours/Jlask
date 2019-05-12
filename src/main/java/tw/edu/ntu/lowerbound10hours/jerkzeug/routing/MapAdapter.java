@@ -6,8 +6,17 @@ import javafx.util.Pair;
 public class MapAdapter {
 
   private Map map;
-  private String serverName, scriptName, subdomain, urlScheme, pathInfo, defaultMethod;
+  private String serverName;
+  private String scriptName;
+  private String subdomain;
+  private String urlScheme;
+  private String pathInfo;
+  private String defaultMethod;
 
+  /**
+   * Returned by :meth:`Map.bind` or :meth:`Map.bind_to_environ` and does the URL matching and
+   * building based on runtime information.
+   */
   public MapAdapter(
       Map map,
       String serverName,
@@ -29,21 +38,26 @@ public class MapAdapter {
     return this.match(pathInfo, this.defaultMethod.toUpperCase());
   }
 
+  /**
+   * Search through all rules in the bound map, return the first rule that match this pathInfo and
+   * its corresponding arguments.
+   */
   public Pair<String, HashMap<String, Integer>> match(String pathInfo, String method) {
-    /**
-     * Search through all rules in the bound map, return the first rule that match this pathInfo and
-     * its corresponding arguments.
-     */
     StringBuilder sb = new StringBuilder();
-    if (this.map.hostMatching) sb.append(this.serverName);
-    else sb.append(this.subdomain);
+    if (this.map.hostMatching) {
+      sb.append(this.serverName);
+    } else {
+      sb.append(this.subdomain);
+    }
     sb.append("|");
     sb.append(pathInfo);
     String path = sb.toString();
 
     for (Rule rule : this.map.rules) {
       HashMap<String, Integer> returnValue = rule.match(path);
-      if (returnValue == null) continue;
+      if (returnValue == null) {
+        continue;
+      }
       // TODO: raise RequestSlash or RequestRedirect under some circumstances
       return new Pair<>(rule.endpoint, returnValue);
     }
