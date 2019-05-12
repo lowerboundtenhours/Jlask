@@ -1,7 +1,6 @@
 package tw.edu.ntu.lowerbound10hours.jlask;
 
 import java.net.InetAddress;
-import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 
 public class Main {
   /** A example for Jlask. */
