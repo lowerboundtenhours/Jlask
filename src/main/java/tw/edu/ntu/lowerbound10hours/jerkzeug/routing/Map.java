@@ -24,7 +24,7 @@ public class Map {
     this(ruleFactories, "", false);
   }
 
-  private void add(RuleFactory ruleFactory) {
+  public void add(RuleFactory ruleFactory) {
     for (Rule rule : ruleFactory.getRules()) {
       rule.bind(this, false);
       this.rules.add(rule);

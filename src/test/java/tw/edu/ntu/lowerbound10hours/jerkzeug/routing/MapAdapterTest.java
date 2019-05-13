@@ -13,8 +13,10 @@ public class MapAdapterTest {
     rules.add(new Rule("/", "index"));
     rules.add(new Rule("/downloads/", "downloads/index"));
     rules.add(new Rule("/downloads/<int:id>", "downloads/show"));
-    rules.add(new Rule("/date/<int:year>/<int:month>/<int:date>", "date"));
+
     Map map = new Map(rules);
+    map.add(new Rule("/date/<int:year>/<int:month>/<int:date>", "date"));
+
     MapAdapter urls = map.bind("example.com");
     return urls;
   }
