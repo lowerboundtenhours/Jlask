@@ -24,6 +24,9 @@ public class Map {
     this(ruleFactories, "", false);
   }
 
+  /** Use passed ruleFactory to created rules and put them into this map.
+   * All rules created is bound to this map (therefore compiled)
+   */
   public void add(RuleFactory ruleFactory) {
     for (Rule rule : ruleFactory.getRules()) {
       rule.bind(this, false);
