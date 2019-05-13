@@ -69,11 +69,11 @@ public class WsgiRequestHandler extends AbstractHandler {
     this.startResponse = new StartResponse(this.write, this);
 
     try {
-      this.execute(this.app);
       // TODO: check where to put these three lines for Jetty
       response.setContentType("text/html; charset=utf-8");
       response.setStatus(HttpServletResponse.SC_OK);
       baseRequest.setHandled(true);
+      this.execute(this.app);
     } catch (Exception e) {
       // TODO: handle connection drop
       // TODO: handle other exceptions
