@@ -8,11 +8,13 @@ import com.hubspot.jinjava.loader.ResourceLocator;
 import java.io.IOException;
 import java.util.Map;
 
+/** Implements Flask's templating.py functionality. */
 public class TemplateEngine {
   private Jinjava jinjava;
   private ResourceLocator loader;
   private JinjavaInterpreter interpreter;
 
+  /** Basic constructor. */
   public TemplateEngine() {
     this.jinjava = new Jinjava();
     this.jinjava.setResourceLocator(new FileLocator());
@@ -20,13 +22,31 @@ public class TemplateEngine {
     this.interpreter = this.jinjava.newInterpreter();
   }
 
-  public String render_template(String template_name, Map<String, Object> context) {
+  /**
+   * Render template from file.
+   *
+   * @param templateName path to template file.
+   * @param context the variables that are in the context of the template.
+   * @return rendered string
+   */
+  public String render_template(String templateName, Map<String, Object> context) {
     String template = "";
     try {
-      template = this.loader.getString(template_name, Charsets.UTF_8, this.interpreter);
+      template = this.loader.getString(templateName, Charsets.UTF_8, this.interpreter);
     } catch (IOException e) {
       e.printStackTrace();
     }
     return this.jinjava.render(template, context);
+  }
+
+  /**
+   * Render template from string.
+   *
+   * @param source template in Java String type.
+   * @param context the variables that are in the context of the template.
+   * @return rendered string
+   */
+  public String render_template_string(String source, Map<String, Object> context) {
+    return this.jinjava.render(source, context);
   }
 }
