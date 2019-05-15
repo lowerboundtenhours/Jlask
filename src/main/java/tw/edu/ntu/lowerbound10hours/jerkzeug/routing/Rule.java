@@ -14,6 +14,7 @@ public class Rule implements RuleFactory {
   public String host;
   private Map map = null;
   private Pattern regex;
+  private HashMap<String, RegexConverter> usedConverter = new HashMap<>();
 
   /** A Rule represents one URL pattern. */
   public Rule(String string, String endpoint) {
@@ -69,6 +70,7 @@ public class Rule implements RuleFactory {
         regexParts.add(result.variable);
       } else {
         regexParts.add(String.format("(?<%s>%s)", result.variable, result.converter.getRegex()));
+        usedConverter.put(result.variable, result.converter);
       }
     }
     // the second part "(?<!/)(?P<__suffix__>/?)" currently not supported.
@@ -82,13 +84,13 @@ public class Rule implements RuleFactory {
    * instead. If the rule matches a HashMap with the converted values is returned, otherwise the
    * return value is `null`.
    */
-  public HashMap<String, Integer> match(String path) {
+  public HashMap<String, Object> match(String path) {
     Matcher matcher = this.regex.matcher(path);
     if (matcher.matches()) {
-      HashMap<String, Integer> ret = new HashMap<String, Integer>();
+      HashMap<String, Object> ret = new HashMap<String, Object>();
       Set<String> groupNames = this.getNamedGroupCandidates(this.regex);
       for (String groupName : groupNames) {
-        ret.put(groupName, Integer.parseInt(matcher.group(groupName)));
+        ret.put(groupName, usedConverter.get(groupName).parse(matcher.group(groupName)));
       }
       return ret;
     } else {
@@ -188,6 +190,7 @@ public class Rule implements RuleFactory {
 
   interface RegexConverter {
     public String getRegex();
+    public Object parse(String variableStr);
   }
 
   class RegexIntegerConverter implements RegexConverter {
@@ -196,6 +199,11 @@ public class Rule implements RuleFactory {
     @Override
     public String getRegex() {
       return "-?\\d+";
+    }
+
+    @Override
+    public Object parse(String variableStr) {
+        return Integer.parseInt(variableStr);
     }
   }
   // TODO: implement more converters, e.g. float, path, uuid...

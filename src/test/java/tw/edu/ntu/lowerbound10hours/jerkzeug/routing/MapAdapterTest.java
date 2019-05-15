@@ -29,7 +29,7 @@ public class MapAdapterTest {
   @Test
   public void testMatch() {
     MapAdapter urls = this.exampleUrls();
-    Pair<String, HashMap<String, Integer>> result;
+    Pair<String, HashMap<String, Object>> result;
     result = urls.match("/");
     assertEquals(result.getKey(), "index");
     assertEquals(result.getValue().size(), 0);
@@ -41,13 +41,13 @@ public class MapAdapterTest {
     result = urls.match("/downloads/12");
     assertEquals(result.getKey(), "downloads/show");
     assertEquals(result.getValue().size(), 1);
-    assertEquals(result.getValue().get("id"), new Integer(12));
+    assertEquals((Integer) result.getValue().get("id"), new Integer(12));
 
     result = urls.match("/date/1996/8/25");
     assertEquals(result.getKey(), "date");
     assertEquals(result.getValue().size(), 3);
-    assertEquals(result.getValue().get("year"), new Integer(1996));
-    assertEquals(result.getValue().get("month"), new Integer(8));
-    assertEquals(result.getValue().get("date"), new Integer(25));
+    assertEquals((Integer) result.getValue().get("year"), new Integer(1996));
+    assertEquals((Integer) result.getValue().get("month"), new Integer(8));
+    assertEquals((Integer) result.getValue().get("date"), new Integer(25));
   }
 }

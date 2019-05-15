@@ -47,9 +47,9 @@ public class RuleTest {
     Rule rule = new Rule("/about/<int:year>/<int:month>", "about");
     Map map = this.getMapWithRule(rule);
 
-    HashMap<String, Integer> matchedResult = rule.match("|/about/1996/11");
+    HashMap<String, Object> matchedResult = rule.match("|/about/1996/11");
 
-    HashMap<String, Integer> answer = new HashMap<>();
+    HashMap<String, Object> answer = new HashMap<>();
     answer.put("year", new Integer(1996));
     answer.put("month", new Integer(11));
     assertEquals(matchedResult, answer);
