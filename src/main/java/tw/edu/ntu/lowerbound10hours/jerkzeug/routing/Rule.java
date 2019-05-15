@@ -15,13 +15,13 @@ public class Rule implements RuleFactory {
   private Map map = null;
   private Pattern regex;
 
-  /** A Rule represents one URL pattern.*/
+  /** A Rule represents one URL pattern. */
   public Rule(String string, String endpoint) {
     this.rule = string;
     this.endpoint = endpoint;
   }
 
-  /** Constructor with argument subdomain and host.*/
+  /** Constructor with argument subdomain and host. */
   public Rule(String string, String endpoint, String subdomain, String host) {
     this.rule = string;
     this.endpoint = endpoint;
@@ -36,8 +36,9 @@ public class Rule implements RuleFactory {
     return ret;
   }
 
-  /** Bind the url to a map and create a regular expression based on
-   * the information from the rule itself and the defaults from the map.
+  /**
+   * Bind the url to a map and create a regular expression based on the information from the rule
+   * itself and the defaults from the map.
    */
   public void bind(Map map, boolean rebind) {
     if (this.map != null && rebind) {
@@ -75,12 +76,11 @@ public class Rule implements RuleFactory {
     this.regex = Pattern.compile(regex);
   }
 
-  /** Check if the rule matches a given path. Path is a string in the
-   * form ``"subdomain|/path"`` and is assembled by the map.  If
-   * the map is doing host matching the subdomain part will be the host
-   * instead.
-   * If the rule matches a HashMap with the converted values is returned,
-   * otherwise the return value is `null`.
+  /**
+   * Check if the rule matches a given path. Path is a string in the form ``"subdomain|/path"`` and
+   * is assembled by the map. If the map is doing host matching the subdomain part will be the host
+   * instead. If the rule matches a HashMap with the converted values is returned, otherwise the
+   * return value is `null`.
    */
   public HashMap<String, Integer> match(String path) {
     Matcher matcher = this.regex.matcher(path);
@@ -145,10 +145,9 @@ public class Rule implements RuleFactory {
     private final Pattern ruleRegex =
         Pattern.compile(
             "(?<static>[^<]*)"
-            + "<(?:(?<converter>[a-zA-Z_][a-zA-Z0-9_]*)"
-            + "(?:\\((?<args>.*?)\\))?\\:)?"
-            + "(?<variable>[a-zA-Z_][a-zA-Z0-9_]*)>"
-        );
+                + "<(?:(?<converter>[a-zA-Z_][a-zA-Z0-9_]*)"
+                + "(?:\\((?<args>.*?)\\))?\\:)?"
+                + "(?<variable>[a-zA-Z_][a-zA-Z0-9_]*)>");
     private final String[] targets = {"static", "converter", "args", "variable"};
 
     public ArrayList<RuleParseResult> parse(String rule) {
