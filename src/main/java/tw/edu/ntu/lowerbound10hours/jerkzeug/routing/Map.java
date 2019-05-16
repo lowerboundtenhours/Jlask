@@ -49,6 +49,7 @@ public class Map {
     return this.bind(serverName, scriptName, null, null, null, null);
   }
 
+  /** Return a new :class:`MapAdapter` with the details specified to the call. */
   public MapAdapter bind(
       String serverName,
       String scriptName,
@@ -56,48 +57,56 @@ public class Map {
       String urlScheme,
       String defaultMethod,
       String pathInfo) {
-      if (scriptName == null) {
-          scriptName = "/";
-      }
-      if (subdomain == null) {
-          subdomain = this.defaultSubdomain;
-      }
-      if (pathInfo == null) {
-          pathInfo = "/";
-      }
+    if (scriptName == null) {
+      scriptName = "/";
+    }
+    if (subdomain == null) {
+      subdomain = this.defaultSubdomain;
+    }
+    if (pathInfo == null) {
+      pathInfo = "/";
+    }
 
-      if (urlScheme == null) {
-          urlScheme = "http";
-      }
-      if (defaultMethod == null) {
-          defaultMethod = "GET";
-      }
+    if (urlScheme == null) {
+      urlScheme = "http";
+    }
+    if (defaultMethod == null) {
+      defaultMethod = "GET";
+    }
     return new MapAdapter(
         this, serverName, scriptName, subdomain, urlScheme, pathInfo, defaultMethod);
   }
 
-  public MapAdapter bindToEnvironment(HashMap<String, Object> environ, String serverName, String subdomain) {
-      String wsgiServerName = (String) environ.get("SERVER_NAME");
-      wsgiServerName = wsgiServerName.toLowerCase();
-      if (serverName == null) {
-          serverName = wsgiServerName;
-      } else {
-          serverName = serverName.toLowerCase();
-      }
+  /**
+   * Like :meth:`bind` but you can pass it an WSGI environment and it will fetch the information
+   * from that dictionary.
+   */
+  public MapAdapter bindToEnvironment(
+      HashMap<String, Object> environ, String serverName, String subdomain) {
 
-      if (subdomain == null && !this.hostMatching) {
-          String[] curServerName = wsgiServerName.split(".");
-          String[] realServerName = serverName.split(".");
-          // TODO: handle subdomain invalid, set subdomain = "<invalid>" like werkzeug
-          String[] subdomainParts = Arrays.copyOfRange(curServerName, 0, curServerName.length - realServerName.length);
-          subdomain = String.join(".", subdomainParts);
-      }
-
-      // TODO: check theses values are currecttly fetched from environ after its functionalities are implemented
-      String scriptName = (String) environ.get("SCRIPT_NAME");
-      String urlScheme = (String) environ.get("wsgi.url_scheme");
-      String pathInfo = (String) environ.get("PATH_INFO");
-      String defaultMethod = (String) environ.get("REQUEST_METHOD");
-      return this.bind(serverName, scriptName, subdomain, urlScheme, defaultMethod, pathInfo);
+    String wsgiServerName = (String) environ.get("SERVER_NAME");
+    wsgiServerName = wsgiServerName.toLowerCase();
+    if (serverName == null) {
+      serverName = wsgiServerName;
+    } else {
+      serverName = serverName.toLowerCase();
     }
+
+    if (subdomain == null && !this.hostMatching) {
+      String[] curServerName = wsgiServerName.split(".");
+      String[] realServerName = serverName.split(".");
+      // TODO: handle subdomain invalid, set subdomain = "<invalid>" like werkzeug
+      String[] subdomainParts =
+          Arrays.copyOfRange(curServerName, 0, curServerName.length - realServerName.length);
+      subdomain = String.join(".", subdomainParts);
+    }
+
+    // TODO: check theses values are currecttly fetched from environ after its functionalities are
+    // implemented
+    String scriptName = (String) environ.get("SCRIPT_NAME");
+    String urlScheme = (String) environ.get("wsgi.url_scheme");
+    String pathInfo = (String) environ.get("PATH_INFO");
+    String defaultMethod = (String) environ.get("REQUEST_METHOD");
+    return this.bind(serverName, scriptName, subdomain, urlScheme, defaultMethod, pathInfo);
+  }
 }
