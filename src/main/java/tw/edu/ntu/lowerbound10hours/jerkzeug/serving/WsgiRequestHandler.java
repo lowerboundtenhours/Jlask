@@ -7,8 +7,8 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
@@ -91,7 +91,7 @@ public class WsgiRequestHandler extends AbstractHandler {
       HttpServletResponse response) {
     Map<String, Object> environ = new HashMap<String, Object>();
     // TODO: setup environ
-    environ.put("SERVER_PORT",  ((ServerConnector) this.server.getConnectors()[0] ).getPort());
+    environ.put("SERVER_PORT", ((ServerConnector) this.server.getConnectors()[0]).getPort());
     environ.put("SERVER_NAME", this.server.getURI().getHost());
     environ.put("SERVER_URI", this.server.getURI());
     environ.put("target", target);
