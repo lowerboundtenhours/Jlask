@@ -15,7 +15,8 @@ public class ServingTest {
 
   @Test
   public void testMakeServer() throws Exception {
-    InetAddress host = InetAddress.getByName("127.0.0.1");
+    String name = "localhost";
+    InetAddress host = InetAddress.getByName(name);
     int port = 8001;
     Application testApp = new TestApplication();
     BaseWsgiServer server = Serving.makeServer(host, port, testApp);
@@ -25,7 +26,8 @@ public class ServingTest {
 
   @Test(enabled = false)
   public void testRunSimple() throws Exception {
-    InetAddress host = InetAddress.getByName("127.0.0.1");
+    String name = "localhost";
+    InetAddress host = InetAddress.getByName(name);
     int port = 8002;
     Application testApp = new TestApplication();
     Serving.runSimple(host, port, testApp);
