@@ -190,6 +190,7 @@ public class Rule implements RuleFactory {
 
   interface RegexConverter {
     public String getRegex();
+
     public Object parse(String variableStr);
   }
 
@@ -203,7 +204,7 @@ public class Rule implements RuleFactory {
 
     @Override
     public Object parse(String variableStr) {
-        return Integer.parseInt(variableStr);
+      return Integer.parseInt(variableStr);
     }
   }
   // TODO: implement more converters, e.g. float, path, uuid...
