@@ -31,7 +31,7 @@ public class BaseWsgiServer {
     this.app = app;
     // TODO: handle address family
     this.server = new Server(new InetSocketAddress(host, port));
-    this.handler = new WsgiRequestHandler(app);
+    this.handler = new WsgiRequestHandler(app, this.server);
     this.server.setHandler(this.handler);
     // this.server.createContext("/test", new MyHandler());
     // this.server.setExecutor(null); // creates a default executor

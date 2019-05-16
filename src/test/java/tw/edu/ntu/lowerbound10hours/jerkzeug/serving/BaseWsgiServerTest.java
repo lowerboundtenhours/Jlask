@@ -8,7 +8,8 @@ import tw.edu.ntu.lowerbound10hours.jerkzeug.TestApplication;
 public class BaseWsgiServerTest {
   @Test
   public void testBaseWsgiServer() throws Exception {
-    InetAddress host = InetAddress.getByName("127.0.0.1");
+    String name = "localhost";
+    InetAddress host = InetAddress.getByName(name);
     int port = 8001;
     Application testApp = new TestApplication();
     BaseWsgiServer server = new BaseWsgiServer(host, port, testApp);
