@@ -16,7 +16,7 @@ import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.WsgiRequestHandler;
 
 public class MapTest {
 
-  public Map exampleMap() {
+  private Map exampleMap() {
     ArrayList<RuleFactory> rules = new ArrayList<>();
     rules.add(new Rule("/", "index"));
     rules.add(new Rule("/downloads/", "downloads/index"));
@@ -24,7 +24,7 @@ public class MapTest {
     return new Map(rules);
   }
 
-  public java.util.Map<String, Object> exampleEnvironment() {
+  private java.util.Map<String, Object> exampleEnvironment() {
     int port = 8001;
     String name = "localhost";
     try {
