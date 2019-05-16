@@ -82,7 +82,7 @@ public class Map {
    * from that dictionary.
    */
   public MapAdapter bindToEnvironment(
-      HashMap<String, Object> environ, String serverName, String subdomain) {
+      java.util.Map<String, Object> environ, String serverName, String subdomain) {
 
     String wsgiServerName = (String) environ.get("SERVER_NAME");
     wsgiServerName = wsgiServerName.toLowerCase();
