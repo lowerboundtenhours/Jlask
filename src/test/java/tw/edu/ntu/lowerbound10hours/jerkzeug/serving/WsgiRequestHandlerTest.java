@@ -4,6 +4,7 @@ import static org.testng.Assert.assertEquals;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.Map;
 import manifold.ext.api.Jailbreak;
 import org.eclipse.jetty.server.Server;
 import org.testng.annotations.Test;
@@ -38,7 +39,7 @@ public class WsgiRequestHandlerTest {
     Server testServer = new Server(new InetSocketAddress(host, port));
     @Jailbreak WsgiRequestHandler handler = new WsgiRequestHandler(testApp, testServer);
     Map<String, Object> environ = handler.makeEnviron(null, null, null, null);
-    int serverPort = environ.get("SERVER_PORT");
+    int serverPort = (int) environ.get("SERVER_PORT");
     String serverName = environ.get("SERVER_NAME").toString();
     assertEquals(serverPort, port);
     assertEquals(serverName, name);
