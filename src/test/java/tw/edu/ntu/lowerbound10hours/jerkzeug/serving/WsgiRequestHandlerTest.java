@@ -39,7 +39,7 @@ public class WsgiRequestHandlerTest {
     Server testServer = new Server(new InetSocketAddress(host, port));
     @Jailbreak WsgiRequestHandler handler = new WsgiRequestHandler(testApp, testServer);
     Map<String, Object> environ = handler.makeEnviron(null, null, null, null);
-    int serverPort = (Integer) environ.get("SERVER_PORT");
+    int serverPort = (int) environ.get("SERVER_PORT");
     String serverName = environ.get("SERVER_NAME").toString();
     assertEquals(serverPort, port);
     assertEquals(serverName, name);
