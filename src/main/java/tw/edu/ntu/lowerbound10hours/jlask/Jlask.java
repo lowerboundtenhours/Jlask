@@ -76,7 +76,7 @@ public class Jlask extends Application {
     // TODO: when rv is Response
     // TODO: when rv is bytestring
 
-    res = new Response(rv, status, headers);
+    res = new Response(rv);
 
     return res;
   }
@@ -97,7 +97,8 @@ public class Jlask extends Application {
     // TODO:
     // rule = req.url_rule
     // return this.view_functions[rule.endpoint](**req.view_args);
-    return "Hello world!";
+    // return "Hello world!";
+    return this.viewFunctions.get("index").call();
   }
 
   private Response full_dispatch_request() {
@@ -203,7 +204,7 @@ public class Jlask extends Application {
     RequestContext ctx = this.request_context(environ);
     Exception error = null;
 
-    Response response;
+    Response response = null;
     try {
       try {
         ctx.push();
@@ -221,8 +222,14 @@ public class Jlask extends Application {
       // ctx.auto_pop(error);
     }
     
-    startResponse.startResponse(200, null, false);
-    startResponse.getWrite().write(response.getBody());
+    if (response != null) {
+      startResponse.startResponse(200, null, false);
+      startResponse.getWrite().write(response.getBody());
+    }
+    else {
+      startResponse.startResponse(500, null, false);
+    }
+    
   }
 
   public ApplicationIter call(Map<String, Object> environ, StartResponse startResponse) {

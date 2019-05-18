@@ -26,4 +26,8 @@ public class AppContext {
     // rv = _app_ctx_stack.pop()
     AppContextStack.pop();
   }
+
+  public Jlask getApp() {
+    return this.app;
+  }
 }

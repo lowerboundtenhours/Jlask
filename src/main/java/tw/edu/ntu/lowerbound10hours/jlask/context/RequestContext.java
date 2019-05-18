@@ -3,11 +3,12 @@ package tw.edu.ntu.lowerbound10hours.jlask.context;
 import java.util.Map;
 import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
-
+import tw.edu.ntu.lowerbound10hours.jlask.session.Session;
 public class RequestContext {
 
   private Jlask app;
   private Request request;
+  private Session session;
 
   public RequestContext(Jlask app, Map<String, Object> environ) {
     /*
@@ -49,5 +50,13 @@ public class RequestContext {
 
   public void auto_pop() {
     
+  }
+
+  public Request getRequest() {
+    return this.request;
+  }
+
+  public Session getSession() {
+    return this.session;
   }
 }
