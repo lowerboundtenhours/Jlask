@@ -2,9 +2,9 @@ package tw.edu.ntu.lowerbound10hours.jerkzeug.routing;
 
 import static org.testng.Assert.assertEquals;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javafx.util.Pair;
 import org.testng.annotations.Test;
 
 public class MapAdapterTest {
@@ -29,7 +29,7 @@ public class MapAdapterTest {
   @Test
   public void testMatch() {
     MapAdapter urls = this.exampleUrls();
-    Pair<String, HashMap<String, Object>> result;
+    SimpleEntry<String, HashMap<String, Object>> result;
     result = urls.match("/");
     assertEquals(result.getKey(), "index");
     assertEquals(result.getValue().size(), 0);

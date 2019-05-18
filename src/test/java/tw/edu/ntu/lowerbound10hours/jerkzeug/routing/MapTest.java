@@ -4,9 +4,9 @@ import static org.testng.Assert.assertEquals;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javafx.util.Pair;
 import manifold.ext.api.Jailbreak;
 import org.eclipse.jetty.server.Server;
 import org.testng.annotations.Test;
@@ -50,7 +50,7 @@ public class MapTest {
     java.util.Map<String, Object> environ = exampleEnvironment();
     MapAdapter urls = map.bindToEnvironment(environ, null, null);
 
-    Pair<String, HashMap<String, Object>> result;
+    SimpleEntry<String, HashMap<String, Object>> result;
     result = urls.match("/downloads/12");
     assertEquals(result.getKey(), "downloads/show");
     assertEquals(result.getValue().size(), 1);
