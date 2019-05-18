@@ -20,7 +20,7 @@ public class RuleTest {
   @Test
   public void testBind() {
     Rule rule = new Rule("/index", "index");
-    Map map = new Map(new ArrayList<RuleFactory>());
+    RuleMap map = new RuleMap(new ArrayList<RuleFactory>());
     boolean rebind = false;
 
     rule.bind(map, rebind);
@@ -28,16 +28,16 @@ public class RuleTest {
     assertNotNull(rule.getRegex());
   }
 
-  private Map getMapWithRule(Rule rule) {
+  private RuleMap getMapWithRule(Rule rule) {
     ArrayList<RuleFactory> rules = new ArrayList<RuleFactory>();
     rules.add(rule);
-    return new Map(rules);
+    return new RuleMap(rules);
   }
 
   @Test
   public void testCompileRegex() {
     Rule rule = new Rule("/about/<int:year>/<int:month>", "about");
-    Map map = this.getMapWithRule(rule);
+    RuleMap map = this.getMapWithRule(rule);
     Pattern answer = Pattern.compile("^\\|/about/(?<year>-?\\d+)/(?<month>-?\\d+)");
     assertEquals(rule.getRegex().pattern(), answer.pattern());
   }
@@ -45,7 +45,7 @@ public class RuleTest {
   @Test
   public void testMatch() {
     Rule rule = new Rule("/about/<int:year>/<int:month>", "about");
-    Map map = this.getMapWithRule(rule);
+    RuleMap map = this.getMapWithRule(rule);
 
     HashMap<String, Object> matchedResult = rule.match("|/about/1996/11");
 

@@ -14,7 +14,7 @@ public class MapAdapterTest {
     rules.add(new Rule("/downloads/", "downloads/index"));
     rules.add(new Rule("/downloads/<int:id>", "downloads/show"));
 
-    Map map = new Map(rules);
+    RuleMap map = new RuleMap(rules);
     map.add(new Rule("/date/<int:year>/<int:month>/<int:date>", "date"));
 
     MapAdapter urls = map.bind("example.com");

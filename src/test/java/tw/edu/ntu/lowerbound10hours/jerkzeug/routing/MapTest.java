@@ -16,12 +16,12 @@ import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.WsgiRequestHandler;
 
 public class MapTest {
 
-  private Map exampleMap() {
+  private RuleMap exampleMap() {
     ArrayList<RuleFactory> rules = new ArrayList<>();
     rules.add(new Rule("/", "index"));
     rules.add(new Rule("/downloads/", "downloads/index"));
     rules.add(new Rule("/downloads/<int:id>", "downloads/show"));
-    return new Map(rules);
+    return new RuleMap(rules);
   }
 
   private java.util.Map<String, Object> exampleEnvironment() {
@@ -41,12 +41,12 @@ public class MapTest {
 
   @Test
   public void testMap() {
-    Map map = exampleMap();
+    RuleMap map = exampleMap();
   }
 
   @Test
   public void testBindToEnviron() {
-    Map map = exampleMap();
+    RuleMap map = exampleMap();
     java.util.Map<String, Object> environ = exampleEnvironment();
     MapAdapter urls = map.bindToEnvironment(environ, null, null);
 

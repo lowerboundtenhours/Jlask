@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class Map {
+public class RuleMap {
   public ArrayList<Rule> rules = new ArrayList<>();
   private HashMap<String, ArrayList<Rule>> rulesByEndpoint = new HashMap<>();
   private boolean remap = true;
@@ -13,7 +13,7 @@ public class Map {
   public boolean hostMatching = false;
 
   /** The map class stores all the URL rules and some configuration parameters. */
-  public Map(List<RuleFactory> ruleFactories, String defaultSubdomain, boolean hostMatching) {
+  public RuleMap(List<RuleFactory> ruleFactories, String defaultSubdomain, boolean hostMatching) {
     for (RuleFactory ruleFactory : ruleFactories) {
       this.add(ruleFactory);
     }
@@ -21,7 +21,7 @@ public class Map {
     this.hostMatching = hostMatching;
   }
 
-  public Map(List<RuleFactory> ruleFactories) {
+  public RuleMap(List<RuleFactory> ruleFactories) {
     this(ruleFactories, "", false);
   }
 

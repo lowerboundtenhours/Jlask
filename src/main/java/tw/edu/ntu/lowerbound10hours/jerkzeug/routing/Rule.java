@@ -12,7 +12,7 @@ public class Rule implements RuleFactory {
   public String endpoint;
   public String subdomain;
   public String host;
-  private Map map = null;
+  private RuleMap map = null;
   private Pattern regex;
   private HashMap<String, RegexConverter> usedConverter = new HashMap<>();
 
@@ -41,7 +41,7 @@ public class Rule implements RuleFactory {
    * Bind the url to a map and create a regular expression based on the information from the rule
    * itself and the defaults from the map.
    */
-  public void bind(Map map, boolean rebind) {
+  public void bind(RuleMap map, boolean rebind) {
     if (this.map != null && rebind) {
       throw new RuntimeException("Already bound.");
     }
@@ -98,7 +98,7 @@ public class Rule implements RuleFactory {
     }
   }
 
-  public Map getMap() {
+  public RuleMap getMap() {
     return this.map;
   }
 
