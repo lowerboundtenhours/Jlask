@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class MapAdapter {
 
-  private Map map;
+  private RuleMap map;
   private String serverName;
   private String scriptName;
   private String subdomain;
@@ -14,11 +14,11 @@ public class MapAdapter {
   private String defaultMethod;
 
   /**
-   * Returned by :meth:`Map.bind` or :meth:`Map.bind_to_environ` and does the URL matching and
-   * building based on runtime information.
+   * Returned by :meth:`RuleMap.bind` or :meth:`RuleMap.bind_to_environ` and does the URL matching
+   * and building based on runtime information.
    */
   public MapAdapter(
-      Map map,
+      RuleMap map,
       String serverName,
       String scriptName,
       String subdomain,
