@@ -7,7 +7,13 @@ public class ApplicationIter<T> implements Iterable<T> {
 
   private List<T> list;
 
-  public ApplicationIter() {}
+  public ApplicationIter() {
+    // empty
+  }
+
+  public ApplicationIter(List<T> list) {
+    this.list = list;
+  }
 
   @Override
   public Iterator<T> iterator() {
