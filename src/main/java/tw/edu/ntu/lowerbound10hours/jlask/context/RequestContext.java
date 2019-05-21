@@ -13,9 +13,7 @@ public class RequestContext {
   public Session session;
   public MapAdapter urlAdapter;
 
-  /**
-   * Setup Request context.
-   */
+  /** Setup Request context. */
   public RequestContext(Jlask app, Map<String, Object> environ) {
     /*
         if request is None:
@@ -32,6 +30,7 @@ public class RequestContext {
     // TODO: match request, then setup request.rule
   }
 
+  /** Match request via urlAdapter. */
   public void match_request() {
     /*
     TODO:
@@ -48,9 +47,7 @@ public class RequestContext {
     RequestContextStack.pop();
   }
 
-  public void auto_pop() {
-    
-  }
+  public void auto_pop() {}
 
   // public Request getRequest() {
   //   return this.request;

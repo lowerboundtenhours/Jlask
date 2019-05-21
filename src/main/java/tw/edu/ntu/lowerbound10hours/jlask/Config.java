@@ -15,18 +15,14 @@ public class Config extends HashMap<String, Object> {
     this.rootPath = rootPath;
   }
 
-  /**
-   * Read config from json file.
-   */
+  /** Read config from json file. */
   public void fromJson(String filename) {
     Path path = Paths.get(this.rootPath, filename);
     System.err.println(path.normalize().toAbsolutePath());
     // TODO: Read file and parse to Map
   }
 
-  /**
-   * Read config from ply file.
-   */
+  /** Read config from ply file. */
   public void fromPyfile(String filename) {
     // TODO: Read file and parse to Map
   }

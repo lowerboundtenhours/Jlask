@@ -5,7 +5,6 @@ import static org.testng.Assert.assertEquals;
 import java.util.Map;
 import manifold.ext.api.Jailbreak;
 import org.testng.annotations.Test;
-import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
 public class JlaskTest {
   @Test

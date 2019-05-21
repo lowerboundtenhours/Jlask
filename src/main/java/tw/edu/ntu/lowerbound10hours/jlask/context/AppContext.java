@@ -8,9 +8,7 @@ public class AppContext {
   // TODO: private url_adapter
   // TODO: private g
 
-  /** 
-   * Setup app context.
-   */
+  /** Setup app context. */
   public AppContext(Jlask app) {
     // TODO: self.url_adapter = app.create_url_adapter(None)
     // TODO: self.g = app.app_ctx_globals_class()

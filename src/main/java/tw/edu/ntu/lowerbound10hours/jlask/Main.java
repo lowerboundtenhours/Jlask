@@ -2,7 +2,6 @@ package tw.edu.ntu.lowerbound10hours.jlask;
 
 import java.net.InetAddress;
 
-
 public class Main {
   /** A example for Jlask. */
   public static void main(String[] args) throws Exception {

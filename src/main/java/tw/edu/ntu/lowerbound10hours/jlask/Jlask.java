@@ -26,9 +26,7 @@ public class Jlask extends Application {
   private SessionInterface sessionInterface;
   private RuleMap ruleMap;
 
-  /**
-   * Init app.
-   */
+  /** Init app. */
   public Jlask() {
     this.sessionInterface = new SecureCookieSessionInterface();
     this.config = new Config();
@@ -36,9 +34,7 @@ public class Jlask extends Application {
     this.ruleMap = new RuleMap();
   }
 
-  /**
-   * Run api for client.
-   */
+  /** Run api for client. */
   public void run(InetAddress host, int port) throws Exception {
     Serving.runSimple(host, port, this);
   }
@@ -52,10 +48,7 @@ public class Jlask extends Application {
     // Save session
   }
 
-  /**
-   * Usage:
-   *  app.add_url_rule('/', 'index', index).
-   */
+  /** Usage: app.add_url_rule('/', 'index', index). */
   public void add_url_rule(String ruleString, String endpoint, View viewFunc) {
     /*
       URL Rule usage
