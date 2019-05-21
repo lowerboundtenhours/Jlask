@@ -29,22 +29,22 @@ public class MapAdapterTest {
   @Test
   public void testMatch() {
     MapAdapter urls = this.exampleUrls();
-    SimpleEntry<String, HashMap<String, Object>> result;
+    SimpleEntry<Rule, HashMap<String, Object>> result;
     result = urls.match("/");
-    assertEquals(result.getKey(), "index");
+    assertEquals(result.getKey().endpoint, "index");
     assertEquals(result.getValue().size(), 0);
 
     result = urls.match("/downloads/");
-    assertEquals(result.getKey(), "downloads/index");
+    assertEquals(result.getKey().endpoint, "downloads/index");
     assertEquals(result.getValue().size(), 0);
 
     result = urls.match("/downloads/12");
-    assertEquals(result.getKey(), "downloads/show");
+    assertEquals(result.getKey().endpoint, "downloads/show");
     assertEquals(result.getValue().size(), 1);
     assertEquals((Integer) result.getValue().get("id"), new Integer(12));
 
     result = urls.match("/date/1996/8/25");
-    assertEquals(result.getKey(), "date");
+    assertEquals(result.getKey().endpoint, "date");
     assertEquals(result.getValue().size(), 3);
     assertEquals((Integer) result.getValue().get("year"), new Integer(1996));
     assertEquals((Integer) result.getValue().get("month"), new Integer(8));
