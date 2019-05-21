@@ -85,6 +85,7 @@ public class RuleMap {
       java.util.Map<String, Object> environ, String serverName, String subdomain) {
 
     String wsgiServerName = (String) environ.get("SERVER_NAME");
+    wsgiServerName = (wsgiServerName == null) ? "localhost" : wsgiServerName;
     wsgiServerName = wsgiServerName.toLowerCase();
     if (serverName == null) {
       serverName = wsgiServerName;

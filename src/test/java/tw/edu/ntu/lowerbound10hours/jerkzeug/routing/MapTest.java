@@ -50,9 +50,9 @@ public class MapTest {
     java.util.Map<String, Object> environ = exampleEnvironment();
     MapAdapter urls = map.bindToEnvironment(environ, null, null);
 
-    SimpleEntry<String, HashMap<String, Object>> result;
+    SimpleEntry<Rule, HashMap<String, Object>> result;
     result = urls.match("/downloads/12");
-    assertEquals(result.getKey(), "downloads/show");
+    assertEquals(result.getKey().endpoint, "downloads/show");
     assertEquals(result.getValue().size(), 1);
     assertEquals((Integer) result.getValue().get("id"), new Integer(12));
   }
