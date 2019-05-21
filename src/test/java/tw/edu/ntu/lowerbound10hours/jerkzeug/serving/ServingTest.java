@@ -2,11 +2,10 @@ package tw.edu.ntu.lowerbound10hours.jerkzeug.serving;
 
 import static org.testng.Assert.assertEquals;
 
-import java.net.InetAddress;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
 import org.testng.annotations.Test;
-import org.eclipse.jetty.http.HttpStatus;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.TestApplication;
 
@@ -34,15 +33,15 @@ public class ServingTest {
     InetAddress host = InetAddress.getByName(name);
     BaseWsgiServer server = Serving.makeServer(host, port, testApp);
     server.getServer().start();
-    HttpURLConnection http = (HttpURLConnection)new URL(String.format("http://%s:%d/", name, port)).openConnection();
-		http.connect();
-		// TODO: pass this check
-		// assertEquals(http.getResponseMessage(), "This is a test response from TestApplication");
-		// assertEquals(http.getResponseCode(), 200);
-		
-		server.getServer().stop();
-  }
+    HttpURLConnection http =
+        (HttpURLConnection) new URL(String.format("http://%s:%d/", name, port)).openConnection();
+    http.connect();
+    // TODO: pass this check
+    // assertEquals(http.getResponseMessage(), "This is a test response from TestApplication");
+    // assertEquals(http.getResponseCode(), 200);
 
+    server.getServer().stop();
+  }
 
   @Test(enabled = false)
   public void testRunSimple() throws Exception {
