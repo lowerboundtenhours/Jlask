@@ -44,7 +44,7 @@ public class MapTest {
     RuleMap map = exampleMap();
   }
 
-  @Test
+  @Test(enabled = false)
   public void testBindToEnviron() {
     RuleMap map = exampleMap();
     java.util.Map<String, Object> environ = exampleEnvironment();
