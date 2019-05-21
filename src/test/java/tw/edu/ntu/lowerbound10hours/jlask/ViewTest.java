@@ -1,10 +1,9 @@
 package tw.edu.ntu.lowerbound10hours.jlask;
 
 import static org.testng.Assert.assertEquals;
-import org.testng.annotations.Test;
+
 import java.util.Map;
-
-
+import org.testng.annotations.Test;
 
 public class ViewTest {
 
@@ -30,5 +29,4 @@ public class ViewTest {
     // assertEquals(view.getMethods().length, 1);
     // assertEquals(view.getMethods()[0], "GET");
   }
-
 }
