@@ -29,6 +29,7 @@ dependencies {
     testCompile "org.testng:testng:6.9.10"
     compile "org.apache.logging.log4j:log4j-api:2.5"
     compile "org.apache.logging.log4j:log4j-core:2.5"
+    compile 'org.slf4j:slf4j-nop:1.7.25'
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.5.0"
     // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.18.v20190429'

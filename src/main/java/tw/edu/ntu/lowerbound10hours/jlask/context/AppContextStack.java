@@ -27,6 +27,6 @@ public class AppContextStack {
   }
 
   private AppContextStack() {
-    
+    // None
   }
 }

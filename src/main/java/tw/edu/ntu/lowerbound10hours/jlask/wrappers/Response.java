@@ -17,6 +17,9 @@ public class Response {
     this.status = status;
   }
 
+  /**
+   * Initial response.
+   */
   public Response(String body, int status, Map<String, String> headers) {
     this.body = body;
     this.status = status;

@@ -20,5 +20,4 @@ public abstract class View {
   public String call() {
     return this.dispatchRequest(null);
   }
-
 }

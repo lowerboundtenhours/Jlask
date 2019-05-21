@@ -2,16 +2,16 @@ package tw.edu.ntu.lowerbound10hours.jlask;
 
 import tw.edu.ntu.lowerbound10hours.jlask.context.AppContextStack;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContextStack;
-import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
 import tw.edu.ntu.lowerbound10hours.jlask.session.Session;
+import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
 
 public class Global {
   public static Request request() {
-    return RequestContextStack.top().getRequest();
+    return RequestContextStack.top().request;
   }
 
   public static Session session() {
-    return RequestContextStack.top().getSession();
+    return RequestContextStack.top().session;
   }
 
   public static Jlask app() {

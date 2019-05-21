@@ -27,6 +27,6 @@ public class RequestContextStack {
   }
 
   private RequestContextStack() {
-    
+    // None
   }
 }

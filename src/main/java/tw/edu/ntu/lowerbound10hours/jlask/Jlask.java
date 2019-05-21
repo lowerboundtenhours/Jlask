@@ -5,10 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.ApplicationIter;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.MapAdapter;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.Rule;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.RuleMap;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
 import tw.edu.ntu.lowerbound10hours.jlask.context.AppContext;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
+import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContextStack;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSessionInterface;
 import tw.edu.ntu.lowerbound10hours.jlask.session.Session;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SessionInterface;
@@ -20,13 +24,21 @@ public class Jlask extends Application {
   private Map<String, View> viewFunctions;
   private String staticPath;
   private SessionInterface sessionInterface;
+  private RuleMap ruleMap;
 
+  /**
+   * Init app.
+   */
   public Jlask() {
     this.sessionInterface = new SecureCookieSessionInterface();
     this.config = new Config();
     this.viewFunctions = new HashMap<String, View>();
+    this.ruleMap = new RuleMap();
   }
 
+  /**
+   * Run api for client.
+   */
   public void run(InetAddress host, int port) throws Exception {
     Serving.runSimple(host, port, this);
   }
@@ -37,15 +49,14 @@ public class Jlask extends Application {
   }
 
   public void save_session(Session session, Response response) {
-
+    // Save session
   }
 
-  public void add_url_rule(String rule, String endpoint, View viewFunc) {
-    /*
-      Usage:
-          app.add_url_rule('/', 'index', index)
-    */
-
+  /**
+   * Usage:
+   *  app.add_url_rule('/', 'index', index).
+   */
+  public void add_url_rule(String ruleString, String endpoint, View viewFunc) {
     /*
       URL Rule usage
       rule = self.url_rule_class(rule, methods=methods, **options)
@@ -58,7 +69,15 @@ public class Jlask extends Application {
       // Rule exist
       throw new RuntimeException("View function mapping is overwriting");
     }
+
+    Rule rule = new Rule(ruleString, endpoint);
+    this.ruleMap.add(rule);
     this.viewFunctions.put(endpoint, viewFunc);
+  }
+
+  public MapAdapter createUrlAdapter(Request request) {
+    // return null;
+    return this.ruleMap.bindToEnvironment(request.environ, null, null);
   }
 
   private Response make_response(String rv) {
@@ -89,7 +108,7 @@ public class Jlask extends Application {
         In order to convert the return value to a
         proper response object, call :func:`make_response`
     */
-
+    Request req = RequestContextStack.top().request;
     // TODO: req = _request_ctx_stack.top.request
     // if req.routing_exception is not None:
     //     self.raise_routing_exception(req)
@@ -117,7 +136,7 @@ public class Jlask extends Application {
     } catch (Exception e) {
       // TODO: handle exception
       // rv = this.handle_user_exception(e);
-
+      System.err.print(e);
     }
 
     return this.finalize_request(rv, false);
@@ -143,6 +162,7 @@ public class Jlask extends Application {
       // self.logger.exception(
       //     "Request finalizing failed with an " "error while handling an error"
       // )
+      System.err.print(e);
     }
     return response;
   }
@@ -205,31 +225,33 @@ public class Jlask extends Application {
     Exception error = null;
 
     Response response = null;
-    try {
-      try {
-        ctx.push();
-        response = this.full_dispatch_request();
-      } catch (Exception e) {
-        // TODO: handle exception
-        error = e;
-        // TODO: response = this.handle_exception(e);
-      }
-      // TODO: return response(environ, startResponse);
-    } finally {
-      // TODO:
-      // if self.should_ignore_error(error):
-      //    error = None
-      // ctx.auto_pop(error);
-    }
-    
+    ctx.push();
+    response = this.full_dispatch_request();
+
+    // try {
+    //   try {
+    //     ctx.push();
+    //     response = this.full_dispatch_request();
+    //   } catch (Exception e) {
+    //     // TODO: handle exception
+    //     error = e;
+    //     System.err.print(e);
+    //     // TODO: response = this.handle_exception(e);
+    //   }
+    //   // TODO: return response(environ, startResponse);
+    // } finally {
+    //   // TODO:
+    //   // if self.should_ignore_error(error):
+    //   //    error = None
+    //   // ctx.auto_pop(error);
+    // }
+
     if (response != null) {
       startResponse.startResponse(200, null, false);
       startResponse.getWrite().write(response.getBody());
-    }
-    else {
+    } else {
       startResponse.startResponse(500, null, false);
     }
-    
   }
 
   public ApplicationIter call(Map<String, Object> environ, StartResponse startResponse) {

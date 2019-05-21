@@ -5,15 +5,15 @@ import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 public class AppContext {
 
   private Jlask app;
-  // private url_adapter
-  // private g
+  // TODO: private url_adapter
+  // TODO: private g
 
+  /** 
+   * Setup app context.
+   */
   public AppContext(Jlask app) {
-    /*
-    TODO:
-    self.url_adapter = app.create_url_adapter(None)
-    self.g = app.app_ctx_globals_class()
-    */
+    // TODO: self.url_adapter = app.create_url_adapter(None)
+    // TODO: self.g = app.app_ctx_globals_class()
     this.app = app;
   }
 
