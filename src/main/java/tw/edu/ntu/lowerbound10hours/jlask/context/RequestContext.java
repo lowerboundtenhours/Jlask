@@ -26,7 +26,7 @@ public class RequestContext {
         self.session = session
         self.flashes = None
     */
-
+    this.session = null;
     this.app = app;
     this.request = new Request(environ);
     this.urlAdapter = this.app.createUrlAdapter(this.request);

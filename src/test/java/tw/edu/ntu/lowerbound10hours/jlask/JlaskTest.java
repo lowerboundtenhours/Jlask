@@ -17,13 +17,6 @@ public class JlaskTest {
     assertEquals(jlask.make_response(rv).getBody(), rv);
   }
 
-  class MyView extends View {
-    @Override
-    public String dispatchRequest(Map<String, Object> args) {
-      return "foo";
-    }
-  }
-
   @Test
   public void testAddUrlRule() throws Exception {
     @Jailbreak Jlask jlask = new Jlask();
