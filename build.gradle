@@ -11,6 +11,7 @@ buildscript {
         maven {
             url 'https://plugins.gradle.org/m2/'
         }
+        jcenter()
         // you can also use this for your local cache:
         // mavenLocal()
     }
@@ -36,6 +37,7 @@ dependencies {
     compile 'com.google.guava:guava:27.1-jre'
     compile 'com.hubspot.jinjava:jinjava:2.5.0'
     compile group: 'systems.manifold', name: 'manifold-all', version: '0.55-alpha'
+    testCompile "org.mockito:mockito-core:2.+"
 }
 
 repositories {
