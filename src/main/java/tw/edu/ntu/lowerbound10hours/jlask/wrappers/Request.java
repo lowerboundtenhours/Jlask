@@ -9,10 +9,6 @@ public class Request {
   public Rule rule;
   public Map<String, Object> viewArgs;
 
-  public Request() {
-    // TODO: init
-  }
-
   public Request(Map<String, Object> environ) {
     this.environ = environ;
   }

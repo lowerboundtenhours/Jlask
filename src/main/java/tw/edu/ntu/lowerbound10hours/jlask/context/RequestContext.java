@@ -1,7 +1,10 @@
 package tw.edu.ntu.lowerbound10hours.jlask.context;
 
+import java.util.AbstractMap.SimpleEntry;
+import java.util.HashMap;
 import java.util.Map;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.MapAdapter;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.Rule;
 import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 import tw.edu.ntu.lowerbound10hours.jlask.session.Session;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
@@ -28,14 +31,15 @@ public class RequestContext {
     this.request = new Request(environ);
     this.urlAdapter = this.app.createUrlAdapter(this.request);
     // TODO: match request, then setup request.rule
+    this.match_request();
   }
 
   /** Match request via urlAdapter. */
   public void match_request() {
-    /*
-    TODO:
-        url_rule, self.request.view_args = self.url_adapter.match(return_rule=True)
-    */
+    SimpleEntry<Rule, HashMap<String, Object>> result = this.urlAdapter.match();
+    this.request.rule = result.getKey();
+    this.request.viewArgs = result.getValue();
+    // TODO: url_rule, self.request.view_args = self.url_adapter.match(return_rule=True)
   }
 
   public void push() {

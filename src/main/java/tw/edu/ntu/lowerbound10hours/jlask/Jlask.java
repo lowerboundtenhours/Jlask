@@ -69,7 +69,6 @@ public class Jlask extends Application {
   }
 
   public MapAdapter createUrlAdapter(Request request) {
-    // return null;
     return this.ruleMap.bindToEnvironment(request.environ, null, null);
   }
 
@@ -105,12 +104,11 @@ public class Jlask extends Application {
     // TODO: req = _request_ctx_stack.top.request
     // if req.routing_exception is not None:
     //     self.raise_routing_exception(req)
-
+    System.err.println(req.rule.endpoint);
     // TODO:
     // rule = req.url_rule
     // return this.view_functions[rule.endpoint](**req.view_args);
-    // return "Hello world!";
-    return this.viewFunctions.get("index").call();
+    return this.viewFunctions.get(req.rule.endpoint).call(req.viewArgs);
   }
 
   private Response full_dispatch_request() {
