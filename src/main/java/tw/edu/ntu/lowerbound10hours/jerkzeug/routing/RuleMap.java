@@ -25,6 +25,10 @@ public class RuleMap {
     this(ruleFactories, "", false);
   }
 
+  public RuleMap() {
+    this(new ArrayList<>(), "", false);
+  }
+
   /**
    * Use passed ruleFactory to created rules and put them into this map. All rules created is bound
    * to this map (therefore compiled)

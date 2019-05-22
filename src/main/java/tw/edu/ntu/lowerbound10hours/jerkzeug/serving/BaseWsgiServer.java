@@ -37,6 +37,10 @@ public class BaseWsgiServer {
     // this.server.setExecutor(null); // creates a default executor
   }
 
+  public Server getServer() {
+    return this.server;
+  }
+
   /**
    * Start the jetty server and listen to requests. Note that this will cause an infinte loop that
    * could only be terminated by ctrl+c.
