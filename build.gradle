@@ -37,6 +37,10 @@ dependencies {
     compile 'com.google.guava:guava:27.1-jre'
     compile 'com.hubspot.jinjava:jinjava:2.5.0'
     compile group: 'systems.manifold', name: 'manifold-all', version: '0.55-alpha'
+    compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.4.2.Final'
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.21.0.1'
+    // https://mvnrepository.com/artifact/com.github.gwenn/sqlite-dialect
+    compile group: 'com.github.gwenn', name: 'sqlite-dialect', version: '0.1.0'
     testCompile "org.mockito:mockito-core:2.+"
 }
 
@@ -101,3 +105,5 @@ tasks.withType(JavaCompile) {
   options.compilerArgs += '-Xplugin:Manifold strings exceptions'
   options.fork = true
 }
+
+// 
