@@ -94,6 +94,7 @@ public class WsgiRequestHandler extends AbstractHandler {
     environ.put("SERVER_PORT", ((ServerConnector) this.server.getConnectors()[0]).getPort());
     environ.put("SERVER_NAME", this.server.getURI().getHost());
     environ.put("SERVER_URI", this.server.getURI());
+    environ.put("PATH_INFO", request.getPathInfo());
     environ.put("target", target);
     environ.put("baseRequest", baseRequest);
     environ.put("request", request);
