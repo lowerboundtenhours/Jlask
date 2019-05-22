@@ -1,9 +1,14 @@
 package tw.edu.ntu.lowerbound10hours.jlask;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class RequestContext {
   private Map<String, Object> environ;
+
+  public RequestContext() {
+    this.environ = new HashMap<String, Object>();
+  }
 
   public RequestContext(Map<String, Object> environ) {
     this.environ = environ;
