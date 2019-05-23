@@ -44,7 +44,6 @@ public class Hibernate {
   public void init_app(Jlask app) {
     this.app = app;
     this.session = this.create_scoped_session();
-    this.tx = session.beginTransaction();
   }
 
   /** Set the configuration to drop all databases when created. */
@@ -54,6 +53,11 @@ public class Hibernate {
     } catch (HibernateException e) {
       e.printStackTrace();
     }
+  }
+
+  /** Set the transaction to handle the following operation. */
+  public void beginTransaction() {
+    this.tx = this.session.beginTransaction();
   }
 
   public SessionFactory getSessionFactory() {
