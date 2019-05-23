@@ -7,12 +7,12 @@ import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 public class SessionInterface {
   public SessionInterface() {}
 
-  public Session open_session(Jlask app, Request request) {
-    return new Session();
+  public SecureCookieSession openSession(Jlask app, Request request) {
+    throw new UnsupportedOperationException("Pleaes implement this function in your subclass.");
   }
 
-  public void save_session(Jlask app, Session session, Response response) {
-    int a = 123;
+  public void saveSession(Jlask app, SecureCookieSession session, Response response) {
+    throw new UnsupportedOperationException("Pleaes implement this function in your subclass.");
   }
 
   public NullSession maksNullSession() {
@@ -62,5 +62,7 @@ public class SessionInterface {
     return (String) app.getConfig().get("SESSION_COOKIE_SAMESITE");
   }
   // public Time getExpirationTime(Jlask app, Session session) {};
-  public boolean shouldSetCookie(Jlask app, Session session) {};
+  public boolean shouldSetCookie(Jlask app, SecureCookieSession session) {
+      // return true;
+  };
 }
