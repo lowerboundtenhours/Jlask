@@ -1,5 +1,6 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug.wrapper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,14 @@ public class Response {
     Cookie newCookie = new Cookie(key, "");
     newCookie.setMaxAge(0);
     this.baseResponse.addCookie(newCookie);
+  }
+
+  public void sendRedirect(String location) {
+    try {
+      this.baseResponse.sendRedirect(location);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   private int getStatus(Map<String, Object> environ) {
