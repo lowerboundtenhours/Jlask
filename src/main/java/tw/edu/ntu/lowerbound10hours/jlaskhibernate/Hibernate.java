@@ -24,14 +24,14 @@ public class Hibernate {
   }
 
   /** Get the session from the sessionFactory. */
-  public Session create_scoped_session() {
-    this.create_session();
+  public Session createScopedSession() {
+    this.createSession();
     Session session = this.factory.openSession();
     return session;
   }
 
   /** Create the sessionFactory based on the configuration. */
-  public void create_session() {
+  public void createSession() {
     try {
       this.factory = this.config.buildSessionFactory();
     } catch (Throwable ex) {
@@ -41,13 +41,13 @@ public class Hibernate {
   }
 
   /** Initialize the Hibernate object. */
-  public void init_app(Jlask app) {
+  public void initApp(Jlask app) {
     this.app = app;
-    this.session = this.create_scoped_session();
+    this.session = this.createScopedSession();
   }
 
   /** Set the configuration to drop all databases when created. */
-  public void drop_all() {
+  public void dropAll() {
     try {
       this.config.setProperty("hibernate.hbm2ddl.auto", "create-drop");
     } catch (HibernateException e) {

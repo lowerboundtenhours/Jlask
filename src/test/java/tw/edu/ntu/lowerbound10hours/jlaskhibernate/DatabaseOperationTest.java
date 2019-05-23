@@ -16,8 +16,8 @@ public class DatabaseOperationTest {
 
   @BeforeClass
   public void beforeClass() {
-    db.drop_all();
-    db.init_app(new Jlask());
+    db.dropAll();
+    db.initApp(new Jlask());
   }
 
   @Test

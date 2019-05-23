@@ -8,6 +8,6 @@ public class BaseHibernateTest {
   @Test
   public void testBaseHibernate() {
     Hibernate db = new Hibernate();
-    db.init_app(new Jlask());
+    db.initApp(new Jlask());
   }
 }
