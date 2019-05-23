@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Posts{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="blog.create">New</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for post in postList %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ post.get('title') }}</h1>
+          <div class="about">by {{ post.get('username') }} on {{ post.get('created') }}</div>
+        </div>
+          <a class="action" href="1/update">Edit</a>
+      </header>
+      <p class="body">{{ post.get('body') }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
