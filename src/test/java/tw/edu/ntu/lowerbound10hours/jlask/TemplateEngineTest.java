@@ -12,7 +12,7 @@ public class TemplateEngineTest {
     TemplateEngine engine = new TemplateEngine();
     Map<String, Object> context = new HashMap<>();
     context.put("name", "Tony");
-    String rv = engine.render_template("src/test/templates/hello.html", context);
+    String rv = engine.renderTemplate("src/test/templates/hello.html", context);
     assertEquals(rv, "<p>Hello, Tony!</p>");
   }
 
@@ -21,7 +21,7 @@ public class TemplateEngineTest {
     TemplateEngine engine = new TemplateEngine();
     Map<String, Object> context = new HashMap<>();
     context.put("name", "Tony");
-    String rv = engine.render_template_string("<p>Hello, {{ name }}!</p>", context);
+    String rv = engine.renderTemplateString("<p>Hello, {{ name }}!</p>", context);
     assertEquals(rv, "<p>Hello, Tony!</p>");
   }
 }

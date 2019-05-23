@@ -29,7 +29,7 @@ public class TemplateEngine {
    * @param context the variables that are in the context of the template.
    * @return rendered string
    */
-  public String render_template(String templateName, Map<String, Object> context) {
+  public String renderTemplate(String templateName, Map<String, Object> context) {
     String template = "";
     try {
       template = this.loader.getString(templateName, Charsets.UTF_8, this.interpreter);
@@ -46,7 +46,7 @@ public class TemplateEngine {
    * @param context the variables that are in the context of the template.
    * @return rendered string
    */
-  public String render_template_string(String source, Map<String, Object> context) {
+  public String renderTemplateString(String source, Map<String, Object> context) {
     return this.jinjava.render(source, context);
   }
 }

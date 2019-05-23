@@ -35,15 +35,15 @@ public class JlaskTest {
   public void testAddUrlRule() throws Exception {
     @Jailbreak Jlask jlask = new Jlask();
     assertEquals(jlask.viewFunctions.containsKey("index"), false);
-    jlask.add_url_rule("/", "index", new MyView());
-    jlask.add_url_rule("/login", "login", new MyView());
+    jlask.addUrlRule("/", "index", new MyView());
+    jlask.addUrlRule("/login", "login", new MyView());
     assertEquals(jlask.viewFunctions.containsKey("login"), true);
     assertEquals(jlask.viewFunctions.containsKey("index"), true);
   }
 
   private Jlask buildApp() {
     Jlask app = new Jlask();
-    app.add_url_rule("/", "index", new MyView());
+    app.addUrlRule("/", "index", new MyView());
     return app;
   }
 
@@ -59,7 +59,7 @@ public class JlaskTest {
   @Test(enabled = true)
   public void testDispatchRequest() throws Exception {
     @Jailbreak Jlask jlask = this.buildAppAndSendReuqest();
-    String r = jlask.dispatch_request();
+    String r = jlask.dispatchRequest();
     assertEquals(r, "foo");
   }
 

@@ -9,7 +9,7 @@ public class GlobalTest {
 
   private Jlask buildAppAndSendReuqest() {
     Jlask jlask = new Jlask();
-    jlask.add_url_rule("/", "index", new MyView());
+    jlask.addUrlRule("/", "index", new MyView());
     Map<String, Object> environ = new HashMap<String, Object>();
     RequestContext ctx = new RequestContext(jlask, environ);
     ctx.push();

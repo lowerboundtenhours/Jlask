@@ -8,8 +8,8 @@ public class Main {
     InetAddress host = InetAddress.getByName("127.0.0.1");
     int port = 8013;
     Jlask app = new Jlask();
-    app.add_url_rule("/", "index", new TestView());
-    app.add_url_rule("/test", "test", new TestView());
+    app.addUrlRule("/", "index", new TestView());
+    app.addUrlRule("/test", "test", new TestView());
     app.run(host, port);
     // Config config = new Config("./");
     // config.fromJson("config.json");

@@ -31,11 +31,11 @@ public class RequestContext {
     this.request = new Request(environ);
     this.urlAdapter = this.app.createUrlAdapter(this.request);
     // TODO: match request, then setup request.rule
-    this.match_request();
+    this.matchRequest();
   }
 
   /** Match request via urlAdapter. */
-  public void match_request() {
+  public void matchRequest() {
     try {
       // TODO: url_rule, self.request.view_args = self.url_adapter.match(return_rule=True)
       SimpleEntry<Rule, HashMap<String, Object>> result = this.urlAdapter.match();
@@ -55,7 +55,7 @@ public class RequestContext {
     RequestContextStack.pop();
   }
 
-  public void auto_pop() {}
+  public void autoPop() {}
 
   // public Request getRequest() {
   //   return this.request;

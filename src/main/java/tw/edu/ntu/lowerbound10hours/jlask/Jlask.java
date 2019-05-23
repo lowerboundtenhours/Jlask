@@ -47,8 +47,8 @@ public class Jlask extends Application {
     sessionInterface.saveSession(this, session, response);
   }
 
-  /** Usage: app.add_url_rule('/', 'index', index). */
-  public void add_url_rule(String ruleString, String endpoint, View viewFunc) {
+  /** Usage: app.addUrlRule('/', 'index', index). */
+  public void addUrlRule(String ruleString, String endpoint, View viewFunc) {
     /*
       URL Rule usage
       rule = self.url_rule_class(rule, methods=methods, **options)
@@ -71,7 +71,7 @@ public class Jlask extends Application {
     return this.ruleMap.bindToEnvironment(request.environ, null, null);
   }
 
-  private Response make_response(String rv) {
+  private Response makeResponse(String rv) {
 
     /*
         Convert the return value from a view function to an instance of
@@ -105,7 +105,7 @@ public class Jlask extends Application {
     throw req.routingException;
   }
 
-  private String dispatch_request() throws Exception {
+  private String dispatchRequest() throws Exception {
     /*
         Does the request dispatching. Matches the URL and returns the
         return value of the view or error handler.  This does not have to
@@ -123,7 +123,7 @@ public class Jlask extends Application {
     return this.viewFunctions.get(req.rule.endpoint).call(req.viewArgs);
   }
 
-  private Response full_dispatch_request() {
+  private Response fullDispatchRequest() {
     /*
     Dispatches the request and on top of that performs request
     pre and postprocessing as well as HTTP exception catching and
@@ -134,7 +134,7 @@ public class Jlask extends Application {
       // TODO: request_started.send(self) signal
       // TODO: rv = this.preprocess_request()
       if (rv == null) {
-        rv = this.dispatch_request();
+        rv = this.dispatchRequest();
       }
     } catch (Exception e) {
       // TODO: handle exception
@@ -142,10 +142,10 @@ public class Jlask extends Application {
       e.printStackTrace();
     }
 
-    return this.finalize_request(rv, false);
+    return this.finalizeRequest(rv, false);
   }
 
-  private Response finalize_request(String rv, boolean fromErrorHandler) {
+  private Response finalizeRequest(String rv, boolean fromErrorHandler) {
     /*
     Given the return value from a view function this finalizes
     the request by converting it into a response and invoking the
@@ -155,9 +155,9 @@ public class Jlask extends Application {
     failure a special saf  the `from_error_handle  processing will be logged and otherwise ignored.
     */
 
-    Response response = this.make_response(rv);
+    Response response = this.makeResponse(rv);
     try {
-      response = this.process_response(response);
+      response = this.processResponse(response);
       //  request_finished.send(self, response=response) signal
     } catch (Exception e) {
       // if not fromErrorHandler:
@@ -170,7 +170,7 @@ public class Jlask extends Application {
     return response;
   }
 
-  private Response process_response(Response response) {
+  private Response processResponse(Response response) {
     /*
         ctx = _request_ctx_stack.top
         bp = ctx.request.blueprint
@@ -189,18 +189,18 @@ public class Jlask extends Application {
     return response;
   }
 
-  private Response handle_exception(Exception e) {
+  private Response handleException(Exception e) {
     /*
     self.log_exception((exc_type, exc_value, tb))
     handler = self._find_error_handler(InternalServerError())
     if handler is None:
         return InternalServerError()
-    return self.finalize_request(handler(e), fromErrorHandler=True)
+    return self.finalizeRequest(handler(e), fromErrorHandler=True)
     */
     return null;
   }
 
-  private AppContext app_context() {
+  private AppContext appContext() {
     /*
     * Create AppContext'
        with app.app_context():
@@ -209,7 +209,7 @@ public class Jlask extends Application {
     return new AppContext(this);
   }
 
-  private RequestContext request_context(Map<String, Object> environ) {
+  private RequestContext requestContext(Map<String, Object> environ) {
     /*
         Create RequestContext representing a WSGI environment.
     */
@@ -225,7 +225,7 @@ public class Jlask extends Application {
             start the response.
 
     */
-    RequestContext ctx = this.request_context(environ);
+    RequestContext ctx = this.requestContext(environ);
     Exception error = null;
 
     Response response = null;
@@ -235,7 +235,7 @@ public class Jlask extends Application {
     try {
       try {
         ctx.push();
-        response = this.full_dispatch_request();
+        response = this.fullDispatchRequest();
       } catch (Exception e) {
         // TODO: handle exception
         e.printStackTrace();
@@ -244,9 +244,9 @@ public class Jlask extends Application {
       // TODO: return response(environ, startResponse);
     } finally {
       // TODO:
-      // if self.should_ignore_error(error):
+      // if self.shouldIgnoreError(error):
       //    error = None
-      // ctx.auto_pop(error);
+      // ctx.autoPop(error);
     }
 
     // if (response != null) {
