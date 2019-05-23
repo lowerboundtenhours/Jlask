@@ -91,7 +91,21 @@ public class Jlask extends Application {
     return res;
   }
 
-  private String dispatch_request() {
+  private void raiseRoutingException(Request req) throws Exception {
+    /* if (
+            not self.debug
+            or not isinstance(request.routing_exception, RequestRedirect)
+            or request.method in ("GET", "HEAD", "OPTIONS")
+        ):
+            raise request.routing_exception
+
+        from .debughelpers import FormDataRoutingRedirect
+
+        raise FormDataRoutingRedirect(request) */
+    throw req.routingException;
+  }
+
+  private String dispatch_request() throws Exception {
     /*
         Does the request dispatching. Matches the URL and returns the
         return value of the view or error handler.  This does not have to
@@ -100,14 +114,12 @@ public class Jlask extends Application {
         proper response object, call :func:`make_response`
     */
     Request req = RequestContextStack.top().request;
-    // TODO: req = _request_ctx_stack.top.request
-    // if req.routing_exception is not None:
-    //     self.raise_routing_exception(req)
-    // System.err.println(req.rule.endpoint);
-    // TODO:
-    // rule = req.url_rule
-    // return this.view_functions[rule.endpoint](**req.view_args);
-    // return this.viewFunctions.get("index").call(new HashMap<String, Object>());
+    if (req.routingException != null) {
+      this.raiseRoutingException(req);
+    }
+    // TODO:   # if we provide automatic options for this URL and the
+    //         # request came with the OPTIONS method, reply automatically
+    System.err.println(req.rule.endpoint);
     return this.viewFunctions.get(req.rule.endpoint).call(req.viewArgs);
   }
 
@@ -127,7 +139,7 @@ public class Jlask extends Application {
     } catch (Exception e) {
       // TODO: handle exception
       // rv = this.handle_user_exception(e);
-      System.err.print(e);
+      e.printStackTrace();
     }
 
     return this.finalize_request(rv, false);
@@ -153,7 +165,7 @@ public class Jlask extends Application {
       // self.logger.exception(
       //     "Request finalizing failed with an " "error while handling an error"
       // )
-      System.err.print(e);
+      e.printStackTrace();
     }
     return response;
   }
@@ -217,26 +229,25 @@ public class Jlask extends Application {
     Exception error = null;
 
     Response response = null;
-    ctx.push();
-    response = this.full_dispatch_request();
+    // ctx.push();
+    // response = this.full_dispatch_request();
 
-    // try {
-    //   try {
-    //     ctx.push();
-    //     response = this.full_dispatch_request();
-    //   } catch (Exception e) {
-    //     // TODO: handle exception
-    //     error = e;
-    //     System.err.print(e);
-    //     // TODO: response = this.handle_exception(e);
-    //   }
-    //   // TODO: return response(environ, startResponse);
-    // } finally {
-    //   // TODO:
-    //   // if self.should_ignore_error(error):
-    //   //    error = None
-    //   // ctx.auto_pop(error);
-    // }
+    try {
+      try {
+        ctx.push();
+        response = this.full_dispatch_request();
+      } catch (Exception e) {
+        // TODO: handle exception
+        e.printStackTrace();
+        // TODO: response = this.handle_exception(e);
+      }
+      // TODO: return response(environ, startResponse);
+    } finally {
+      // TODO:
+      // if self.should_ignore_error(error):
+      //    error = None
+      // ctx.auto_pop(error);
+    }
 
     // if (response != null) {
     //   startResponse.startResponse(200, null, false);

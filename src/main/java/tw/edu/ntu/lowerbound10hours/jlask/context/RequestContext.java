@@ -36,10 +36,14 @@ public class RequestContext {
 
   /** Match request via urlAdapter. */
   public void match_request() {
-    SimpleEntry<Rule, HashMap<String, Object>> result = this.urlAdapter.match();
-    this.request.rule = result.getKey();
-    this.request.viewArgs = result.getValue();
-    // TODO: url_rule, self.request.view_args = self.url_adapter.match(return_rule=True)
+    try {
+      // TODO: url_rule, self.request.view_args = self.url_adapter.match(return_rule=True)
+      SimpleEntry<Rule, HashMap<String, Object>> result = this.urlAdapter.match();
+      this.request.rule = result.getKey();
+      this.request.viewArgs = result.getValue();
+    } catch (Exception e) {
+      this.request.routingException = e;
+    }
   }
 
   public void push() {
