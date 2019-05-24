@@ -30,6 +30,7 @@ public class SigningSerializer {
       dictType = new TypeToken<HashMap<String, String>>() {}.getType();
       signature.initSign(keyPair.getPrivate(), secureRandom);
     } catch (Exception e) {
+      e.printStackTrace();
       throw new RuntimeException(e);
     }
   }
@@ -61,10 +62,10 @@ public class SigningSerializer {
     String encodedSignature = tokens[1];
     byte[] digitalSignature = this.fromBase64(encodedSignature);
     if (!this.verify(digitalSignature)) {
-      throw new java.security.SignatureException(
-          "Verification failed. The content of this cookie migh be changed");
+      throw new RuntimeException("Verification of session cookie failed.");
     }
     HashMap<String, String> originalContent = this.fromJsonString(jsonString);
+    return originalContent;
   }
 
   private String toJsonString(HashMap<String, String> dict) {
@@ -76,15 +77,25 @@ public class SigningSerializer {
   }
 
   private byte[] sign(String target) {
-    byte[] data = target.getBytes("UTF-8");
-    signature.update(data);
-    byte[] digitalSignature = signature.sign();
-    return digitalSignature;
+    try {
+      byte[] data = target.getBytes("UTF-8");
+      signature.update(data);
+      byte[] digitalSignature = signature.sign();
+      return digitalSignature;
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new RuntimeException();
+    }
   }
 
   private boolean verify(byte[] digitalSignature) {
-    signature.initVerify(keyPair.getPublic());
-    return signature.verify(digitalSignature);
+    try {
+      signature.initVerify(keyPair.getPublic());
+      return signature.verify(digitalSignature);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new RuntimeException();
+    }
   }
 
   private String toBase64(byte[] bytes) {
