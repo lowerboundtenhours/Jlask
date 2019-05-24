@@ -33,7 +33,7 @@ public class Response {
   /**
    * Wrap javax.servlet.http.HttpServletResponse.
    *
-   * @param rv return body as List<String>
+   * @param rv return body as List
    * @param environ WSGI environ
    * @param status HTTP status
    */
