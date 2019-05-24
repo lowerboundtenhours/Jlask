@@ -6,6 +6,9 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.Cookie;
@@ -15,10 +18,14 @@ import org.testng.annotations.Test;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.HttpException;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.InternalServerError;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.BaseWsgiServer;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
 public class JlaskTest {
+  private static final String name = "localhost";
+  private static final int port = 8002;
   private static HttpServletRequest mockedRequest = mock(HttpServletRequest.class);
 
   /** Setting up mock object. */
@@ -49,7 +56,7 @@ public class JlaskTest {
   private Jlask buildApp() {
     Jlask testApp = new Jlask();
     testApp.addUrlRule("/", "index", new MyView());
-    return app;
+    return testApp;
   }
 
   private Jlask buildAppAndSendReuqest() {
@@ -58,7 +65,7 @@ public class JlaskTest {
     environ.put("baseRequest", mockedRequest);
     RequestContext ctx = new RequestContext(jlask, environ);
     ctx.push();
-    return jlask;
+    return testApp;
   }
 
   @Test()
@@ -125,11 +132,22 @@ public class JlaskTest {
   }
 
   @Test
+  public void testOverwritingRule() {
+    Jlask testApp = this.buildAppAndSendReuqest();
+    assertThrows(RuntimeException.class, () -> testApp.addUrlRule("/", "index", new MyView()));
+  }
+  @Test(enabled = false)
   public void testNotFound() {
+    InetAddress host = InetAddress.getByName(name);
     @Jailbreak Jlask testApp = this.buildAppAndSendReuqest();
-    testApp.addUrlRule("/", "index", new MyView());
-    testApp.addUrlRule("/login", "login", new MyView());
-    BaseWsgiServer server = Serving.makeServer(host, port, app);
+    BaseWsgiServer server = Serving.makeServer(host, port, testApp);
+    server.getServer().start();
+    HttpURLConnection http =
+        (HttpURLConnection) new URL(String.format("http://%s:%d", name, port)).openConnection();
+    http.connect();
+    // Environ is empty, so it will be not found
+    assertEquals(http.getResponseMessage(), "Not Found");
+    assertEquals(http.getResponseCode(), 404);
   }
 
 }

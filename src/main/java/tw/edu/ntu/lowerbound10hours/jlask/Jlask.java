@@ -315,7 +315,6 @@ public class Jlask extends Application {
         error = e;
         response = this.handleException(e);
       }
-      System.out.println(response);
       startResponse.startResponse(response.getStatus(), null, false);
       startResponse.getWrite().write(response.getBody());
       return;

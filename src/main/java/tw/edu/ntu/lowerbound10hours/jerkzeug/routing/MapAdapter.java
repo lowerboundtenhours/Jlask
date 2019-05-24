@@ -34,11 +34,11 @@ public class MapAdapter {
     this.defaultMethod = defaultMethod;
   }
 
-  public SimpleEntry<Rule, HashMap<String, Object>> match() {
+  public SimpleEntry<Rule, HashMap<String, Object>> match() throws NotFound {
     return this.match(this.pathInfo, this.defaultMethod.toUpperCase());
   }
 
-  public SimpleEntry<Rule, HashMap<String, Object>> match(String pathInfo) {
+  public SimpleEntry<Rule, HashMap<String, Object>> match(String pathInfo) throws NotFound {
     return this.match(pathInfo, this.defaultMethod.toUpperCase());
   }
 
@@ -46,7 +46,7 @@ public class MapAdapter {
    * Search through all rules in the bound map, return the first rule that match this pathInfo and
    * its corresponding arguments.
    */
-  public SimpleEntry<Rule, HashMap<String, Object>> match(String pathInfo, String method) {
+  public SimpleEntry<Rule, HashMap<String, Object>> match(String pathInfo, String method) throws NotFound {
     StringBuilder sb = new StringBuilder();
     if (this.map.hostMatching) {
       sb.append(this.serverName);
