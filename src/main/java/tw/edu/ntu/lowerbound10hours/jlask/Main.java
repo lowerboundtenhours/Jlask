@@ -143,7 +143,7 @@ class CreateView extends View {
       post.put("title", title);
       post.put("body", body);
       post.put("author_id", BlogGlobal.getLoginUser().get("id"));
-      int id = postDatabase.size();
+      int id = BlogGlobal.getPostId();
       post.put("id", String.valueOf(id));
       post.put("username", BlogGlobal.getLoginUser().get("username"));
       post.put("created", new Date().toString());
