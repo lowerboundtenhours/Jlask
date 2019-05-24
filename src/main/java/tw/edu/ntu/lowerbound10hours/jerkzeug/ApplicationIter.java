@@ -9,6 +9,10 @@ public class ApplicationIter<T> implements Iterable<T> {
 
   public ApplicationIter() {}
 
+  public ApplicationIter(List<T> list) {
+    this.list = list;
+  }
+
   @Override
   public Iterator<T> iterator() {
     return list.iterator();

@@ -87,7 +87,7 @@ public class Jlask extends Application {
     // TODO: when rv is Response
     // TODO: when rv is bytestring
 
-    res = new Response(rv);
+    res = new Response(rv, Global.request().environ, 200);
 
     return res;
   }
@@ -104,10 +104,11 @@ public class Jlask extends Application {
     // TODO: req = _request_ctx_stack.top.request
     // if req.routing_exception is not None:
     //     self.raise_routing_exception(req)
-    System.err.println(req.rule.endpoint);
+    // System.err.println(req.rule.endpoint);
     // TODO:
     // rule = req.url_rule
     // return this.view_functions[rule.endpoint](**req.view_args);
+    // return this.viewFunctions.get("index").call(new HashMap<String, Object>());
     return this.viewFunctions.get(req.rule.endpoint).call(req.viewArgs);
   }
 
@@ -204,7 +205,8 @@ public class Jlask extends Application {
     return new RequestContext(this, environ);
   }
 
-  private void wsgi_app(Map<String, Object> environ, StartResponse startResponse) {
+  private ApplicationIter<String> wsgi_app(
+      Map<String, Object> environ, StartResponse startResponse) {
     /*
         environ: A WSGI environment.
         start_response: A callable accepting a status code,
@@ -237,16 +239,16 @@ public class Jlask extends Application {
     //   // ctx.auto_pop(error);
     // }
 
-    if (response != null) {
-      startResponse.startResponse(200, null, false);
-      startResponse.getWrite().write(response.getBody());
-    } else {
-      startResponse.startResponse(500, null, false);
-    }
+    // if (response != null) {
+    //   startResponse.startResponse(200, null, false);
+    //   startResponse.getWrite().write(response.getBody());
+    // } else {
+    //   startResponse.startResponse(500, null, false);
+    // }
+    return response.call(environ, startResponse);
   }
 
-  public ApplicationIter call(Map<String, Object> environ, StartResponse startResponse) {
-    this.wsgi_app(environ, startResponse);
-    return null;
+  public ApplicationIter<String> call(Map<String, Object> environ, StartResponse startResponse) {
+    return this.wsgi_app(environ, startResponse);
   }
 }
