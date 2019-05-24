@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertThrows;
+import static org.mockito.Mockito.mock;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +12,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import manifold.ext.api.Jailbreak;
 import org.testng.annotations.Test;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.HttpException;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.InternalServerError;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
@@ -58,7 +61,7 @@ public class JlaskTest {
     return jlask;
   }
 
-  @Test(enabled = true)
+  @Test()
   public void testDispatchRequest() throws Exception {
     @Jailbreak Jlask jlask = this.buildAppAndSendReuqest();
     String r = jlask.dispatchRequest();
@@ -111,4 +114,14 @@ public class JlaskTest {
     InternalServerError e = new InternalServerError();
     assertEquals(null, jlask.findErrorHandler(e));
   }
+
+  @Test()
+  public void testNotFound() throws Exception {
+    @Jailbreak Jlask jlask = this.buildAppAndSendReuqest();
+    
+    Map<String, Object> environ = new HashMap<String, Object>();
+    StartResponse startResponse = mock(StartResponse.class);
+    jlask.wsgiApp(environ, startResponse);
+  }
+
 }
