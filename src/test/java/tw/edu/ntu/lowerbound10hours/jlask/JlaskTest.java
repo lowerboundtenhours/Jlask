@@ -16,6 +16,7 @@ import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
 public class JlaskTest {
   private static HttpServletRequest mockedRequest = mock(HttpServletRequest.class);
 
+  /** Setting up mock object. */
   public JlaskTest() {
     // Mock request
     when(mockedRequest.getMethod()).thenReturn("GET");
