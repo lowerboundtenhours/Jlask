@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 public class RequestTest {
   private static HttpServletRequest mockRequest = mock(HttpServletRequest.class);
 
+  /** Setting up mock object. */
   public RequestTest() {
     when(mockRequest.getMethod()).thenReturn("GET");
     when(mockRequest.getCookies()).thenReturn(new Cookie[0]);
@@ -28,6 +29,7 @@ public class RequestTest {
     assertEquals(req.cookies, new Cookie[0]);
   }
 
+  @Test
   public void testGetParameter() throws Exception {
     Map<String, Object> environ = new HashMap<>();
     environ.put("baseRequest", mockRequest);

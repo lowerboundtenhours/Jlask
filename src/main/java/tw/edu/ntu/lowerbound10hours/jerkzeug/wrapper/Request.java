@@ -13,6 +13,11 @@ public class Request {
   public Cookie[] cookies;
   private HttpServletRequest baseRequest;
 
+  /**
+   * Wrap javax.servlet.http.HttpServletRequest.
+   *
+   * @param environ WSGI environ
+   */
   public Request(Map<String, Object> environ) {
     this.environ = environ;
     if (environ.containsKey("baseRequest")) {

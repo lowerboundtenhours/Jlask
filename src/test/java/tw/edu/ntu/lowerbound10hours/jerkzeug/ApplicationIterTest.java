@@ -13,6 +13,7 @@ public class ApplicationIterTest {
     assertNotNull(iter);
   }
 
+  @Test
   public void testListConstructor() throws Exception {
     List<String> list = new ArrayList<>();
     ApplicationIter<String> iter = new ApplicationIter<>(list);

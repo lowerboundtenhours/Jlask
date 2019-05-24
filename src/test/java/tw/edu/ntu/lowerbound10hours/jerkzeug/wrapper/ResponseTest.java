@@ -21,6 +21,7 @@ public class ResponseTest {
   private static HttpServletResponse mockResponse = mock(HttpServletResponse.class);
   private static StartResponse mockStartResponse = mock(StartResponse.class);
 
+  /** Setting up mock object. */
   public ResponseTest() {
     doNothing().when(mockResponse).addCookie(any());
     doNothing().doThrow(new IOException()).when(mockResponse).sendRedirect(any());

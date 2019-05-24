@@ -16,6 +16,12 @@ public class Response {
   private List<String> response;
   private HttpServletResponse baseResponse;
 
+  /**
+   * Wrap javax.servlet.http.HttpServletResponse.
+   *
+   * @param rv return body
+   * @param environ WSGI environ
+   */
   public Response(String rv, Map<String, Object> environ) {
     this.response = new ArrayList<>();
     this.response.add(rv);
@@ -27,6 +33,15 @@ public class Response {
     this.baseResponse = (HttpServletResponse) environ.get("baseResponse");
   }
 
+  /**
+   * Add a cookie to response.
+   *
+   * @param key cookie key
+   * @param value cookie value
+   * @param domain cookie domain
+   * @param path cookie path
+   * @param maxAge cookie maxAge, in seconds
+   */
   public void setCookie(String key, String value, String domain, String path, int maxAge) {
     Cookie newCookie = new Cookie(key, value);
     newCookie.setDomain(domain);
@@ -35,12 +50,22 @@ public class Response {
     this.baseResponse.addCookie(newCookie);
   }
 
+  /**
+   * Remove a cookie from response.
+   *
+   * @param key cookie key
+   */
   public void deleteCookie(String key) {
     Cookie newCookie = new Cookie(key, "");
     newCookie.setMaxAge(0);
     this.baseResponse.addCookie(newCookie);
   }
 
+  /**
+   * Set redirect in response.
+   *
+   * @param location location to redirect
+   */
   public void sendRedirect(String location) {
     try {
       this.baseResponse.sendRedirect(location);
