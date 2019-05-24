@@ -260,16 +260,12 @@ public class Jlask extends Application {
   }
 
   private Response handleException(Exception e) throws Exception {
-    /*
-    got_request_exception.send(self, exception=e)
-      if self.propagate_exceptions:
-        ...
-    self.log_exception((exc_type, exc_value, tb))
-    handler = self._find_error_handler(InternalServerError())
-    if handler is None:
-        return InternalServerError()
-    return self.finalizeRequest(handler(e), fromErrorHandler=True)
-    */
+    /**
+     * TODO: got_request_exception.send(self, exception=e) if self.propagate_exceptions: ...
+     * self.log_exception((exc_type, exc_value, tb)) handler =
+     * self._find_error_handler(InternalServerError()) if handler is None: return
+     * InternalServerError() return self.finalizeRequest(handler(e), fromErrorHandler=True)
+     */
     Handler handler = this.findErrorHandler(new InternalServerError());
     if (handler == null) {
       throw new InternalServerError();

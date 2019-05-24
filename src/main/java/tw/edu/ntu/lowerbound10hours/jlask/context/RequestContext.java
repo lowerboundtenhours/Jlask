@@ -57,14 +57,11 @@ public class RequestContext {
 
   /** Auto pop after request processed. */
   public void autoPop(Exception e) {
-    /** TODO.
-     * if self.request.environ.get("flask._preserve_context") or (
-     *    exc is not None and self.app.preserve_context_on_exception
-     * ):
-     *    self.preserved = True
-     *    self._preserved_exc = exc
-     * else:
-     *    self.pop(exc)  */
+    /**
+     * TODO. if self.request.environ.get("flask._preserve_context") or ( exc is not None and
+     * self.app.preserve_context_on_exception ): self.preserved = True self._preserved_exc = exc
+     * else: self.pop(exc)
+     */
     this.pop();
   }
 

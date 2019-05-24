@@ -21,6 +21,7 @@ public class HttpException extends Exception {
 
   /**
    * Main constructer.
+   *
    * @param description error message
    */
   public HttpException(String description) {

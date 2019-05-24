@@ -2,10 +2,7 @@ package tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions;
 
 @SuppressWarnings("serial")
 public class NotFound extends HttpException {
-  /**
-   * Page Not Found Error.
-   * status code 404
-   */
+  /** Page Not Found Error. status code 404 */
   public NotFound() {
     super();
     super.code = 404;

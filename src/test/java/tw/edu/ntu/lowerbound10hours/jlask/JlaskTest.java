@@ -3,6 +3,7 @@ package tw.edu.ntu.lowerbound10hours.jlask;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertThrows;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +11,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import manifold.ext.api.Jailbreak;
 import org.testng.annotations.Test;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.InternalServerError;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
@@ -75,5 +77,38 @@ public class JlaskTest {
     @Jailbreak Jlask jlask = this.buildAppAndSendReuqest();
     @Jailbreak Response res = jlask.full_dispatch_request();
     assertEquals(res.response.get(0), "foo");
+  }
+
+  @Test
+  public void testHandleException() throws Exception {
+    @Jailbreak Jlask jlask = buildApp();
+    // For now handleException() will only throw InternalServerError
+    assertThrows(InternalServerError.class, () -> jlask.handleException(new Exception()));
+  }
+
+  @Test
+  public void testHandleUserException() throws Exception {
+    @Jailbreak Jlask jlask = buildApp();
+    // For now handleUserException() will only throw whatever comes in back if it is not a
+    // HttpException. Otherwise, it will return HttpException
+    assertThrows(Exception.class, () -> jlask.handleUserException(new Exception()));
+    InternalServerError e = new InternalServerError();
+    assertEquals(e, jlask.handleUserException(e));
+  }
+
+  @Test
+  public void testHttpException() throws Exception {
+    @Jailbreak Jlask jlask = buildApp();
+    // For now handleException() will only return given HttpException
+    InternalServerError e = new InternalServerError();
+    assertEquals(e, jlask.handleHttpException(e));
+  }
+
+  @Test
+  public void testFindErrorHandler() {
+    @Jailbreak Jlask jlask = buildApp();
+    // For now there is no error handler
+    InternalServerError e = new InternalServerError();
+    assertEquals(null, jlask.findErrorHandler(e));
   }
 }

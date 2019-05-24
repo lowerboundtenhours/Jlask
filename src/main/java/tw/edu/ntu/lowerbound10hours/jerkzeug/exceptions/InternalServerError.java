@@ -2,10 +2,7 @@ package tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions;
 
 @SuppressWarnings("serial")
 public class InternalServerError extends HttpException {
-  /**
-   * InternalServerError.
-   * status code 500
-   */
+  /** InternalServerError. status code 500 */
   public InternalServerError() {
     super();
     super.code = 500;
