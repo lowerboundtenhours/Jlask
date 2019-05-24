@@ -16,7 +16,7 @@ public class RequestTest {
   /** Setting up mock object. */
   public RequestTest() {
     when(mockRequest.getMethod()).thenReturn("GET");
-    when(mockRequest.getCookies()).thenReturn(new Cookie[0]);
+    when(mockRequest.getCookies()).thenReturn(new Cookie[] {new Cookie("name", "value")});
     when(mockRequest.getParameter("key")).thenReturn("value");
   }
 
@@ -26,7 +26,8 @@ public class RequestTest {
     environ.put("baseRequest", mockRequest);
     Request req = new Request(environ);
     assertEquals(req.method, "GET");
-    assertEquals(req.cookies.size(), 0);
+    assertEquals(req.cookies.size(), 1);
+    assertEquals(req.cookies.get("name").getValue(), "value");
   }
 
   @Test
