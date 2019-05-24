@@ -2,8 +2,8 @@
 
 {% block header %}
   <h1>{% block title %}Posts{% endblock %}</h1>
-  {% if g.user %}
-    <a class="action" href="blog.create">New</a>
+  {% if hasUser %}
+    <a class="action" href="/create">New</a>
   {% endif %}
 {% endblock %}
 
@@ -15,7 +15,11 @@
           <h1>{{ post.get('title') }}</h1>
           <div class="about">by {{ post.get('username') }} on {{ post.get('created') }}</div>
         </div>
-          <a class="action" href="1/update">Edit</a>
+        {% if hasUser %}
+            {%if post.get('author_id') == user.get('id') %}
+            <a class="action" href="update/{{post.get('id')}}">Edit</a>
+            {% endif %}
+        {% endif %}
       </header>
       <p class="body">{{ post.get('body') }}</p>
     </article>
