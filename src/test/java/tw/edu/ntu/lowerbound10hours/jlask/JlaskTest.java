@@ -10,8 +10,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import manifold.ext.api.Jailbreak;
 import org.testng.annotations.Test;
-import tw.edu.ntu.lowerbound10hours.jerkzeug.wrapper.Response;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
+import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
 public class JlaskTest {
   private static HttpServletRequest mockedRequest = mock(HttpServletRequest.class);

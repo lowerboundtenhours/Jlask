@@ -1,4 +1,4 @@
-package tw.edu.ntu.lowerbound10hours.jerkzeug.wrapper;
+package tw.edu.ntu.lowerbound10hours.jerkzeug.wrappers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -33,7 +33,7 @@ public class ResponseTest {
   public void testConstructor() throws Exception {
     Map<String, Object> environ = new HashMap<>();
     environ.put("baseResponse", mockResponse);
-    @Jailbreak Response res = new Response("foo", environ);
+    @Jailbreak Response res = new Response("foo", environ, 200);
     assertEquals(res.response.get(0), "foo");
   }
 
@@ -43,7 +43,7 @@ public class ResponseTest {
     environ.put("baseResponse", mockResponse);
     List<String> list = new ArrayList<>();
     list.add("foo");
-    @Jailbreak Response res = new Response(list, environ);
+    @Jailbreak Response res = new Response(list, environ, 200);
     assertEquals(res.response.get(0), "foo");
   }
 
@@ -51,7 +51,7 @@ public class ResponseTest {
   public void testSetCookie() throws Exception {
     Map<String, Object> environ = new HashMap<>();
     environ.put("baseResponse", mockResponse);
-    Response res = new Response("foo", environ);
+    Response res = new Response("foo", environ, 200);
     res.setCookie("key", "value", "domain", "path", 0);
   }
 
@@ -59,7 +59,7 @@ public class ResponseTest {
   public void testDeleteCookie() throws Exception {
     Map<String, Object> environ = new HashMap<>();
     environ.put("baseResponse", mockResponse);
-    Response res = new Response("foo", environ);
+    Response res = new Response("foo", environ, 200);
     res.deleteCookie("key");
   }
 
@@ -67,7 +67,7 @@ public class ResponseTest {
   public void testRedirect() throws Exception {
     Map<String, Object> environ = new HashMap<>();
     environ.put("baseResponse", mockResponse);
-    Response res = new Response("foo", environ);
+    Response res = new Response("foo", environ, 200);
     res.sendRedirect("");
   }
 
@@ -75,15 +75,17 @@ public class ResponseTest {
   public void testGetStatus() throws Exception {
     Map<String, Object> environ = new HashMap<>();
     environ.put("baseResponse", mockResponse);
-    @Jailbreak Response res = new Response("foo", environ);
-    assertEquals(res.getStatus(environ), 200);
+    @Jailbreak Response res1 = new Response("foo", environ, 200);
+    assertEquals(res1.getStatus(), 200);
+    @Jailbreak Response res2 = new Response("bar", environ, 404);
+    assertEquals(res2.getStatus(), 404);
   }
 
   @Test
   public void testGetResponseHeaders() throws Exception {
     Map<String, Object> environ = new HashMap<>();
     environ.put("baseResponse", mockResponse);
-    @Jailbreak Response res = new Response("foo", environ);
+    @Jailbreak Response res = new Response("foo", environ, 200);
     assertEquals(res.getResponseHeaders(environ).size(), 0);
   }
 
@@ -91,7 +93,7 @@ public class ResponseTest {
   public void testGetApplicationIter() throws Exception {
     Map<String, Object> environ = new HashMap<>();
     environ.put("baseResponse", mockResponse);
-    @Jailbreak Response res = new Response("foo", environ);
+    @Jailbreak Response res = new Response("foo", environ, 200);
     assertEquals(res.getApplicationIter(environ).iterator().next(), "foo");
   }
 
@@ -99,7 +101,7 @@ public class ResponseTest {
   public void testCall() throws Exception {
     Map<String, Object> environ = new HashMap<>();
     environ.put("baseResponse", mockResponse);
-    @Jailbreak Response res = new Response("foo", environ);
+    @Jailbreak Response res = new Response("foo", environ, 200);
     ApplicationIter<String> iter = res.call(environ, mockStartResponse);
     assertEquals(iter.iterator().next(), "foo");
   }

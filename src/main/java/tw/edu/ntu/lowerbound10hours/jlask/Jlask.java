@@ -10,14 +10,14 @@ import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.Rule;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.RuleMap;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
-import tw.edu.ntu.lowerbound10hours.jerkzeug.wrapper.Request;
-import tw.edu.ntu.lowerbound10hours.jerkzeug.wrapper.Response;
 import tw.edu.ntu.lowerbound10hours.jlask.context.AppContext;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContextStack;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSessionInterface;
 import tw.edu.ntu.lowerbound10hours.jlask.session.Session;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SessionInterface;
+import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
+import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
 public class Jlask extends Application {
   private Config config;
@@ -87,7 +87,7 @@ public class Jlask extends Application {
     // TODO: when rv is Response
     // TODO: when rv is bytestring
 
-    res = new Response(rv, Global.request().environ);
+    res = new Response(rv, Global.request().environ, 200);
 
     return res;
   }

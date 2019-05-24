@@ -1,9 +1,9 @@
 package tw.edu.ntu.lowerbound10hours.jlask;
 
-import tw.edu.ntu.lowerbound10hours.jerkzeug.wrapper.Request;
 import tw.edu.ntu.lowerbound10hours.jlask.context.AppContextStack;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContextStack;
 import tw.edu.ntu.lowerbound10hours.jlask.session.Session;
+import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
 
 public class Global {
   public static Request request() {

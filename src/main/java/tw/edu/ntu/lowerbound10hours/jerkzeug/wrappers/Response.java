@@ -1,4 +1,4 @@
-package tw.edu.ntu.lowerbound10hours.jerkzeug.wrapper;
+package tw.edu.ntu.lowerbound10hours.jerkzeug.wrappers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,16 +21,19 @@ public class Response {
    *
    * @param rv return body
    * @param environ WSGI environ
+   * @param status HTTP status
    */
-  public Response(String rv, Map<String, Object> environ) {
+  public Response(String rv, Map<String, Object> environ, int status) {
     this.response = new ArrayList<>();
     this.response.add(rv);
     this.baseResponse = (HttpServletResponse) environ.get("baseResponse");
+    this.status = status;
   }
 
-  public Response(List<String> rv, Map<String, Object> environ) {
+  public Response(List<String> rv, Map<String, Object> environ, int status) {
     this.response = rv;
     this.baseResponse = (HttpServletResponse) environ.get("baseResponse");
+    this.status = status;
   }
 
   /**
@@ -74,9 +77,8 @@ public class Response {
     }
   }
 
-  private int getStatus(Map<String, Object> environ) {
-    // TODO: implement return status
-    return 200;
+  public int getStatus() {
+    return this.status;
   }
 
   private ArrayList<HttpHeader> getResponseHeaders(Map<String, Object> environ) {
@@ -96,7 +98,7 @@ public class Response {
    * @return ApplicationIter
    */
   public ApplicationIter<String> call(Map<String, Object> environ, StartResponse startResponse) {
-    int status = this.getStatus(environ);
+    int status = this.getStatus();
     ArrayList<HttpHeader> headers = this.getResponseHeaders(environ);
     ApplicationIter<String> iter = this.getApplicationIter(environ);
     startResponse.startResponse(status, headers, false);

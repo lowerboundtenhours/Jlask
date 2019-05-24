@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.MapAdapter;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.Rule;
-import tw.edu.ntu.lowerbound10hours.jerkzeug.wrapper.Request;
 import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 import tw.edu.ntu.lowerbound10hours.jlask.session.Session;
+import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
 
 public class RequestContext {
 
