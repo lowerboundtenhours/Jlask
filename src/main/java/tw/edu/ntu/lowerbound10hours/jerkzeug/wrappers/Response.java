@@ -19,7 +19,7 @@ public class Response {
   /**
    * Wrap javax.servlet.http.HttpServletResponse.
    *
-   * @param rv return body
+   * @param rv return body as String
    * @param environ WSGI environ
    * @param status HTTP status
    */
@@ -30,6 +30,13 @@ public class Response {
     this.status = status;
   }
 
+  /**
+   * Wrap javax.servlet.http.HttpServletResponse.
+   *
+   * @param rv return body as List<String>
+   * @param environ WSGI environ
+   * @param status HTTP status
+   */
   public Response(List<String> rv, Map<String, Object> environ, int status) {
     this.response = rv;
     this.baseResponse = (HttpServletResponse) environ.get("baseResponse");
