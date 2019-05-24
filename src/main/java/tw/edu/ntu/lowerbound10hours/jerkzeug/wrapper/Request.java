@@ -1,5 +1,6 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug.wrapper;
 
+import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,7 @@ public class Request {
   public Rule rule;
   public Map<String, Object> viewArgs;
   public String method;
-  public Cookie[] cookies;
+  public Map<String, Cookie> cookies;
   private HttpServletRequest baseRequest;
 
   /**
@@ -23,7 +24,10 @@ public class Request {
     if (environ.containsKey("baseRequest")) {
       this.baseRequest = (HttpServletRequest) environ.get("baseRequest");
       this.method = this.baseRequest.getMethod();
-      this.cookies = this.baseRequest.getCookies();
+      this.cookies = new HashMap<String, Cookie>();
+      for (Cookie cookie : this.baseRequest.getCookies()) {
+        this.cookies.put(cookie.getName(), cookie);
+      }
     }
   }
 

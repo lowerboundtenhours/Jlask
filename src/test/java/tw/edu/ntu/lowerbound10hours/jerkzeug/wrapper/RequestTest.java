@@ -26,7 +26,7 @@ public class RequestTest {
     environ.put("baseRequest", mockRequest);
     Request req = new Request(environ);
     assertEquals(req.method, "GET");
-    assertEquals(req.cookies, new Cookie[0]);
+    assertEquals(req.cookies.size(), 0);
   }
 
   @Test
