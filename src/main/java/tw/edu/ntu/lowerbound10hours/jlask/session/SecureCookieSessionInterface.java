@@ -73,7 +73,10 @@ public class SecureCookieSessionInterface extends SessionInterface {
   }
 }
 
-/** Java alternative of itsdangerous.URLSafeTimeSerializer */
+/**
+ * Java alternative of itsdangerous.URLSafeTimeSerializer. Note that now it only support to encode
+ * and sign HashMap<String, String>
+ */
 class SigningSerializer {
   private Signature signature = Signature.getInstance("SHA256WithDSA");
   private SecureRandom secureRandom = new SecureRandom();
@@ -95,12 +98,28 @@ class SigningSerializer {
     return instance;
   }
 
-  public HashMap<String, Object> loads(String value) {
-    throw new UnsupportedOperationException("Not implemented yet.");
+  /** Dumps the json format string along with its siginature (base64 encdoed) of input dict. */
+  public String dumps(HashMap<String, String> dict) {
+    String jsonString = this.toJsonString(dict);
+    byte[] digitalSignature = this.sign(jsonString);
+    String encodedSignature = toBase64(digitalSignature);
+    return jsonString + "." + encodedSignature;
   }
 
-  public String dumps(HashMap<String, Object> dict) {
-    throw new UnsupportedOperationException("Not implemented yet.");
+  /**
+   * Load a json string with its base64-encoded siginature, verify the signature and return the
+   * original content of the json string.
+   */
+  public HashMap<String, String> loads(String value) {
+    String[] tokens = value.split(".");
+    String jsonString = tokens[0];
+    String encodedSignature = tokens[1];
+    byte[] digitalSignature = this.fromBase64(encodedSignature);
+    if (!this.verify(digitalSignature)) {
+      throw new java.security.SignatureException(
+          "Verification failed. The content of this cookie migh be changed");
+    }
+    HashMap<String, String> originalContent = this.fromJsonString(jsonString);
   }
 
   private String toJsonString(HashMap<String, String> dict) {
