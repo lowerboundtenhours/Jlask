@@ -1,0 +1,37 @@
+package tw.edu.ntu.lowerbound10hours.jerkzeug.wrapper;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertEquals;
+
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import org.testng.annotations.Test;
+
+public class RequestTest {
+  private static HttpServletRequest mockRequest = mock(HttpServletRequest.class);
+
+  public RequestTest() {
+    when(mockRequest.getMethod()).thenReturn("GET");
+    when(mockRequest.getCookies()).thenReturn(new Cookie[0]);
+    when(mockRequest.getParameter("key")).thenReturn("value");
+  }
+
+  @Test
+  public void testConstructor() throws Exception {
+    Map<String, Object> environ = new HashMap<>();
+    environ.put("baseRequest", mockRequest);
+    Request req = new Request(environ);
+    assertEquals(req.method, "GET");
+    assertEquals(req.cookies, new Cookie[0]);
+  }
+
+  public void testGetParameter() throws Exception {
+    Map<String, Object> environ = new HashMap<>();
+    environ.put("baseRequest", mockRequest);
+    Request req = new Request(environ);
+    assertEquals(req.getParameter("key"), "value");
+  }
+}
