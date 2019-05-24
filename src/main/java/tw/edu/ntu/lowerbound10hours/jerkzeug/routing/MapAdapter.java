@@ -46,7 +46,8 @@ public class MapAdapter {
    * Search through all rules in the bound map, return the first rule that match this pathInfo and
    * its corresponding arguments.
    */
-  public SimpleEntry<Rule, HashMap<String, Object>> match(String pathInfo, String method) throws NotFound {
+  public SimpleEntry<Rule, HashMap<String, Object>> match(String pathInfo, String method)
+      throws NotFound {
     StringBuilder sb = new StringBuilder();
     if (this.map.hostMatching) {
       sb.append(this.serverName);

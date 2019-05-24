@@ -4,7 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertThrows;
-import static org.mockito.Mockito.mock;
 
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
@@ -15,11 +14,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import manifold.ext.api.Jailbreak;
 import org.testng.annotations.Test;
-import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.HttpException;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.InternalServerError;
-import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
-import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.BaseWsgiServer;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
@@ -125,7 +123,7 @@ public class JlaskTest {
   @Test
   public void testWsgiApp() throws Exception {
     @Jailbreak Jlask testApp = this.buildAppAndSendReuqest();
-    
+
     Map<String, Object> environ = new HashMap<String, Object>();
     StartResponse startResponse = mock(StartResponse.class);
     testApp.wsgiApp(environ, startResponse);
@@ -136,6 +134,7 @@ public class JlaskTest {
     Jlask testApp = this.buildAppAndSendReuqest();
     assertThrows(RuntimeException.class, () -> testApp.addUrlRule("/", "index", new MyView()));
   }
+
   @Test(enabled = false)
   public void testNotFound() {
     InetAddress host = InetAddress.getByName(name);
@@ -149,5 +148,4 @@ public class JlaskTest {
     assertEquals(http.getResponseMessage(), "Not Found");
     assertEquals(http.getResponseCode(), 404);
   }
-
 }
