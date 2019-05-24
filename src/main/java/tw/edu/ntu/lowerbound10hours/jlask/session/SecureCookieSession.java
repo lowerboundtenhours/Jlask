@@ -43,6 +43,6 @@ public class SecureCookieSession {
   }
 
   public HashMap<String, Object> getDict() {
-      return this.dict;
+    return this.dict;
   }
 }

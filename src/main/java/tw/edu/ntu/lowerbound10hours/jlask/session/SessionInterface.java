@@ -51,18 +51,40 @@ public class SessionInterface {
   }
 
   public boolean getCookieHttponly(Jlask app) {
-    return (boolean) app.getConfig().get("SESSION_COOKIE_HTTPONLY");
+    Boolean ret = (Boolean) app.getConfig().get("SESSION_COOKIE_HTTPONLY");
+    ret = (ret == null) ? true : ret;
+    return ret;
   }
 
   public boolean getCookieSecure(Jlask app) {
-    return (boolean) app.getConfig().get("SESSION_COOKIE_SECURE");
+    Boolean ret = (Boolean) app.getConfig().get("SESSION_COOKIE_SECURE");
+    ret = (ret == null) ? false : ret;
+    return ret;
   }
 
   public String getCookieSamesite(Jlask app) {
     return (String) app.getConfig().get("SESSION_COOKIE_SAMESITE");
   }
+
+  public Integer getCookieMaxAge(Jlask app) {
+    Integer ret = (Integer) app.getConfig().get("SESSION_COOKIE_MAXAGE");
+    ret = (ret == null) ? 3600 * 24 : ret;
+    return ret;
+  }
   // public Time getExpirationTime(Jlask app, Session session) {};
   public boolean shouldSetCookie(Jlask app, SecureCookieSession session) {
-      // return true;
-  };
+    if (session.modified) {
+      return true;
+    }
+    if (this.getSessionRefresionEachRequest(app)) {
+      return true;
+    }
+    return false;
+  }
+
+  private boolean getSessionRefresionEachRequest(Jlask app) {
+    Boolean ret = (Boolean) app.getConfig().get("SESSION_REFRESH_EACH_REQUEST");
+    ret = (ret == null) ? false : ret;
+    return ret;
+  }
 }
