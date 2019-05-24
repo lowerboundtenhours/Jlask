@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.ApplicationIter;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.HttpException;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.InternalServerError;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.MapAdapter;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.Rule;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.RuleMap;
-import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.RoutingException;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
-import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.InternalServerError;
-import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.HttpException;
 import tw.edu.ntu.lowerbound10hours.jlask.context.AppContext;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContextStack;
@@ -100,15 +99,15 @@ public class Jlask extends Application {
 
   private void raiseRoutingException(Request req) throws Exception {
     /* if (
-            not self.debug
-            or not isinstance(request.routing_exception, RequestRedirect)
-            or request.method in ("GET", "HEAD", "OPTIONS")
-        ):
-            raise request.routing_exception
+        not self.debug
+        or not isinstance(request.routing_exception, RequestRedirect)
+        or request.method in ("GET", "HEAD", "OPTIONS")
+    ):
+        raise request.routing_exception
 
-        from .debughelpers import FormDataRoutingRedirect
+    from .debughelpers import FormDataRoutingRedirect
 
-        raise FormDataRoutingRedirect(request) */
+    raise FormDataRoutingRedirect(request) */
     throw req.routingException;
   }
 
@@ -131,20 +130,20 @@ public class Jlask extends Application {
   }
 
   private Handler findErrorHandler(Exception e) {
-    /* 
-			 Return a registered error handler for an exception in this order:
-       blueprint handler for a specific code, app handler for a specific code,
-       blueprint handler for an exception class, app handler for an exception
-       class, or ``None`` if a suitable handler is not found.
-	  */
+    /*
+     Return a registered error handler for an exception in this order:
+        blueprint handler for a specific code, app handler for a specific code,
+        blueprint handler for an exception class, app handler for an exception
+        class, or ``None`` if a suitable handler is not found.
+    */
 
-		// TODO: implement error handler map and matching
+    // TODO: implement error handler map and matching
     return null;
   }
 
   private Object handleUserException(Exception e) throws Exception {
-    /* 
-			 This method is called whenever an exception occurs that
+    /*
+    This method is called whenever an exception occurs that
        should be handled. A special case is :class:`~werkzeug
        .exceptions.HTTPException` which is forwarded to the
        :meth:`handle_http_exception` method. This function will either
@@ -152,8 +151,8 @@ public class Jlask extends Application {
        traceback. */
     // TODO: if isinstance(e, HTTPException) and not self.trap_http_exception(e):
     //             return self.handle_http_exception(e)
-    if (e instanceof HttpException) {  // TODO: not self.trap_http_exception(e)
-      return this.handleHttpException((HttpException)e);
+    if (e instanceof HttpException) { // TODO: not self.trap_http_exception(e)
+      return this.handleHttpException((HttpException) e);
     }
     Handler handler = this.findErrorHandler(e);
     if (handler == null) {
@@ -162,18 +161,19 @@ public class Jlask extends Application {
     return handler.call(e);
   }
 
-  private Object handleHttpException (HttpException e) {
+  private Object handleHttpException(HttpException e) {
     /*
      * Proxy exceptions don't have error codes.  We want to always return
      * those unchanged as errors
      */
-    if (e.getCode() == null) 
+    if (e.getCode() == null) {
       return e;
-   /* 
-    * RoutingExceptions are used internally to trigger routing
-    * actions, such as slash redirects raising RequestRedirect. They
-    * are not raised or handled in user code. 
-    */
+    }
+    /*
+     * RoutingExceptions are used internally to trigger routing
+     * actions, such as slash redirects raising RequestRedirect. They
+     * are not raised or handled in user code.
+     */
     // TODO
     // if (e instanceof RoutingException) {
     //   return e;
@@ -232,8 +232,9 @@ public class Jlask extends Application {
       // self.logger.exception(
       //     "Request finalizing failed with an " "error while handling an error"
       // )
-      if (fromErrorHandler)
+      if (fromErrorHandler) {
         throw e;
+      }
       e.printStackTrace();
     }
     return response;
@@ -269,13 +270,12 @@ public class Jlask extends Application {
         return InternalServerError()
     return self.finalizeRequest(handler(e), fromErrorHandler=True)
     */
-		Handler handler = this.findErrorHandler(new InternalServerError());
-		if (handler == null) {
+    Handler handler = this.findErrorHandler(new InternalServerError());
+    if (handler == null) {
       throw new InternalServerError();
     }
 
     return this.finalizeRequest(handler.call(e), true);
-                
   }
 
   private AppContext appContext() {

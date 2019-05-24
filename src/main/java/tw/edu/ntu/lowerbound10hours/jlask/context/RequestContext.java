@@ -46,8 +46,8 @@ public class RequestContext {
     }
   }
 
+  /** Binds the request context to the current context. */
   public void push() {
-    // Binds the request context to the current context
     RequestContextStack.push(this);
   }
 
@@ -55,7 +55,18 @@ public class RequestContext {
     RequestContextStack.pop();
   }
 
-  public void autoPop() {}
+  /** Auto pop after request processed. */
+  public void autoPop(Exception e) {
+    /** TODO.
+     * if self.request.environ.get("flask._preserve_context") or (
+     *    exc is not None and self.app.preserve_context_on_exception
+     * ):
+     *    self.preserved = True
+     *    self._preserved_exc = exc
+     * else:
+     *    self.pop(exc)  */
+    this.pop();
+  }
 
   // public Request getRequest() {
   //   return this.request;
