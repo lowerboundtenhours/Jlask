@@ -1,3 +1,5 @@
+package tw.edu.ntu.lowerbound10hours.jlask.session;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
@@ -20,7 +22,7 @@ public class SigningSerializer {
   private Gson gson;
   private Type dictType;
 
-  public SigningSerializer() {
+  private SigningSerializer() {
     try {
       signature = Signature.getInstance("SHA256WithDSA");
       secureRandom = new SecureRandom();
@@ -37,6 +39,7 @@ public class SigningSerializer {
 
   private static SigningSerializer instance = null;
 
+  /** Singleton of SigningSerializer */
   public static SigningSerializer getInstance() {
     if (instance == null) {
       instance = new SigningSerializer();

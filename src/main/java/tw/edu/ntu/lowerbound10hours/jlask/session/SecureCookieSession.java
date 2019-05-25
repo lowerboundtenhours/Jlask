@@ -3,11 +3,11 @@ package tw.edu.ntu.lowerbound10hours.jlask.session;
 import java.util.HashMap;
 
 public class SecureCookieSession {
-  private HashMap<String, Object> dict = new HashMap<>();
+  private HashMap<String, String> dict = new HashMap<>();
   public boolean modified = false;
   public boolean accessed = false;
 
-  public SecureCookieSession(HashMap<String, Object> initial) {
+  public SecureCookieSession(HashMap<String, String> initial) {
     this.dict = initial;
   }
 
@@ -42,7 +42,7 @@ public class SecureCookieSession {
     this.dict.remove(key);
   }
 
-  public HashMap<String, Object> getDict() {
+  public HashMap<String, String> getDict() {
     return this.dict;
   }
 }
