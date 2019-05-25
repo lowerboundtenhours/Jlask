@@ -7,7 +7,7 @@ import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
 public class SecureCookieSessionInterface extends SessionInterface {
-  public SecureCookieSessionInterface() {};
+  public SecureCookieSessionInterface() {}
 
   private String salt = "cookie-session";
 
@@ -64,9 +64,6 @@ public class SecureCookieSessionInterface extends SessionInterface {
     int maxAge = this.getCookieMaxAge(app);
 
     String val = this.getSigningSerializer(app).dumps(session.getDict());
-    response.setCookie(
-        this.getSessionCookieName(app), val, domain, path, maxAge
-        // , expires, httponly, domain, path, secure, samesite
-        );
+    response.setCookie(this.getSessionCookieName(app), val, domain, path, maxAge);
   }
 }
