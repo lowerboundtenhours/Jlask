@@ -2,7 +2,7 @@ package tw.edu.ntu.lowerbound10hours.jlask.session;
 
 import java.util.HashMap;
 
-public class SecureCookieSession {
+public class SecureCookieSession extends Session {
   protected HashMap<String, String> dict = new HashMap<>();
   public boolean modified = false;
   public boolean accessed = false;

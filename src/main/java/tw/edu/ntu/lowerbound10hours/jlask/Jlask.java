@@ -13,8 +13,8 @@ import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
 import tw.edu.ntu.lowerbound10hours.jlask.context.AppContext;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContextStack;
+import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSession;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSessionInterface;
-import tw.edu.ntu.lowerbound10hours.jlask.session.Session;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SessionInterface;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
@@ -39,13 +39,12 @@ public class Jlask extends Application {
     Serving.runSimple(host, port, this);
   }
 
-  public Session open_session(Request request) {
-
-    return new Session();
+  public SecureCookieSession open_session(Request request) {
+    return sessionInterface.openSession(this, request);
   }
 
-  public void save_session(Session session, Response response) {
-    // Save session
+  public void save_session(SecureCookieSession session, Response response) {
+    sessionInterface.saveSession(this, session, response);
   }
 
   /** Usage: app.add_url_rule('/', 'index', index). */

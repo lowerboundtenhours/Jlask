@@ -12,6 +12,7 @@ public class SecureCookieSessionInterface extends SessionInterface {
   private String salt = "cookie-session";
 
   private SigningSerializer getSigningSerializer(Jlask app) {
+    // TODO: use private key provided by app if exists
     return SigningSerializer.getInstance();
   }
 
