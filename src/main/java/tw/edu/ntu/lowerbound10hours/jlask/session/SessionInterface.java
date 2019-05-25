@@ -23,7 +23,7 @@ public class SessionInterface {
     return (obj instanceof NullSession);
   }
 
-  public String getCookieDomain(Jlask app) {
+  protected String getCookieDomain(Jlask app) {
     String ret = (String) app.getConfig().get("SESSION_COOKIE_DOMAIN");
     if (ret == null) {
       ret = (String) app.getConfig().get("SERVER_NAME");
@@ -45,7 +45,7 @@ public class SessionInterface {
     return ret;
   }
 
-  public String getCookiePath(Jlask app) {
+  protected String getCookiePath(Jlask app) {
     String ret = (String) app.getConfig().get("SESSION_COOKIE_PATH");
     if (ret == null) {
       ret = (String) app.getConfig().get("APPLICATION_ROOT");
@@ -53,29 +53,30 @@ public class SessionInterface {
     return ret;
   }
 
-  public boolean getCookieHttponly(Jlask app) {
+  protected boolean getCookieHttponly(Jlask app) {
     Boolean ret = (Boolean) app.getConfig().get("SESSION_COOKIE_HTTPONLY");
     ret = (ret == null) ? true : ret;
     return ret;
   }
 
-  public boolean getCookieSecure(Jlask app) {
+  protected boolean getCookieSecure(Jlask app) {
     Boolean ret = (Boolean) app.getConfig().get("SESSION_COOKIE_SECURE");
     ret = (ret == null) ? false : ret;
     return ret;
   }
 
-  public String getCookieSamesite(Jlask app) {
+  protected String getCookieSamesite(Jlask app) {
     return (String) app.getConfig().get("SESSION_COOKIE_SAMESITE");
   }
 
-  public Integer getCookieMaxAge(Jlask app) {
+  protected Integer getCookieMaxAge(Jlask app) {
     Integer ret = (Integer) app.getConfig().get("SESSION_COOKIE_MAXAGE");
     ret = (ret == null) ? 3600 * 24 : ret;
     return ret;
   }
-  // public Time getExpirationTime(Jlask app, Session session) {};
-  public boolean shouldSetCookie(Jlask app, SecureCookieSession session) {
+
+  // protected Time getExpirationTime(Jlask app, Session session) {};
+  protected boolean shouldSetCookie(Jlask app, SecureCookieSession session) {
     if (session.modified) {
       return true;
     }
@@ -85,7 +86,7 @@ public class SessionInterface {
     return false;
   }
 
-  private boolean getSessionRefresionEachRequest(Jlask app) {
+  protected boolean getSessionRefresionEachRequest(Jlask app) {
     Boolean ret = (Boolean) app.getConfig().get("SESSION_REFRESH_EACH_REQUEST");
     ret = (ret == null) ? false : ret;
     return ret;

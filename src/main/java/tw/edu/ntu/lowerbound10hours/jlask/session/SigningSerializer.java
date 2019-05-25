@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 /**
  * Java alternative of itsdangerous.URLSafeTimeSerializer. Note that now it only support to encode
- * and sign HashMap<String, String>
+ * and sign a HashMap from String to String.
  */
 public class SigningSerializer {
   private Signature signatureSigner;
@@ -48,7 +48,7 @@ public class SigningSerializer {
 
   private static SigningSerializer instance = null;
 
-  /** Singleton of SigningSerializer */
+  /** Singleton of SigningSerializer. */
   public static SigningSerializer getInstance() {
     if (instance == null) {
       instance = new SigningSerializer();

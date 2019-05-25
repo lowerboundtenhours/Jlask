@@ -25,7 +25,9 @@ public class SecureCookieSessionInterface extends SessionInterface {
   @Override
   public SecureCookieSession openSession(Jlask app, Request request) {
     SigningSerializer serializer = this.getSigningSerializer(app);
-    if (serializer == null) return null;
+    if (serializer == null) {
+      return null;
+    }
     // val is a encoded string
     Cookie cookie = request.cookies.get(this.getSessionCookieName(app));
     String val = cookie.getValue();

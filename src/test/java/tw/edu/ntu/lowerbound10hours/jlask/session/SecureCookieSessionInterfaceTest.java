@@ -23,7 +23,7 @@ public class SecureCookieSessionInterfaceTest {
   private Request request;
   private Response response;
 
-  // Set up all fake variables for testing
+  /** Set up all fake variables for testing. */
   public SecureCookieSessionInterfaceTest() {
     when(mockRequest.getMethod()).thenReturn("GET");
     when(mockRequest.getParameter("key")).thenReturn("value");
@@ -42,20 +42,18 @@ public class SecureCookieSessionInterfaceTest {
             new Cookie[] {
               new Cookie(sessionInterface.getSessionCookieName(app), signedSessionData)
             });
+    this.app = app;
+    this.sessionInterface = sessionInterface;
 
     // set up fake request
     Map<String, Object> environ = new HashMap<>();
     environ.put("baseRequest", mockRequest);
     Request request = new Request(environ);
+    this.request = request;
 
     // set up fake response
     environ.put("baseResponse", mockResponse);
     @Jailbreak Response response = new Response("foo", environ, 200);
-
-    // store these values
-    this.app = app;
-    this.sessionInterface = sessionInterface;
-    this.request = request;
     this.response = response;
   }
 
