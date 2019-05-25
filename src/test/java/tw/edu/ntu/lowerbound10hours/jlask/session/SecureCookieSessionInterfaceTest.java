@@ -8,28 +8,23 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import manifold.ext.api.Jailbreak;
 import org.testng.annotations.Test;
 import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
+import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
 public class SecureCookieSessionInterfaceTest {
   private static HttpServletRequest mockRequest = mock(HttpServletRequest.class);
+  private static HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+  private Jlask app;
+  private Request request;
 
   public SecureCookieSessionInterfaceTest() {
     when(mockRequest.getMethod()).thenReturn("GET");
     when(mockRequest.getParameter("key")).thenReturn("value");
-  }
 
-  private HashMap<String, String> getExampleSessionData() {
-    HashMap<String, String> data = new HashMap<>();
-    data.put("username", "Nash");
-    data.put("accessID", "13579");
-    return data;
-  }
-
-  @Test
-  public void testReadCookie() {
     // set up fake app
     @Jailbreak Jlask app = new Jlask();
 
@@ -38,7 +33,7 @@ public class SecureCookieSessionInterfaceTest {
     SecureCookieSessionInterface sessionInterface =
         (SecureCookieSessionInterface) app.sessionInterface;
     SigningSerializer serializer = sessionInterface.getSigningSerializer(app);
-    String signedSessionData = serializer.dumps(getExampleSessionData());
+    String signedSessionData = serializer.dumps(this.getExampleSessionData());
     when(mockRequest.getCookies())
         .thenReturn(
             new Cookie[] {
@@ -50,6 +45,23 @@ public class SecureCookieSessionInterfaceTest {
     environ.put("baseRequest", mockRequest);
     Request request = new Request(environ);
 
+    // set up fake response
+    environ.put("baseResponse", mockResponse);
+    @Jailbreak Response response = new Response("foo", environ, 200);
+
+    this.app = app;
+    this.request = request;
+  }
+
+  private HashMap<String, String> getExampleSessionData() {
+    HashMap<String, String> data = new HashMap<>();
+    data.put("username", "Nash");
+    data.put("accessID", "13579");
+    return data;
+  }
+
+  @Test
+  public void testReadCookie() {
     // test if read session data is correct
     @Jailbreak SecureCookieSession session = app.open_session(request);
     assertEquals(session.dict.size(), 2);
