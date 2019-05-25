@@ -3,6 +3,7 @@ package tw.edu.ntu.lowerbound10hours.jlask.session;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertThrows;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -115,5 +116,30 @@ public class SecureCookieSessionInterfaceTest {
     SecureCookieSession nullSession = this.sessionInterface.makeNullSession();
     assertEquals(sessionInterface.isNullSession(session), false);
     assertEquals(sessionInterface.isNullSession(nullSession), true);
+  }
+
+  @Test
+  public void testUseNullSession() {
+    SecureCookieSession nullSession = this.sessionInterface.makeNullSession();
+    assertThrows(
+        RuntimeException.class,
+        () -> {
+          nullSession.get("username");
+        });
+    assertThrows(
+        RuntimeException.class,
+        () -> {
+          nullSession.set("username", "invalid usage");
+        });
+    assertThrows(
+        RuntimeException.class,
+        () -> {
+          nullSession.pop("username");
+        });
+    assertThrows(
+        RuntimeException.class,
+        () -> {
+          nullSession.contains("username");
+        });
   }
 }

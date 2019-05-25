@@ -12,6 +12,17 @@ public class NullSession extends SecureCookieSession {
     return null;
   }
 
+  @Override
+  public void pop(String key) {
+    this.fail();
+  }
+
+  @Override
+  public boolean contains(String key) {
+    this.fail();
+    return false;
+  }
+
   private void fail() {
     throw new RuntimeException(
         "The session is unavailable because no secret "
