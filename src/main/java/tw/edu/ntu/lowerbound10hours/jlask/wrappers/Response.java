@@ -1,30 +1,22 @@
 package tw.edu.ntu.lowerbound10hours.jlask.wrappers;
 
+import java.util.List;
 import java.util.Map;
 
-public class Response {
+public class Response extends tw.edu.ntu.lowerbound10hours.jerkzeug.wrappers.Response {
 
-  private String body;
-  private Integer status = null;
-  private Map<String, String> headers = null;
-
-  public Response(String body) {
-    this.body = body;
+  /**
+   * Extends jerkjeug.wrappers.Response.
+   *
+   * @param rv return body
+   * @param environ WSGI environ
+   * @param status HTTP status code
+   */
+  public Response(String rv, Map<String, Object> environ, int status) {
+    super(rv, environ, status);
   }
 
-  public Response(String body, int status) {
-    this.body = body;
-    this.status = status;
-  }
-
-  /** Initial response. */
-  public Response(String body, int status, Map<String, String> headers) {
-    this.body = body;
-    this.status = status;
-    this.headers = headers;
-  }
-
-  public String getBody() {
-    return this.body;
+  public Response(List<String> rv, Map<String, Object> environ, int status) {
+    super(rv, environ, status);
   }
 }

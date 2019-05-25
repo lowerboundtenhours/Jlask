@@ -156,6 +156,7 @@ public class Rule implements RuleFactory {
       Matcher matcher = ruleRegex.matcher(rule);
       ArrayList<RuleParseResult> results = new ArrayList<RuleParseResult>();
       int countFound = 0;
+      int matchedEnd = 0;
       while (matcher.find()) {
         countFound += 1;
         String staticPart = matcher.group("static");
@@ -167,10 +168,14 @@ public class Rule implements RuleFactory {
           results.add(new RuleParseResult(null, null, staticPart));
         }
         results.add(new RuleParseResult(converter, args, variable));
+        matchedEnd = matcher.end();
       }
       if (countFound == 0) {
         // When the whole rule is static
         results.add(new RuleParseResult(null, null, rule));
+      } else if (matchedEnd < rule.length()) {
+        // There is a static tail
+        results.add(new RuleParseResult(null, null, rule.substring(matchedEnd)));
       }
       return results;
     }
