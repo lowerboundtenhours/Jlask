@@ -8,9 +8,9 @@ public class SecureCookieSession {
   public boolean accessed = false;
 
   public SecureCookieSession() {
-      dict = new HashMap<>();
-      modified = false;
-      accessed = false;
+    dict = new HashMap<>();
+    modified = false;
+    accessed = false;
   }
 
   public SecureCookieSession(HashMap<String, String> initial) {

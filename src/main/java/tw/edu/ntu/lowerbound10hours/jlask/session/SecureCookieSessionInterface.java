@@ -1,6 +1,7 @@
 package tw.edu.ntu.lowerbound10hours.jlask.session;
 
 import java.util.HashMap;
+import javax.servlet.http.Cookie;
 import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
@@ -25,8 +26,8 @@ public class SecureCookieSessionInterface extends SessionInterface {
     SigningSerializer serializer = this.getSigningSerializer(app);
     if (serializer == null) return null;
     // val is a encoded string
-    // String val = request.cookies.get(this.getSessionCookieName(app));
-    String val = null;
+    Cookie cookie = request.cookies.get(this.getSessionCookieName(app));
+    String val = cookie.getValue();
 
     if (val == null) {
       // empty session
@@ -47,7 +48,7 @@ public class SecureCookieSessionInterface extends SessionInterface {
     if (session == null) {
       return;
     }
-    // if (session.accessed) {
+    // TODO: if (session.accessed) {
     //     response.vary.add("Cookie");
     // }
     if (!this.shouldSetCookie(app, session)) {
@@ -59,9 +60,9 @@ public class SecureCookieSessionInterface extends SessionInterface {
     // Time expires = this.getExpirationTime(app);
     int maxAge = this.getCookieMaxAge(app);
     String val = this.getSigningSerializer(app).dumps(session.getDict());
-    // response.setCookie(
-    //     this.getSessionCookieName(app), val, domain, path, maxAge
-    //     // , expires, httponly, domain, path, secure, samesite
-    //     );
+    response.setCookie(
+        this.getSessionCookieName(app), val, domain, path, maxAge
+        // , expires, httponly, domain, path, secure, samesite
+        );
   }
 }
