@@ -249,9 +249,12 @@ public class Jlask extends Application {
 
   public ApplicationIter<String> call(Map<String, Object> environ, StartResponse startResponse) {
     return this.wsgi_app(environ, startResponse);
+<<<<<<< HEAD
+=======
   }
 
   public Config getConfig() {
     return this.config;
+>>>>>>> 910d26f2204b046133f12fd55e1c48ecd40b6012
   }
 }

@@ -50,4 +50,27 @@ public class MapAdapterTest {
     assertEquals((Integer) result.getValue().get("month"), new Integer(8));
     assertEquals((Integer) result.getValue().get("date"), new Integer(25));
   }
+
+  @Test
+  public void testMatch2() {
+    ArrayList<RuleFactory> rules = new ArrayList<>();
+    rules.add(new Rule("/update/", "update/index"));
+    rules.add(new Rule("/<int:id>/update", "update/show"));
+
+    RuleMap map = new RuleMap(rules);
+    map.add(new Rule("/a/<int:b>/c/<int:d>/e/tailing", "GaLaGaLaGaLa"));
+    MapAdapter urls = map.bind("example.com");
+
+    SimpleEntry<Rule, HashMap<String, Object>> result;
+    result = urls.match("/22/update");
+    assertEquals(result.getKey().endpoint, "update/show");
+    assertEquals(result.getValue().size(), 1);
+    assertEquals((Integer) result.getValue().get("id"), new Integer(22));
+
+    result = urls.match("/a/1/c/2222222/e/tailing");
+    assertEquals(result.getKey().endpoint, "GaLaGaLaGaLa");
+    assertEquals(result.getValue().size(), 2);
+    assertEquals((Integer) result.getValue().get("b"), new Integer(1));
+    assertEquals((Integer) result.getValue().get("d"), new Integer(2222222));
+  }
 }

@@ -4,7 +4,7 @@
 <hibernate-configuration>
     <session-factory >
         <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
-        <property name="hibernate.connection.url">jdbc:sqlite:src/main/resources/jlask.sqlite</property>
+        <property name="hibernate.connection.url">jdbc:sqlite:src/test/resources/jlask.sqlite</property>
         <property name="hibernate.default_schema">strutshibernate</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <property name="hibernate.connection.pool.size">20</property>    
@@ -13,10 +13,6 @@
         <property name="hibernate.connection.autocommit">false</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
-<<<<<<< HEAD
-        <mapping class="tw.edu.ntu.lowerbound10hours.jlaskhibernate.User" />
         <mapping class="tw.edu.ntu.lowerbound10hours.jlaskhibernate.Post" />
-=======
->>>>>>> 910d26f2204b046133f12fd55e1c48ecd40b6012
     </session-factory>
 </hibernate-configuration>

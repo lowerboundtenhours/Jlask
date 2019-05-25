@@ -1,20 +1,34 @@
 package tw.edu.ntu.lowerbound10hours.jlask;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import manifold.ext.api.Jailbreak;
 import org.testng.annotations.Test;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
 public class JlaskTest {
+  private static HttpServletRequest mockedRequest = mock(HttpServletRequest.class);
+
+  /** Setting up mock object. */
+  public JlaskTest() {
+    // Mock request
+    when(mockedRequest.getMethod()).thenReturn("GET");
+    when(mockedRequest.getCookies()).thenReturn(new Cookie[0]);
+  }
+
   @Test
   public void testMakeResponse() throws Exception {
     @Jailbreak Jlask jlask = new Jlask();
     String rv = "foo";
-    assertEquals(jlask.make_response(rv).getBody(), rv);
+    @Jailbreak Response res = jlask.make_response(rv);
+    assertEquals(res.response.get(0), rv);
   }
 
   @Test
@@ -36,6 +50,7 @@ public class JlaskTest {
   private Jlask buildAppAndSendReuqest() {
     @Jailbreak Jlask jlask = buildApp();
     Map<String, Object> environ = new HashMap<String, Object>();
+    environ.put("baseRequest", mockedRequest);
     RequestContext ctx = new RequestContext(jlask, environ);
     ctx.push();
     return jlask;
@@ -50,15 +65,15 @@ public class JlaskTest {
 
   @Test
   public void testFinalizeRequest() throws Exception {
-    @Jailbreak Jlask jlask = this.buildApp();
-    Response response = jlask.finalize_request("bar", false);
-    assertEquals(response.getBody(), "bar");
+    @Jailbreak Jlask jlask = this.buildAppAndSendReuqest();
+    @Jailbreak Response res = jlask.finalize_request("bar", false);
+    assertEquals(res.response.get(0), "bar");
   }
 
   @Test
   public void testFullDispatachRequest() throws Exception {
     @Jailbreak Jlask jlask = this.buildAppAndSendReuqest();
-    Response response = jlask.full_dispatch_request();
-    assertEquals(response.getBody(), "foo");
+    @Jailbreak Response res = jlask.full_dispatch_request();
+    assertEquals(res.response.get(0), "foo");
   }
 }

@@ -1,12 +1,12 @@
-package tw.edu.ntu.lowerbound10hours.jlask;
+package tw.edu.ntu.lowerbound10hours.jlask.context;
 
 import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
 import org.testng.annotations.Test;
-import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
-import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContextStack;
+import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
+import tw.edu.ntu.lowerbound10hours.jlask.MyView;
 
 public class RequestContextStackTest {
 
