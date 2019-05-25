@@ -15,7 +15,7 @@ public class SessionInterface {
     throw new UnsupportedOperationException("Pleaes implement this function in your subclass.");
   }
 
-  public NullSession maksNullSession() {
+  public NullSession makeNullSession() {
     return new NullSession();
   }
 

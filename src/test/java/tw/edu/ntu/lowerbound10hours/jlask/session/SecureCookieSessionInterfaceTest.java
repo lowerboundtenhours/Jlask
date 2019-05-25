@@ -87,11 +87,33 @@ public class SecureCookieSessionInterfaceTest {
   public void testShouldSetCookie() {
     // TODO: only if the session is modified will we need to rewrite the session cookie
     SecureCookieSession session = app.open_session(request);
-
     assertEquals(sessionInterface.shouldSetCookie(app, session), false);
 
     // if the session is modified, the cookie need to be reset
     session.set("username2", "Bob");
     assertEquals(sessionInterface.shouldSetCookie(app, session), true);
+  }
+
+  @Test
+  public void testShouldSetCookie2() {
+    // TODO: only if the session is modified will we need to rewrite the session cookie
+    SecureCookieSession session = app.open_session(request);
+    assertEquals(sessionInterface.shouldSetCookie(app, session), false);
+
+    // Test pop and contains
+    assertEquals(session.contains("username"), true);
+    session.pop("username");
+    assertEquals(session.contains("username"), false);
+
+    // if the session is modified, the cookie need to be reset
+    assertEquals(sessionInterface.shouldSetCookie(app, session), true);
+  }
+
+  @Test
+  public void testNullSession() {
+    SecureCookieSession session = app.open_session(request);
+    SecureCookieSession nullSession = this.sessionInterface.makeNullSession();
+    assertEquals(sessionInterface.isNullSession(session), false);
+    assertEquals(sessionInterface.isNullSession(nullSession), true);
   }
 }
