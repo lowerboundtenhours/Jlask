@@ -6,7 +6,7 @@ import java.util.Map;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.MapAdapter;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.Rule;
 import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
-import tw.edu.ntu.lowerbound10hours.jlask.session.Session;
+import tw.edu.ntu.lowerbound10hours.jlask.session.*;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
 
 public class RequestContext {
@@ -45,6 +45,7 @@ public class RequestContext {
   public void push() {
     // Binds the request context to the current context
     RequestContextStack.push(this);
+    this.session = this.app.open_session(this.request);
   }
 
   public void pop() {
