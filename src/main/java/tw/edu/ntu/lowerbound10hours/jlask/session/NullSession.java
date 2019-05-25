@@ -2,12 +2,12 @@ package tw.edu.ntu.lowerbound10hours.jlask.session;
 
 public class NullSession extends SecureCookieSession {
   @Override
-  public void set(Object key, Object value) {
+  public void set(String key, String value) {
     this.fail();
   }
 
   @Override
-  public Object get(Object key) {
+  public String get(String key) {
     this.fail();
     return null;
   }

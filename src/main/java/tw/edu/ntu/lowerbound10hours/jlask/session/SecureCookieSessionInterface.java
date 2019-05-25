@@ -25,7 +25,8 @@ public class SecureCookieSessionInterface extends SessionInterface {
     SigningSerializer serializer = this.getSigningSerializer(app);
     if (serializer == null) return null;
     // val is a encoded string
-    String val = request.cookies.get(this.getSessionCookieName(app));
+    // String val = request.cookies.get(this.getSessionCookieName(app));
+    String val = null;
 
     if (val == null) {
       // empty session
@@ -58,9 +59,9 @@ public class SecureCookieSessionInterface extends SessionInterface {
     // Time expires = this.getExpirationTime(app);
     int maxAge = this.getCookieMaxAge(app);
     String val = this.getSigningSerializer(app).dumps(session.getDict());
-    response.setCookie(
-        this.getSessionCookieName(app), val, domain, path, maxAge
-        // , expires, httponly, domain, path, secure, samesite
-        );
+    // response.setCookie(
+    //     this.getSessionCookieName(app), val, domain, path, maxAge
+    //     // , expires, httponly, domain, path, secure, samesite
+    //     );
   }
 }

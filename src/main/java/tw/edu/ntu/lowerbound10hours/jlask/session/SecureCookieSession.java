@@ -3,32 +3,29 @@ package tw.edu.ntu.lowerbound10hours.jlask.session;
 import java.util.HashMap;
 
 public class SecureCookieSession {
-  private HashMap<String, String> dict = new HashMap<>();
+  protected HashMap<String, String> dict = new HashMap<>();
   public boolean modified = false;
   public boolean accessed = false;
+
+  public SecureCookieSession() {
+      dict = new HashMap<>();
+      modified = false;
+      accessed = false;
+  }
 
   public SecureCookieSession(HashMap<String, String> initial) {
     this.dict = initial;
   }
 
-  public void set(String key, Object value) {
+  public void set(String key, String value) {
     this.modified = true;
     this.accessed = true;
     this.dict.put(key, value);
   }
 
-  public Object get(String key) {
+  public String get(String key) {
     this.accessed = true;
     return this.dict.get(key);
-  }
-
-  public boolean getPermanent() {
-    final String key = "_permanent";
-    return dict.containsKey(key) ? (boolean) this.get(key) : false;
-  }
-
-  public void setPermanent(boolean value) {
-    this.set("_permanent", (Object) value);
   }
 
   public boolean contains(String key) {
