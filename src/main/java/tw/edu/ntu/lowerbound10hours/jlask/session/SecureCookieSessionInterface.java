@@ -41,9 +41,6 @@ public class SecureCookieSessionInterface extends SessionInterface {
 
   @Override
   public void saveSession(Jlask app, SecureCookieSession session, Response response) {
-    String domain = (String) app.getConfig().get("SESSION_COOKIE_DOMAIN"); // might be null
-    String path = (String) app.getConfig().get("SESSION_COOKIE_PATH"); // might be null
-
     // TODO: If the session is modified to be empty, remove the cookie
     // If the session is empty, return without setting the cookie
     if (session == null) {
@@ -55,11 +52,15 @@ public class SecureCookieSessionInterface extends SessionInterface {
     if (!this.shouldSetCookie(app, session)) {
       return;
     }
+    String domain = this.getCookieDomain(app);
+    String path = this.getCookiePath(app);
+
     boolean httponly = this.getCookieHttponly(app);
     boolean secure = this.getCookieSecure(app);
     String samesite = this.getCookieSamesite(app);
     // Time expires = this.getExpirationTime(app);
     int maxAge = this.getCookieMaxAge(app);
+
     String val = this.getSigningSerializer(app).dumps(session.getDict());
     response.setCookie(
         this.getSessionCookieName(app), val, domain, path, maxAge

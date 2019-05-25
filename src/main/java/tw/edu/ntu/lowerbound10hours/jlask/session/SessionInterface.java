@@ -28,6 +28,9 @@ public class SessionInterface {
     if (ret == null) {
       ret = (String) app.getConfig().get("SERVER_NAME");
     }
+    if (ret == null) {
+      ret = "localhost";
+    }
     // Chop off the port which is usually not supported by browsers
     ret = ret.split(":")[0];
     // Remove any leading '.' since we'll add that later

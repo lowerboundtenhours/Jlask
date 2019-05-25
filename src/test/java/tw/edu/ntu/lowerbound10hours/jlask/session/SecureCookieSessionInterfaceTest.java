@@ -19,8 +19,11 @@ public class SecureCookieSessionInterfaceTest {
   private static HttpServletRequest mockRequest = mock(HttpServletRequest.class);
   private static HttpServletResponse mockResponse = mock(HttpServletResponse.class);
   private Jlask app;
+  private SecureCookieSessionInterface sessionInterface;
   private Request request;
+  private Response response;
 
+  // Set up all fake variables for testing
   public SecureCookieSessionInterfaceTest() {
     when(mockRequest.getMethod()).thenReturn("GET");
     when(mockRequest.getParameter("key")).thenReturn("value");
@@ -49,8 +52,11 @@ public class SecureCookieSessionInterfaceTest {
     environ.put("baseResponse", mockResponse);
     @Jailbreak Response response = new Response("foo", environ, 200);
 
+    // store these values
     this.app = app;
+    this.sessionInterface = sessionInterface;
     this.request = request;
+    this.response = response;
   }
 
   private HashMap<String, String> getExampleSessionData() {
@@ -62,7 +68,7 @@ public class SecureCookieSessionInterfaceTest {
 
   @Test
   public void testReadCookie() {
-    // test if read session data is correct
+    // test if session data can be correctly read
     @Jailbreak SecureCookieSession session = app.open_session(request);
     assertEquals(session.dict.size(), 2);
     assertEquals(session.get("username"), "Nash");
@@ -71,13 +77,23 @@ public class SecureCookieSessionInterfaceTest {
 
   @Test
   public void testSentCookie() {
-
-    // NOTE: Here we don't know if the session cookie is set up correctly,
-    // since we don't have a browser to interact!
+    SecureCookieSession session = app.open_session(request);
+    session.set("username2", "Bob");
+    app.save_session(session, response);
+    // NOTE: Here we don't know if the session cookie is correctly set up
+    // in the response object, because we don't have a browser to interact!
+    // Therefore, this test only guarentee the save_session procedure is runnable.
   }
 
   @Test
   public void testShouldSetCookie() {
     // TODO: only if the session is modified will we need to rewrite the session cookie
+    SecureCookieSession session = app.open_session(request);
+
+    assertEquals(sessionInterface.shouldSetCookie(app, session), false);
+
+    // if the session is modified, the cookie need to be reset
+    session.set("username2", "Bob");
+    assertEquals(sessionInterface.shouldSetCookie(app, session), true);
   }
 }
