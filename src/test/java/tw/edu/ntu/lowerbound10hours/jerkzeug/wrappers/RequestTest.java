@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 public class RequestTest {
   private static HttpServletRequest mockRequest = mock(HttpServletRequest.class);
   private static HttpServletRequest mockNoCookieRequest = mock(HttpServletRequest.class);
+
   /** Setting up mock object. */
   public RequestTest() {
     when(mockRequest.getMethod()).thenReturn("GET");

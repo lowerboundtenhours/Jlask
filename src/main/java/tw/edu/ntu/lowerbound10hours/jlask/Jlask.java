@@ -1,12 +1,12 @@
 package tw.edu.ntu.lowerbound10hours.jlask;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.util.logging.LogManager;
+import java.util.logging.Logger;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.ApplicationIter;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.HttpException;
@@ -18,7 +18,6 @@ import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
 import tw.edu.ntu.lowerbound10hours.jlask.context.AppContext;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
-import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContextStack;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSession;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSessionInterface;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SessionInterface;
@@ -34,16 +33,16 @@ public class Jlask extends Application {
   private RuleMap ruleMap;
 
   static {
-      InputStream stream = Jlask.class.getClassLoader().
-              getResourceAsStream("logging.properties");
-      try {
-          LogManager.getLogManager().readConfiguration(stream);
-          LOGGER = Logger.getLogger(Jlask.class.getName());
+    InputStream stream = Jlask.class.getClassLoader().getResourceAsStream("logging.properties");
+    try {
+      LogManager.getLogManager().readConfiguration(stream);
+      LOGGER = Logger.getLogger(Jlask.class.getName());
 
-      } catch (IOException e) {
-          e.printStackTrace();
-      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
+
   /** Init app. */
   public Jlask() {
     this.sessionInterface = new SecureCookieSessionInterface();
@@ -343,17 +342,16 @@ public class Jlask extends Application {
       // TODO:
       // if self.shouldIgnoreError(error):
       //    error = None
-      
+
       // TODO: record request and response
       Request req = Global.request();
       LOGGER.info(
-        String.format("%s - \"%s %s\" %d",
-          req.environ.get("REMOTE_ADDR"),
-          req.method,
-          req.environ.get("PATH_INFO"),
-          response.getStatus()
-        )
-      );
+          String.format(
+              "%s - \"%s %s\" %d",
+              req.environ.get("REMOTE_ADDR"),
+              req.method,
+              req.environ.get("PATH_INFO"),
+              response.getStatus()));
       ctx.autoPop(error);
     }
 

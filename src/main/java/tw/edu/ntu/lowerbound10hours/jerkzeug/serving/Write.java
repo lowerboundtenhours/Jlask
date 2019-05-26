@@ -12,6 +12,7 @@ public class Write {
     this.handler = handler;
   }
 
+  /** Write data to respopnse. * */
   public void write(String data) {
     // TODO: handle header_sent
     if (data != null) {
