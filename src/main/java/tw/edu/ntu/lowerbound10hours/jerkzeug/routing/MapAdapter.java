@@ -67,6 +67,6 @@ public class MapAdapter {
       // TODO: raise RequestSlash or RequestRedirect under some circumstances
       return new SimpleEntry<>(rule, returnValue);
     }
-    throw new RuntimeException("All rules not matched"); // TODO: use a custom NotFound excpetion.
+    throw new NotFound();
   }
 }
