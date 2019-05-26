@@ -14,6 +14,8 @@ public class Write {
 
   public void write(String data) {
     // TODO: handle header_sent
-    this.writer.printf(data);
+    if (data != null) {
+      this.writer.printf(data);
+    }
   }
 }
