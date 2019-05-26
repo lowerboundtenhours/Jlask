@@ -90,10 +90,15 @@ public class WsgiRequestHandler extends AbstractHandler {
       HttpServletRequest request,
       HttpServletResponse response) {
     Map<String, Object> environ = new HashMap<String, Object>();
+    String ipAddress = request.getHeader("X-FORWARDED-FOR");  
+    if (ipAddress == null) {  
+        ipAddress = request.getRemoteAddr();  
+    }
     // TODO: setup environ
     environ.put("SERVER_PORT", ((ServerConnector) this.server.getConnectors()[0]).getPort());
     environ.put("SERVER_NAME", this.server.getURI().getHost());
     environ.put("SERVER_URI", this.server.getURI());
+    environ.put("REMOTE_ADDR", ipAddress);
     environ.put("PATH_INFO", request.getPathInfo());
     environ.put("target", target);
     environ.put("baseRequest", baseRequest);
