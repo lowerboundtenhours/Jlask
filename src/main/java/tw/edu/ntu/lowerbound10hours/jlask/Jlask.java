@@ -74,7 +74,7 @@ public class Jlask extends Application {
   }
 
   private Response makeResponse(HttpException rv) {
-    return new Response(rv);
+    return new Response(rv.getDescription(),Global.request().environ,  rv.getCode());
   }
 
   private Response makeResponse(String rv) {
@@ -290,7 +290,7 @@ public class Jlask extends Application {
     return new RequestContext(this, environ);
   }
 
-  private ApplicationIter<String> wsgi_app(
+  private ApplicationIter<String> wsgiApp(
       Map<String, Object> environ, StartResponse startResponse) {
     /*
         environ: A WSGI environment.
@@ -317,7 +317,6 @@ public class Jlask extends Application {
       }
       startResponse.startResponse(response.getStatus(), null, false);
       startResponse.getWrite().write(response.getBody());
-      return;
       // TODO: return response(environ, startResponse);
     } catch (InternalServerError e) {
       e.printStackTrace();
@@ -343,7 +342,7 @@ public class Jlask extends Application {
   }
 
   public ApplicationIter<String> call(Map<String, Object> environ, StartResponse startResponse) {
-    return this.wsgi_app(environ, startResponse);
+    return this.wsgiApp(environ, startResponse);
   }
 
   public Config getConfig() {

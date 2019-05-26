@@ -11,6 +11,7 @@ import tw.edu.ntu.lowerbound10hours.jerkzeug.ApplicationIter;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
 
 public class Response {
+  private String body;
   private Integer status = null;
   private Map<String, String> headers = null;
   private List<String> response;
@@ -110,5 +111,12 @@ public class Response {
     ApplicationIter<String> iter = this.getApplicationIter(environ);
     startResponse.startResponse(status, headers, false);
     return iter;
+  }
+
+  /**
+   * Get response body.
+   */
+  public String getBody() {
+    return this.body;
   }
 }

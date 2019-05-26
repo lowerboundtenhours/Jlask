@@ -20,9 +20,9 @@ public class RequestContextStackTest {
   public void testRequestContextStack() throws Exception {
 
     assertEquals(RequestContextStack.empty(), false);
-    Jlask jlask = buildApp();
+    Jlask testApp = buildApp();
     Map<String, Object> environ = new HashMap<String, Object>();
-    RequestContext ctx = new RequestContext(jlask, environ);
+    RequestContext ctx = new RequestContext(testApp, environ);
     RequestContextStack.push(ctx);
     assertEquals(RequestContextStack.empty(), false);
     RequestContextStack.pop();

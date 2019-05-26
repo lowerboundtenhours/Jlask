@@ -37,7 +37,7 @@ public class JlaskTest {
   public void testMakeResponse() throws Exception {
     @Jailbreak Jlask testApp = new Jlask();
     String rv = "foo";
-    @Jailbreak Response res = jlask.make_response(rv);
+    @Jailbreak Response res = testApp.makeResponse(rv);
     assertEquals(res.response.get(0), rv);
   }
 
@@ -61,7 +61,7 @@ public class JlaskTest {
     @Jailbreak Jlask testApp = buildApp();
     Map<String, Object> environ = new HashMap<String, Object>();
     environ.put("baseRequest", mockedRequest);
-    RequestContext ctx = new RequestContext(jlask, environ);
+    RequestContext ctx = new RequestContext(testApp, environ);
     ctx.push();
     return testApp;
   }
@@ -75,15 +75,15 @@ public class JlaskTest {
 
   @Test
   public void testFinalizeRequest() throws Exception {
-    @Jailbreak Jlask jlask = this.buildAppAndSendReuqest();
-    @Jailbreak Response res = jlask.finalize_request("bar", false);
+    @Jailbreak Jlask testApp = this.buildAppAndSendReuqest();
+    @Jailbreak Response res = testApp.finalizeRequest("bar", false);
     assertEquals(res.response.get(0), "bar");
   }
 
   @Test
   public void testFullDispatachRequest() throws Exception {
-    @Jailbreak Jlask jlask = this.buildAppAndSendReuqest();
-    @Jailbreak Response res = jlask.full_dispatch_request();
+    @Jailbreak Jlask testApp = this.buildAppAndSendReuqest();
+    @Jailbreak Response res = testApp.fullDispatchRequest();
     assertEquals(res.response.get(0), "foo");
   }
 

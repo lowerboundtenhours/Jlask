@@ -2,6 +2,7 @@ package tw.edu.ntu.lowerbound10hours.jerkzeug.routing;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.NotFound;
 
 public class MapAdapter {
 
