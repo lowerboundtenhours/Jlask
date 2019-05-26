@@ -25,8 +25,10 @@ public class Request {
       this.baseRequest = (HttpServletRequest) environ.get("baseRequest");
       this.method = this.baseRequest.getMethod();
       this.cookies = new HashMap<String, Cookie>();
-      for (Cookie cookie : this.baseRequest.getCookies()) {
-        this.cookies.put(cookie.getName(), cookie);
+      if (this.baseRequest.getCookies() != null) {
+        for (Cookie cookie : this.baseRequest.getCookies()) {
+          this.cookies.put(cookie.getName(), cookie);
+        }
       }
     }
   }

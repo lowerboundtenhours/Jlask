@@ -12,12 +12,15 @@ import org.testng.annotations.Test;
 
 public class RequestTest {
   private static HttpServletRequest mockRequest = mock(HttpServletRequest.class);
-
+  private static HttpServletRequest mockNoCookieRequest = mock(HttpServletRequest.class);
   /** Setting up mock object. */
   public RequestTest() {
     when(mockRequest.getMethod()).thenReturn("GET");
     when(mockRequest.getCookies()).thenReturn(new Cookie[] {new Cookie("name", "value")});
     when(mockRequest.getParameter("key")).thenReturn("value");
+
+    when(mockNoCookieRequest.getMethod()).thenReturn("GET");
+    when(mockNoCookieRequest.getCookies()).thenReturn(null);
   }
 
   @Test
@@ -28,6 +31,15 @@ public class RequestTest {
     assertEquals(req.method, "GET");
     assertEquals(req.cookies.size(), 1);
     assertEquals(req.cookies.get("name").getValue(), "value");
+  }
+
+  @Test
+  public void testNoCookieConstructor() throws Exception {
+    Map<String, Object> environ = new HashMap<>();
+    environ.put("baseRequest", mockNoCookieRequest);
+    Request req = new Request(environ);
+    assertEquals(req.method, "GET");
+    assertEquals(req.cookies.size(), 0);
   }
 
   @Test
