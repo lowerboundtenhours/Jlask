@@ -1,8 +1,12 @@
 package tw.edu.ntu.lowerbound10hours.jlask;
 
+import java.io.InputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
+import java.util.logging.LogManager;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.ApplicationIter;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.HttpException;
@@ -22,12 +26,24 @@ import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
 public class Jlask extends Application {
+  private static Logger LOGGER = null;
   private Config config;
   private Map<String, View> viewFunctions;
   private String staticPath;
   private SessionInterface sessionInterface;
   private RuleMap ruleMap;
 
+  static {
+      InputStream stream = Jlask.class.getClassLoader().
+              getResourceAsStream("logging.properties");
+      try {
+          LogManager.getLogManager().readConfiguration(stream);
+          LOGGER = Logger.getLogger(Jlask.class.getName());
+
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+  }
   /** Init app. */
   public Jlask() {
     this.sessionInterface = new SecureCookieSessionInterface();
@@ -74,7 +90,11 @@ public class Jlask extends Application {
   }
 
   private Response makeResponse(HttpException rv) {
-    return new Response(rv.getDescription(),Global.request().environ,  rv.getCode());
+    return new Response(rv.getDescription(), Global.request().environ, rv.getCode());
+  }
+
+  private Response makeResponse(Exception rv) {
+    return new Response("Unknown error: " + rv.getMessage(), Global.request().environ, 500);
   }
 
   private Response makeResponse(String rv) {
@@ -119,13 +139,12 @@ public class Jlask extends Application {
         In order to convert the return value to a
         proper response object, call :func:`make_response`
     */
-    Request req = RequestContextStack.top().request;
+    Request req = Global.request();
     if (req.routingException != null) {
       this.raiseRoutingException(req);
     }
     // TODO:   # if we provide automatic options for this URL and the
     //         # request came with the OPTIONS method, reply automatically
-    System.err.println(req.rule.endpoint);
     return this.viewFunctions.get(req.rule.endpoint).call(req.viewArgs);
   }
 
@@ -303,8 +322,6 @@ public class Jlask extends Application {
     Exception error = null;
 
     Response response = null;
-    // ctx.push();
-    // response = this.full_dispatch_request();
 
     try {
       try {
@@ -315,29 +332,31 @@ public class Jlask extends Application {
         error = e;
         response = this.handleException(e);
       }
-      startResponse.startResponse(response.getStatus(), null, false);
-      startResponse.getWrite().write(response.getBody());
-      // TODO: return response(environ, startResponse);
     } catch (InternalServerError e) {
       e.printStackTrace();
-      startResponse.startResponse(500, null, false);
+      response = makeResponse(e);
     } catch (Exception e) {
       // Exception from finalizeRequest
       e.printStackTrace();
-      startResponse.startResponse(500, null, false);
+      response = makeResponse(e);
     } finally {
       // TODO:
       // if self.shouldIgnoreError(error):
       //    error = None
+      
+      // TODO: record request and response
+      Request req = Global.request();
+      LOGGER.info(
+        String.format("%s - \"%s %s\" %d",
+          req.environ.get("REMOTE_ADDR"),
+          req.method,
+          req.environ.get("PATH_INFO"),
+          response.getStatus()
+        )
+      );
       ctx.autoPop(error);
     }
 
-    // if (response != null) {
-    //   startResponse.startResponse(200, null, false);
-    //   startResponse.getWrite().write(response.getBody());
-    // } else {
-    //   startResponse.startResponse(500, null, false);
-    // }
     return response.call(environ, startResponse);
   }
 
