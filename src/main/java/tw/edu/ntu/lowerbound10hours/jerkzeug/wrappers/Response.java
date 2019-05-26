@@ -113,10 +113,13 @@ public class Response {
     return iter;
   }
 
-  /**
-   * Get response body.
-   */
+  /** Get response body. */
   public String getBody() {
     return this.body;
+  }
+
+  /** Set response status. */
+  public void setStatus(int status) {
+    this.status = status;
   }
 }
