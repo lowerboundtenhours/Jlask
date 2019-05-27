@@ -10,7 +10,7 @@ public class ConfigTest {
     assertEquals(3, 3);
   }
 
-  @Test(enabled = false)
+  @Test
   public void testConfig() throws Exception {
     Config config = new Config("./");
     config.fromJson("config.json");

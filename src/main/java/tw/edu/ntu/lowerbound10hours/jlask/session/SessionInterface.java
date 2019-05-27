@@ -54,14 +54,14 @@ public class SessionInterface {
   }
 
   protected boolean getCookieHttponly(Jlask app) {
-    Boolean ret = (Boolean) app.getConfig().get("SESSION_COOKIE_HTTPONLY");
-    ret = (ret == null) ? true : ret;
+    String retString = app.getConfig().get("SESSION_COOKIE_HTTPONLY");
+    Boolean ret = (retString == null) ? true : Boolean.valueOf(retString);
     return ret;
   }
 
   protected boolean getCookieSecure(Jlask app) {
-    Boolean ret = (Boolean) app.getConfig().get("SESSION_COOKIE_SECURE");
-    ret = (ret == null) ? false : ret;
+    String retString = app.getConfig().get("SESSION_COOKIE_SECURE");
+    Boolean ret = (retString == null) ? false : Boolean.valueOf(retString);
     return ret;
   }
 
@@ -70,8 +70,8 @@ public class SessionInterface {
   }
 
   protected Integer getCookieMaxAge(Jlask app) {
-    Integer ret = (Integer) app.getConfig().get("SESSION_COOKIE_MAXAGE");
-    ret = (ret == null) ? 3600 * 24 : ret;
+    String retString = app.getConfig().get("SESSION_COOKIE_MAXAGE");
+    Integer ret = (retString == null) ? 3600 * 24 : Integer.valueOf(retString);
     return ret;
   }
 
@@ -87,8 +87,8 @@ public class SessionInterface {
   }
 
   protected boolean getSessionRefresionEachRequest(Jlask app) {
-    Boolean ret = (Boolean) app.getConfig().get("SESSION_REFRESH_EACH_REQUEST");
-    ret = (ret == null) ? false : ret;
+    String retString = app.getConfig().get("SESSION_REFRESH_EACH_REQUEST");
+    Boolean ret = (retString == null) ? false : Boolean.valueOf(retString);
     return ret;
   }
 }
