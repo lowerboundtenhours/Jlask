@@ -1,10 +1,16 @@
 package tw.edu.ntu.lowerbound10hours.jlask;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.Application;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.ApplicationIter;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.HttpException;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.InternalServerError;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.MapAdapter;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.Rule;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.routing.RuleMap;
@@ -12,7 +18,6 @@ import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
 import tw.edu.ntu.lowerbound10hours.jlask.context.AppContext;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
-import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContextStack;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSession;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSessionInterface;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SessionInterface;
@@ -20,11 +25,23 @@ import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Response;
 
 public class Jlask extends Application {
+  private static Logger LOGGER = null;
   private Config config;
   private Map<String, View> viewFunctions;
   private String staticPath;
   private SessionInterface sessionInterface;
   private RuleMap ruleMap;
+
+  static {
+    InputStream stream = Jlask.class.getClassLoader().getResourceAsStream("logging.properties");
+    try {
+      LogManager.getLogManager().readConfiguration(stream);
+      LOGGER = Logger.getLogger(Jlask.class.getName());
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
   /** Init app. */
   public Jlask() {
@@ -47,8 +64,8 @@ public class Jlask extends Application {
     sessionInterface.saveSession(this, session, response);
   }
 
-  /** Usage: app.add_url_rule('/', 'index', index). */
-  public void add_url_rule(String ruleString, String endpoint, View viewFunc) {
+  /** Usage: app.addUrlRule('/', 'index', index). */
+  public void addUrlRule(String ruleString, String endpoint, View viewFunc) {
     /*
       URL Rule usage
       rule = self.url_rule_class(rule, methods=methods, **options)
@@ -71,7 +88,15 @@ public class Jlask extends Application {
     return this.ruleMap.bindToEnvironment(request.environ, null, null);
   }
 
-  private Response make_response(String rv) {
+  private Response makeResponse(HttpException rv) {
+    return new Response(rv.getDescription(), Global.request().environ, rv.getCode());
+  }
+
+  private Response makeResponse(Exception rv) {
+    return new Response("Unknown error: " + rv.getMessage(), Global.request().environ, 500);
+  }
+
+  private Response makeResponse(String rv) {
 
     /*
         Convert the return value from a view function to an instance of
@@ -91,7 +116,21 @@ public class Jlask extends Application {
     return res;
   }
 
-  private String dispatch_request() {
+  private void raiseRoutingException(Request req) throws Exception {
+    /* if (
+        not self.debug
+        or not isinstance(request.routing_exception, RequestRedirect)
+        or request.method in ("GET", "HEAD", "OPTIONS")
+    ):
+        raise request.routing_exception
+
+    from .debughelpers import FormDataRoutingRedirect
+
+    raise FormDataRoutingRedirect(request) */
+    throw req.routingException;
+  }
+
+  private String dispatchRequest() throws Exception {
     /*
         Does the request dispatching. Matches the URL and returns the
         return value of the view or error handler.  This does not have to
@@ -99,41 +138,93 @@ public class Jlask extends Application {
         In order to convert the return value to a
         proper response object, call :func:`make_response`
     */
-    Request req = RequestContextStack.top().request;
-    // TODO: req = _request_ctx_stack.top.request
-    // if req.routing_exception is not None:
-    //     self.raise_routing_exception(req)
-    // System.err.println(req.rule.endpoint);
-    // TODO:
-    // rule = req.url_rule
-    // return this.view_functions[rule.endpoint](**req.view_args);
-    // return this.viewFunctions.get("index").call(new HashMap<String, Object>());
+    Request req = Global.request();
+    if (req.routingException != null) {
+      this.raiseRoutingException(req);
+    }
+    // TODO:   # if we provide automatic options for this URL and the
+    //         # request came with the OPTIONS method, reply automatically
     return this.viewFunctions.get(req.rule.endpoint).call(req.viewArgs);
   }
 
-  private Response full_dispatch_request() {
+  private Handler findErrorHandler(Exception e) {
+    /*
+     Return a registered error handler for an exception in this order:
+        blueprint handler for a specific code, app handler for a specific code,
+        blueprint handler for an exception class, app handler for an exception
+        class, or ``None`` if a suitable handler is not found.
+    */
+
+    // TODO: implement error handler map and matching
+    return null;
+  }
+
+  private Object handleUserException(Exception e) throws Exception {
+    /*
+    This method is called whenever an exception occurs that
+       should be handled. A special case is :class:`~werkzeug
+       .exceptions.HTTPException` which is forwarded to the
+       :meth:`handle_http_exception` method. This function will either
+       return a response value or reraise the exception with the same
+       traceback. */
+    // TODO: if isinstance(e, HTTPException) and not self.trap_http_exception(e):
+    //             return self.handle_http_exception(e)
+    if (e instanceof HttpException) { // TODO: not self.trap_http_exception(e)
+      return this.handleHttpException((HttpException) e);
+    }
+    Handler handler = this.findErrorHandler(e);
+    if (handler == null) {
+      throw e;
+    }
+    return handler.call(e);
+  }
+
+  private Object handleHttpException(HttpException e) {
+    /*
+     * Proxy exceptions don't have error codes.  We want to always return
+     * those unchanged as errors
+     */
+    if (e.getCode() == null) {
+      return e;
+    }
+    /*
+     * RoutingExceptions are used internally to trigger routing
+     * actions, such as slash redirects raising RequestRedirect. They
+     * are not raised or handled in user code.
+     */
+    // TODO
+    // if (e instanceof RoutingException) {
+    //   return e;
+    // }
+
+    Handler handler = this.findErrorHandler(e);
+    if (handler == null) {
+      return e;
+    }
+    return handler.call(e);
+  }
+
+  private Response fullDispatchRequest() throws Exception {
     /*
     Dispatches the request and on top of that performs request
     pre and postprocessing as well as HTTP exception catching and
     error handling.
     */
-    String rv = null;
+    Object rv = null;
     try {
       // TODO: request_started.send(self) signal
       // TODO: rv = this.preprocess_request()
       if (rv == null) {
-        rv = this.dispatch_request();
+        rv = this.dispatchRequest();
       }
     } catch (Exception e) {
-      // TODO: handle exception
-      // rv = this.handle_user_exception(e);
-      System.err.print(e);
+      rv = this.handleUserException(e);
     }
 
-    return this.finalize_request(rv, false);
+    return this.finalizeRequest(rv, false);
   }
 
-  private Response finalize_request(String rv, boolean fromErrorHandler) {
+  private Response finalizeRequest(Object rv, boolean fromErrorHandler) throws Exception {
     /*
     Given the return value from a view function this finalizes
     the request by converting it into a response and invoking the
@@ -143,9 +234,15 @@ public class Jlask extends Application {
     failure a special saf  the `from_error_handle  processing will be logged and otherwise ignored.
     */
 
-    Response response = this.make_response(rv);
+    // To handle Python duck type of rv
+    Response response = null;
+    if (rv instanceof HttpException) {
+      response = this.makeResponse((HttpException) rv);
+    } else if (rv instanceof String) {
+      response = this.makeResponse((String) rv);
+    }
     try {
-      response = this.process_response(response);
+      response = this.processResponse(response);
       //  request_finished.send(self, response=response) signal
     } catch (Exception e) {
       // if not fromErrorHandler:
@@ -153,12 +250,15 @@ public class Jlask extends Application {
       // self.logger.exception(
       //     "Request finalizing failed with an " "error while handling an error"
       // )
-      System.err.print(e);
+      if (fromErrorHandler) {
+        throw e;
+      }
+      e.printStackTrace();
     }
     return response;
   }
 
-  private Response process_response(Response response) {
+  private Response processResponse(Response response) {
     /*
         ctx = _request_ctx_stack.top
         bp = ctx.request.blueprint
@@ -177,18 +277,22 @@ public class Jlask extends Application {
     return response;
   }
 
-  private Response handle_exception(Exception e) {
-    /*
-    self.log_exception((exc_type, exc_value, tb))
-    handler = self._find_error_handler(InternalServerError())
-    if handler is None:
-        return InternalServerError()
-    return self.finalize_request(handler(e), fromErrorHandler=True)
-    */
-    return null;
+  private Response handleException(Exception e) throws Exception {
+    /**
+     * TODO: got_request_exception.send(self, exception=e) if self.propagate_exceptions: ...
+     * self.log_exception((exc_type, exc_value, tb)) handler =
+     * self._find_error_handler(InternalServerError()) if handler is None: return
+     * InternalServerError() return self.finalizeRequest(handler(e), fromErrorHandler=True)
+     */
+    Handler handler = this.findErrorHandler(new InternalServerError());
+    if (handler == null) {
+      throw new InternalServerError();
+    }
+
+    return this.finalizeRequest(handler.call(e), true);
   }
 
-  private AppContext app_context() {
+  private AppContext appContext() {
     /*
     * Create AppContext'
        with app.app_context():
@@ -197,14 +301,14 @@ public class Jlask extends Application {
     return new AppContext(this);
   }
 
-  private RequestContext request_context(Map<String, Object> environ) {
+  private RequestContext requestContext(Map<String, Object> environ) {
     /*
         Create RequestContext representing a WSGI environment.
     */
     return new RequestContext(this, environ);
   }
 
-  private ApplicationIter<String> wsgi_app(
+  private ApplicationIter<String> wsgiApp(
       Map<String, Object> environ, StartResponse startResponse) {
     /*
         environ: A WSGI environment.
@@ -213,42 +317,49 @@ public class Jlask extends Application {
             start the response.
 
     */
-    RequestContext ctx = this.request_context(environ);
+    RequestContext ctx = this.requestContext(environ);
     Exception error = null;
 
     Response response = null;
-    ctx.push();
-    response = this.full_dispatch_request();
 
-    // try {
-    //   try {
-    //     ctx.push();
-    //     response = this.full_dispatch_request();
-    //   } catch (Exception e) {
-    //     // TODO: handle exception
-    //     error = e;
-    //     System.err.print(e);
-    //     // TODO: response = this.handle_exception(e);
-    //   }
-    //   // TODO: return response(environ, startResponse);
-    // } finally {
-    //   // TODO:
-    //   // if self.should_ignore_error(error):
-    //   //    error = None
-    //   // ctx.auto_pop(error);
-    // }
+    try {
+      try {
+        ctx.push();
+        response = this.fullDispatchRequest();
+      } catch (Exception e) {
+        // e.printStackTrace();
+        error = e;
+        response = this.handleException(e);
+      }
+    } catch (InternalServerError e) {
+      e.printStackTrace();
+      response = makeResponse(e);
+    } catch (Exception e) {
+      // Exception from finalizeRequest
+      e.printStackTrace();
+      response = makeResponse(e);
+    } finally {
+      // TODO:
+      // if self.shouldIgnoreError(error):
+      //    error = None
 
-    // if (response != null) {
-    //   startResponse.startResponse(200, null, false);
-    //   startResponse.getWrite().write(response.getBody());
-    // } else {
-    //   startResponse.startResponse(500, null, false);
-    // }
+      // TODO: record request and response
+      Request req = Global.request();
+      LOGGER.info(
+          String.format(
+              "%s - \"%s %s\" %d",
+              req.environ.get("REMOTE_ADDR"),
+              req.method,
+              req.environ.get("PATH_INFO"),
+              response.getStatus()));
+      ctx.autoPop(error);
+    }
+
     return response.call(environ, startResponse);
   }
 
   public ApplicationIter<String> call(Map<String, Object> environ, StartResponse startResponse) {
-    return this.wsgi_app(environ, startResponse);
+    return this.wsgiApp(environ, startResponse);
   }
 
   public Config getConfig() {

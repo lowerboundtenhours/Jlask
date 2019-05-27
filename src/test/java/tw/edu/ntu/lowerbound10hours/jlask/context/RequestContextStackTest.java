@@ -12,7 +12,7 @@ public class RequestContextStackTest {
 
   private Jlask buildApp() {
     Jlask app = new Jlask();
-    app.add_url_rule("/", "index", new MyView());
+    app.addUrlRule("/", "index", new MyView());
     return app;
   }
 
@@ -20,9 +20,9 @@ public class RequestContextStackTest {
   public void testRequestContextStack() throws Exception {
 
     assertEquals(RequestContextStack.empty(), false);
-    Jlask jlask = buildApp();
+    Jlask testApp = buildApp();
     Map<String, Object> environ = new HashMap<String, Object>();
-    RequestContext ctx = new RequestContext(jlask, environ);
+    RequestContext ctx = new RequestContext(testApp, environ);
     RequestContextStack.push(ctx);
     assertEquals(RequestContextStack.empty(), false);
     RequestContextStack.pop();

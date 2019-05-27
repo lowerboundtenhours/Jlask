@@ -2,6 +2,7 @@ package tw.edu.ntu.lowerbound10hours.jerkzeug.routing;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.NotFound;
 
 public class MapAdapter {
 
@@ -34,11 +35,11 @@ public class MapAdapter {
     this.defaultMethod = defaultMethod;
   }
 
-  public SimpleEntry<Rule, HashMap<String, Object>> match() {
+  public SimpleEntry<Rule, HashMap<String, Object>> match() throws NotFound {
     return this.match(this.pathInfo, this.defaultMethod.toUpperCase());
   }
 
-  public SimpleEntry<Rule, HashMap<String, Object>> match(String pathInfo) {
+  public SimpleEntry<Rule, HashMap<String, Object>> match(String pathInfo) throws NotFound {
     return this.match(pathInfo, this.defaultMethod.toUpperCase());
   }
 
@@ -46,7 +47,8 @@ public class MapAdapter {
    * Search through all rules in the bound map, return the first rule that match this pathInfo and
    * its corresponding arguments.
    */
-  public SimpleEntry<Rule, HashMap<String, Object>> match(String pathInfo, String method) {
+  public SimpleEntry<Rule, HashMap<String, Object>> match(String pathInfo, String method)
+      throws NotFound {
     StringBuilder sb = new StringBuilder();
     if (this.map.hostMatching) {
       sb.append(this.serverName);
@@ -65,6 +67,6 @@ public class MapAdapter {
       // TODO: raise RequestSlash or RequestRedirect under some circumstances
       return new SimpleEntry<>(rule, returnValue);
     }
-    throw new RuntimeException("All rules not matched"); // TODO: use a custom NotFound excpetion.
+    throw new NotFound();
   }
 }

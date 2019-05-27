@@ -31,19 +31,23 @@ public class RequestContext {
     this.request = new Request(environ);
     this.urlAdapter = this.app.createUrlAdapter(this.request);
     // TODO: match request, then setup request.rule
-    this.match_request();
+    this.matchRequest();
   }
 
   /** Match request via urlAdapter. */
-  public void match_request() {
-    SimpleEntry<Rule, HashMap<String, Object>> result = this.urlAdapter.match();
-    this.request.rule = result.getKey();
-    this.request.viewArgs = result.getValue();
-    // TODO: url_rule, self.request.view_args = self.url_adapter.match(return_rule=True)
+  public void matchRequest() {
+    try {
+      // TODO: url_rule, self.request.view_args = self.url_adapter.match(return_rule=True)
+      SimpleEntry<Rule, HashMap<String, Object>> result = this.urlAdapter.match();
+      this.request.rule = result.getKey();
+      this.request.viewArgs = result.getValue();
+    } catch (Exception e) {
+      this.request.routingException = e;
+    }
   }
 
+  /** Binds the request context to the current context. */
   public void push() {
-    // Binds the request context to the current context
     RequestContextStack.push(this);
   }
 
@@ -51,7 +55,15 @@ public class RequestContext {
     RequestContextStack.pop();
   }
 
-  public void auto_pop() {}
+  /** Auto pop after request processed. */
+  public void autoPop(Exception e) {
+    /**
+     * TODO. if self.request.environ.get("flask._preserve_context") or ( exc is not None and
+     * self.app.preserve_context_on_exception ): self.preserved = True self._preserved_exc = exc
+     * else: self.pop(exc)
+     */
+    this.pop();
+  }
 
   // public Request getRequest() {
   //   return this.request;

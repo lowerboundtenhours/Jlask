@@ -13,6 +13,7 @@ public class Request {
   public String method;
   public Map<String, Cookie> cookies;
   private HttpServletRequest baseRequest;
+  public Exception routingException = null;
 
   /**
    * Wrap javax.servlet.http.HttpServletRequest.
