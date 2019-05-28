@@ -48,12 +48,12 @@ public class SecureCookieSessionInterfaceTest {
 
     // set up fake request
     Map<String, Object> environ = new HashMap<>();
-    environ.put("baseRequest", mockRequest);
+    environ.put("request", mockRequest);
     Request request = new Request(environ);
     this.request = request;
 
     // set up fake response
-    environ.put("baseResponse", mockResponse);
+    environ.put("response", mockResponse);
     @Jailbreak Response response = new Response("foo", environ, 200);
     this.response = response;
   }

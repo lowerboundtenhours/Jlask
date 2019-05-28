@@ -15,7 +15,7 @@ public class ResponseTest {
   @Test
   public void testConstructor() throws Exception {
     Map<String, Object> environ = new HashMap<>();
-    environ.put("baseResponse", mockResponse);
+    environ.put("response", mockResponse);
     @Jailbreak Response res = new Response("foo", environ, 200);
     assertEquals(res.response.get(0), "foo");
   }
