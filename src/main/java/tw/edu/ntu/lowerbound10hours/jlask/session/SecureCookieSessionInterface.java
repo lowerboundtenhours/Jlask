@@ -17,8 +17,10 @@ public class SecureCookieSessionInterface extends SessionInterface {
   }
 
   private String getSessionCookieName(Jlask app) {
-    String sessionCookieName = (String) app.getConfig().get("SESSION_COOKIE_NAME");
-    sessionCookieName = (sessionCookieName == null) ? "session" : sessionCookieName;
+    String sessionCookieName = app.getConfig().get("SESSION_COOKIE_NAME");
+    // Add a random session cookie suffix (base64) to avoid cookie key collision
+    sessionCookieName =
+        (sessionCookieName == null) ? "Jlask-session-IUuArEBYeWgXdg" : sessionCookieName;
     return sessionCookieName;
   }
 
@@ -30,12 +32,11 @@ public class SecureCookieSessionInterface extends SessionInterface {
     }
     // val is a encoded string
     Cookie cookie = request.cookies.get(this.getSessionCookieName(app));
-    String val = cookie.getValue();
-
-    if (val == null) {
+    if (cookie == null) {
       // empty session
       return new SecureCookieSession(new HashMap<>());
     }
+    String val = cookie.getValue();
 
     HashMap<String, String> data = serializer.loads(val);
     return new SecureCookieSession(data);
