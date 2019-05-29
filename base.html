@@ -4,8 +4,8 @@
 <nav>
   <h1><a href="/">Jlaskr</a></h1>
   <ul>
-    {% if hasUser %}
-      <li><span>{{ user.get('username') }}</span>
+    {% if user %}
+      <li><span>{{ user.getUsername() }}</span>
       <li><a href="/logout" >Log Out</a>
     {% else %}
       <li><a href="/register">Register</a>
