@@ -27,7 +27,7 @@ public class RequestTest {
   @Test
   public void testConstructor() throws Exception {
     Map<String, Object> environ = new HashMap<>();
-    environ.put("baseRequest", mockRequest);
+    environ.put("request", mockRequest);
     Request req = new Request(environ);
     assertEquals(req.method, "GET");
     assertEquals(req.cookies.size(), 1);
@@ -37,7 +37,7 @@ public class RequestTest {
   @Test
   public void testNoCookieConstructor() throws Exception {
     Map<String, Object> environ = new HashMap<>();
-    environ.put("baseRequest", mockNoCookieRequest);
+    environ.put("request", mockNoCookieRequest);
     Request req = new Request(environ);
     assertEquals(req.method, "GET");
     assertEquals(req.cookies.size(), 0);
@@ -46,7 +46,7 @@ public class RequestTest {
   @Test
   public void testGetParameter() throws Exception {
     Map<String, Object> environ = new HashMap<>();
-    environ.put("baseRequest", mockRequest);
+    environ.put("request", mockRequest);
     Request req = new Request(environ);
     assertEquals(req.getParameter("key"), "value");
   }

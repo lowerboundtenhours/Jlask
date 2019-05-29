@@ -22,8 +22,8 @@ public class Request {
    */
   public Request(Map<String, Object> environ) {
     this.environ = environ;
-    if (environ.containsKey("baseRequest")) {
-      this.baseRequest = (HttpServletRequest) environ.get("baseRequest");
+    if (environ.containsKey("request")) {
+      this.baseRequest = (HttpServletRequest) environ.get("request");
       this.method = this.baseRequest.getMethod();
       this.cookies = new HashMap<String, Cookie>();
       if (this.baseRequest.getCookies() != null) {

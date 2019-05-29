@@ -60,7 +60,7 @@ public class JlaskTest {
   private Jlask buildAppAndSendReuqest() {
     @Jailbreak Jlask testApp = buildApp();
     Map<String, Object> environ = new HashMap<String, Object>();
-    environ.put("baseRequest", mockedRequest);
+    environ.put("request", mockedRequest);
     RequestContext ctx = new RequestContext(testApp, environ);
     ctx.push();
     return testApp;

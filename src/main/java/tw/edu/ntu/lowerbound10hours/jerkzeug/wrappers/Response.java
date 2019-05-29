@@ -26,7 +26,7 @@ public class Response {
   public Response(String rv, Map<String, Object> environ, int status) {
     this.response = new ArrayList<>();
     this.response.add(rv);
-    this.baseResponse = (HttpServletResponse) environ.get("baseResponse");
+    this.baseResponse = (HttpServletResponse) environ.get("response");
     this.status = status;
   }
 
@@ -39,7 +39,7 @@ public class Response {
    */
   public Response(List<String> rv, Map<String, Object> environ, int status) {
     this.response = rv;
-    this.baseResponse = (HttpServletResponse) environ.get("baseResponse");
+    this.baseResponse = (HttpServletResponse) environ.get("response");
     this.status = status;
   }
 
