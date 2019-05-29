@@ -1,6 +1,7 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug.routing;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -72,5 +73,22 @@ public class MapAdapterTest {
     assertEquals(result.getValue().size(), 2);
     assertEquals((Integer) result.getValue().get("b"), new Integer(1));
     assertEquals((Integer) result.getValue().get("d"), new Integer(2222222));
+  }
+
+  @Test
+  public void testMatch3() {
+    ArrayList<RuleFactory> rules = new ArrayList<>();
+    rules.add(new Rule("/test/<string:name>/<int:match>/<float:point>", "getPoint"));
+
+    RuleMap map = new RuleMap(rules);
+    MapAdapter urls = map.bind("example.com");
+
+    SimpleEntry<Rule, HashMap<String, Object>> result;
+    result = urls.match("/test/Nash/55/23.731");
+    assertEquals(result.getKey().endpoint, "getPoint");
+    assertEquals(result.getValue().size(), 3);
+    assertEquals((String) result.getValue().get("name"), "Nash");
+    assertEquals((Integer) result.getValue().get("match"), new Integer(55));
+    assertTrue((Float) result.getValue().get("point") - new Float(23.731) < 1e-7);
   }
 }
