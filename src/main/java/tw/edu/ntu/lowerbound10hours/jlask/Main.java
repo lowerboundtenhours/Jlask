@@ -4,12 +4,11 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.*;
+import tw.edu.ntu.lowerbound10hours.jlask.wrappers.*;
 import tw.edu.ntu.lowerbound10hours.jlaskhibernate.Hibernate;
 import tw.edu.ntu.lowerbound10hours.jlaskhibernate.Post;
 import tw.edu.ntu.lowerbound10hours.jlaskhibernate.User;
@@ -43,12 +42,9 @@ class RegisterView extends View {
   }
 
   public String dispatchRequest(Map<String, Object> args) {
-    Map<String, Object> environ = Global.request().environ;
-    HttpServletRequest request = (HttpServletRequest) environ.get("request");
-    HttpServletResponse response = (HttpServletResponse) environ.get("response");
+    Request request = Global.request();
     Map<String, Object> context = new HashMap<>();
-
-    if (request.getMethod() == "POST") {
+    if (request.method == "POST") {
       String username = request.getParameter("username");
       String password = request.getParameter("password");
 
@@ -64,6 +60,8 @@ class RegisterView extends View {
         _db.getTransaction().commit();
 
         try {
+          System.out.println("redirect\n");
+          Response response = new Response("", request.environ, 302);
           response.sendRedirect("/login");
         } catch (Exception e) {
         }
@@ -72,7 +70,6 @@ class RegisterView extends View {
 
     // TODO session.user
     context.put("user", BlogGlobal.getLoginUser());
-    context.put("hasUser", !BlogGlobal.getLoginUser().isEmpty());
     return _templateEngine.renderTemplate("auth/register.html", context);
   }
 
@@ -87,11 +84,9 @@ class LoginView extends View {
   }
 
   public String dispatchRequest(Map<String, Object> args) {
-    Map<String, Object> environ = Global.request().environ;
-    HttpServletRequest request = (HttpServletRequest) environ.get("request");
-    HttpServletResponse response = (HttpServletResponse) environ.get("response");
+    Request request = Global.request();
     Map<String, Object> context = new HashMap<>();
-    if (request.getMethod() == "POST") {
+    if (request.method == "POST") {
       String username = request.getParameter("username");
       String password = request.getParameter("password");
 
@@ -105,6 +100,7 @@ class LoginView extends View {
         System.out.println(user.getUsername());
         BlogGlobal.setLoginUser(user);
         try {
+          Response response = new Response("", request.environ, 302);
           response.sendRedirect("/");
         } catch (Exception e) {
         }
@@ -113,7 +109,6 @@ class LoginView extends View {
 
     // TODO session.user
     context.put("user", BlogGlobal.getLoginUser());
-    context.put("hasUser", !BlogGlobal.getLoginUser().isEmpty());
     return _templateEngine.renderTemplate("auth/login.html", context);
   }
 
@@ -129,28 +124,27 @@ class CreateView extends View {
 
   public String dispatchRequest(Map<String, Object> args) {
     Map<String, Object> context = new HashMap<String, Object>();
-    Map<String, Object> environ = Global.request().environ;
-    HttpServletRequest request = (HttpServletRequest) environ.get("request");
-    HttpServletResponse response = (HttpServletResponse) environ.get("response");
+    Request request = Global.request();
     String title = request.getParameter("title");
     String body = request.getParameter("body");
     context.put("title", title);
     context.put("body", body);
 
-    if (request.getMethod() == "POST") {
+    if (request.method == "POST") {
       // test post
       // TODO session.user
       Post post =
           new Post(
               title,
               body,
-              Integer.parseInt(BlogGlobal.getLoginUser().get("id")),
-              BlogGlobal.getLoginUser().get("username"));
+              BlogGlobal.getLoginUser().getId(),
+              BlogGlobal.getLoginUser().getUsername());
       _db.beginTransaction();
       _db.getSession().save(post);
       _db.getTransaction().commit();
 
       try {
+        Response response = new Response("", request.environ, 302);
         response.sendRedirect("/");
       } catch (Exception e) {
       }
@@ -158,7 +152,6 @@ class CreateView extends View {
 
     // TODO session.user
     context.put("user", BlogGlobal.getLoginUser());
-    context.put("hasUser", !BlogGlobal.getLoginUser().isEmpty());
     return _templateEngine.renderTemplate("blog/create.html", context);
   }
 
@@ -176,18 +169,10 @@ class BlogView extends View {
     ArrayList<Object> postList = new ArrayList<>();
 
     Criteria criteria = _db.getSession().createCriteria(Post.class);
-    criteria.add(Restrictions.eq("username", BlogGlobal.getLoginUser().get("username")));
     criteria.addOrder(Order.asc("created"));
 
     for (int i = 0; i < criteria.list().size(); ++i) {
-      Post _post = (Post) criteria.list().get(i);
-      Map<String, String> post = new HashMap<String, String>();
-      post.put("title", _post.getTitle());
-      post.put("body", _post.getBody());
-      post.put("author_id", String.valueOf(_post.getAuthorId()));
-      post.put("id", String.valueOf(_post.getId()));
-      post.put("username", _post.getUsername());
-      post.put("created", String.valueOf(_post.getCreated()));
+      Post post = (Post) criteria.list().get(i);
       postList.add(post);
     }
 
@@ -196,7 +181,6 @@ class BlogView extends View {
 
     // TODO session.user
     context.put("user", BlogGlobal.getLoginUser());
-    context.put("hasUser", !BlogGlobal.getLoginUser().isEmpty());
     return _templateEngine.renderTemplate("blog/index.html", context);
   }
 
@@ -212,35 +196,26 @@ class UpdateView extends View {
 
   public String dispatchRequest(Map<String, Object> args) {
     Map<String, Object> context = new HashMap<String, Object>();
-    Map<String, Object> environ = Global.request().environ;
-    HttpServletRequest request = (HttpServletRequest) environ.get("request");
-    HttpServletResponse response = (HttpServletResponse) environ.get("response");
-
+    Request request = Global.request();
     // test post database
     Criteria criteria = _db.getSession().createCriteria(Post.class);
     criteria.add(Restrictions.eq("id", args.get("id")));
 
-    Post _post = (Post) criteria.list().get(0);
-    Map<String, String> post = new HashMap<String, String>();
-    post.put("title", _post.getTitle());
-    post.put("body", _post.getBody());
-    post.put("author_id", String.valueOf(_post.getAuthorId()));
-    post.put("id", String.valueOf(_post.getId()));
-    post.put("username", _post.getUsername());
-    post.put("created", String.valueOf(_post.getCreated()));
+    Post post = (Post) criteria.list().get(0);
 
-    if (request.getMethod() == "POST") {
+    if (request.method == "POST") {
       String title = request.getParameter("title");
       String body = request.getParameter("body");
       System.out.printf("%s %s\n", title, body);
 
-      _post.setTitle(title);
-      _post.setBody(body);
+      post.setTitle(title);
+      post.setBody(body);
       _db.beginTransaction();
-      _db.getSession().update(_post);
+      _db.getSession().update(post);
       _db.getTransaction().commit();
 
       try {
+        Response response = new Response("", request.environ, 302);
         response.sendRedirect("/");
       } catch (Exception e) {
       }
@@ -250,7 +225,6 @@ class UpdateView extends View {
 
     // TODO session.user
     context.put("user", BlogGlobal.getLoginUser());
-    context.put("hasUser", !BlogGlobal.getLoginUser().isEmpty());
     return _templateEngine.renderTemplate("blog/update.html", context);
   }
 
@@ -265,11 +239,7 @@ class DeleteView extends View {
   }
 
   public String dispatchRequest(Map<String, Object> args) {
-    Map<String, Object> environ = Global.request().environ;
-    HttpServletRequest request = (HttpServletRequest) environ.get("request");
-    HttpServletResponse response = (HttpServletResponse) environ.get("response");
-
-    String id = request.getParameter("id");
+    Request request = Global.request();
 
     // test post database
     Criteria criteria = _db.getSession().createCriteria(Post.class);
@@ -282,6 +252,7 @@ class DeleteView extends View {
     _db.getTransaction().commit();
 
     try {
+      Response response = new Response("", request.environ, 302);
       response.sendRedirect("/");
     } catch (Exception e) {
     }
@@ -299,12 +270,11 @@ class LogOutView extends View {
   }
 
   public String dispatchRequest(Map<String, Object> args) {
-    Map<String, Object> environ = Global.request().environ;
-    HttpServletResponse response = (HttpServletResponse) environ.get("response");
 
     // TODO session.user
     BlogGlobal.setLoginUser(null);
     try {
+      Response response = new Response("", Global.request().environ, 302);
       response.sendRedirect("/");
     } catch (Exception e) {
     }
