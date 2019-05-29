@@ -191,8 +191,7 @@ public class Rule implements RuleFactory {
       } else if (converterStr.equals("float")) {
         return new RegexFloatConverter();
       } else {
-        // TODO: throw a converter not found exception
-        return new RegexIntegerConverter();
+        return new RegexStringConverter();
       }
     }
   }

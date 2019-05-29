@@ -1,12 +1,14 @@
 package tw.edu.ntu.lowerbound10hours.jerkzeug.routing;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertThrows;
 import static org.testng.Assert.assertTrue;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.testng.annotations.Test;
+import tw.edu.ntu.lowerbound10hours.jerkzeug.exceptions.NotFound;
 
 public class MapAdapterTest {
   private MapAdapter exampleUrls() {
@@ -78,6 +80,7 @@ public class MapAdapterTest {
   @Test
   public void testMatch3() {
     ArrayList<RuleFactory> rules = new ArrayList<>();
+    rules.add(new Rule("/update/", "update/index"));
     rules.add(new Rule("/test/<string:name>/<int:match>/<float:point>", "getPoint"));
 
     RuleMap map = new RuleMap(rules);
@@ -90,5 +93,21 @@ public class MapAdapterTest {
     assertEquals((String) result.getValue().get("name"), "Nash");
     assertEquals((Integer) result.getValue().get("match"), new Integer(55));
     assertTrue((Float) result.getValue().get("point") - new Float(23.731) < 1e-7);
+  }
+
+  @Test
+  public void testNotFound() {
+    ArrayList<RuleFactory> rules = new ArrayList<>();
+    rules.add(new Rule("/test/<sdfsdg:name>", "getPoint"));
+
+    RuleMap map = new RuleMap(rules);
+    MapAdapter urls = map.bind("example.com");
+
+    assertThrows(
+        NotFound.class,
+        () -> {
+          SimpleEntry<Rule, HashMap<String, Object>> result;
+          result = urls.match("/nmlkwerv0");
+        });
   }
 }
