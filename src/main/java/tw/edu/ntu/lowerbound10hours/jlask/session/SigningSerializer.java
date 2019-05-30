@@ -39,12 +39,17 @@ public class SigningSerializer {
   private SigningSerializer(String keyStoragePath) {
     try {
       secureRandom = new SecureRandom();
-      try {
-        keyPair = loadKeyPair(keyStoragePath, "DSA");
-      } catch (Exception e) {
+      if (keyStoragePath == null) {
         keyPairGenerator = KeyPairGenerator.getInstance("DSA");
         keyPair = keyPairGenerator.generateKeyPair();
-        saveKeyPair(keyStoragePath, keyPair);
+      } else {
+        try {
+          keyPair = loadKeyPair(keyStoragePath, "DSA");
+        } catch (Exception e) {
+          keyPairGenerator = KeyPairGenerator.getInstance("DSA");
+          keyPair = keyPairGenerator.generateKeyPair();
+          saveKeyPair(keyStoragePath, keyPair);
+        }
       }
       gson = new Gson();
       dictType = new TypeToken<HashMap<String, String>>() {}.getType();

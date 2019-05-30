@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 public class SigningSerializerTest {
   @Test
   public void testDumpsAndLoads() {
-    SigningSerializer serializer = SigningSerializer.getInstance();
+    SigningSerializer serializer = SigningSerializer.getInstance(null);
     HashMap<String, String> sessionData = new HashMap<>();
     sessionData.put("username", "Nash");
     sessionData.put("clear_password", "NashTestPassword13579");
