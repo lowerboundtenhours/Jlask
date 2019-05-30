@@ -76,8 +76,8 @@ public class SecureCookieSessionInterfaceTest {
 
   @Test
   public void testLoadKeyPair() {
-    Jlask app = new Jlask();
-    SecureCookieSession session = app.open_session(request);
+    SigningSerializer ss = new SigningSerializer("./src/main/resources/");
+    SigningSerializer ss2 = new SigningSerializer("./src/main/resources/");
   }
 
   @Test

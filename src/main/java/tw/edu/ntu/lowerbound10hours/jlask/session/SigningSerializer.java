@@ -36,7 +36,8 @@ public class SigningSerializer {
   private Gson gson;
   private Type dictType;
 
-  private SigningSerializer(String keyStoragePath) {
+  /** Construct a SigningSerializer. */
+  public SigningSerializer(String keyStoragePath) {
     try {
       secureRandom = new SecureRandom();
       if (keyStoragePath == null) {
