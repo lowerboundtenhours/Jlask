@@ -13,7 +13,9 @@ public class SecureCookieSessionInterface extends SessionInterface {
 
   private SigningSerializer getSigningSerializer(Jlask app) {
     // TODO: use private key provided by app if exists
-    return SigningSerializer.getInstance();
+    String keyStoragePath = app.getConfig().get("SESSION_KEY_STORE_PATH");
+    keyStoragePath = (keyStoragePath == null) ? "./src/main/resources/" : keyStoragePath;
+    return SigningSerializer.getInstance(keyStoragePath);
   }
 
   private String getSessionCookieName(Jlask app) {
@@ -31,6 +33,10 @@ public class SecureCookieSessionInterface extends SessionInterface {
       return null;
     }
     // val is a encoded string
+    if (request.cookies == null) {
+      // empty session
+      return new SecureCookieSession(new HashMap<>());
+    }
     Cookie cookie = request.cookies.get(this.getSessionCookieName(app));
     if (cookie == null) {
       // empty session
