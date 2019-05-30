@@ -18,6 +18,7 @@ import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.StartResponse;
 import tw.edu.ntu.lowerbound10hours.jlask.context.AppContext;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContext;
+import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContextStack;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSession;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSessionInterface;
 import tw.edu.ntu.lowerbound10hours.jlask.session.SessionInterface;
@@ -259,6 +260,7 @@ public class Jlask extends Application {
   }
 
   private Response processResponse(Response response) {
+    RequestContext ctx = RequestContextStack.top();
     /*
         ctx = _request_ctx_stack.top
         bp = ctx.request.blueprint
@@ -269,11 +271,11 @@ public class Jlask extends Application {
             funcs = chain(funcs, reversed(self.after_request_funcs[None]))
         for handler in funcs:
             response = handler(response)
-        if not self.session_interface.is_null_session(ctx.session):
-            self.session_interface.save_session(self, ctx.session, response)
-        return response
     */
 
+    if (!this.sessionInterface.isNullSession(ctx.session)) {
+      this.sessionInterface.saveSession(this, (SecureCookieSession) ctx.session, response);
+    }
     return response;
   }
 

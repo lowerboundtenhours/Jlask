@@ -65,6 +65,7 @@ public class SecureCookieSessionInterface extends SessionInterface {
     int maxAge = this.getCookieMaxAge(app);
 
     String val = this.getSigningSerializer(app).dumps(session.getDict());
+    String key = this.getSessionCookieName(app);
     response.setCookie(this.getSessionCookieName(app), val, domain, path, maxAge);
   }
 }
