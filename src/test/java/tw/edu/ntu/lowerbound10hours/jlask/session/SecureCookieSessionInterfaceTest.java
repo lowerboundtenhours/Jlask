@@ -75,6 +75,12 @@ public class SecureCookieSessionInterfaceTest {
   }
 
   @Test
+  public void testLoadKeyPair() {
+    Jlask app = new Jlask();
+    SecureCookieSession session = app.open_session(request);
+  }
+
+  @Test
   public void testSentCookie() {
     SecureCookieSession session = app.open_session(request);
     session.set("username2", "Bob");
