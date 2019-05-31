@@ -37,68 +37,96 @@ public class IntegrityTest {
     InetAddress host = InetAddress.getByName(name);
     BaseWsgiServer server = Serving.makeServer(host, port, application);
     server.getServer().start();
-    String baseURL = String.format("http://%s:%d", name, port);
+    String baseUrl = String.format("http://%s:%d", name, port);
 
     // GET register
-    if (!doGet(String.format("%s/register", baseURL))) {
+    if (!doGet(String.format("%s/register", baseUrl))) {
       System.err.println("Fail Get register");
       return;
     }
     // POST register with username="t" password = "1"
     if (!doPost(
-        String.format("%s/register", baseURL),
+        String.format("%s/register", baseUrl),
         String.format("username=%s&password=%s", "t", "1"))) {
       System.err.println("Fail post register");
       return;
     }
 
     // GET login
-    if (!doGet(String.format("%s/login", baseURL))) {
+    if (!doGet(String.format("%s/login", baseUrl))) {
       System.err.println("Fail get login");
       return;
     }
     // POST login with username="t" password = "1"
     if (!doPost(
-        String.format("%s/login", baseURL), String.format("username=%s&password=%s", "t", "1"))) {
+        String.format("%s/login", baseUrl), String.format("username=%s&password=%s", "t", "1"))) {
       System.err.println("Fail post login");
       return;
     }
 
     // GET create
-    if (!doGet(String.format("%s/create", baseURL))) {
+    if (!doGet(String.format("%s/create", baseUrl))) {
       System.err.println("Fail get create");
     }
     // POST create
     if (!doPost(
-        String.format("%s/create", baseURL), String.format("title=%s&body=%s", "Hello", "World"))) {
+        String.format("%s/create", baseUrl), String.format("title=%s&body=%s", "Hello", "World"))) {
       System.err.println("Fail Post register");
       return;
+    }
+
+    // GET blog index
+    if (!doGet(String.format("%s/", baseUrl))) {
+      System.err.println("Fail get /");
+    }
+
+    // GET Update index
+    if (!doGet(String.format("%s/update/%s", baseUrl, "1"))) {
+      System.err.println("Fail get /update/1");
+    }
+    // POST update
+    if (!doPost(
+        String.format("%s/update/%s", baseUrl, "1"),
+        String.format("title=%s&body=%s", "Hello!", "World!"))) {
+      System.err.println("Fail Post /update/1");
+      return;
+    }
+
+    // GET delete
+    if (!doGet(String.format("%s/delete/%s", baseUrl, "1"))) {
+      System.err.println("Fail get /delete/1");
+    }
+
+    // GET logout
+    if (!doGet(String.format("%s/logout", baseUrl))) {
+      System.err.println("Fail get /logout");
     }
 
     server.getServer().stop();
   }
 
-  public boolean doPost(String sURL, String data) {
+  /** post url. */
+  public boolean doPost(String sourceUrl, String data) {
     boolean doSuccess = false;
     java.io.BufferedWriter wr = null;
     try {
-      URL url = new URL(sURL);
-      HttpURLConnection URLConn = (HttpURLConnection) url.openConnection();
-      URLConn.setDoOutput(true);
-      URLConn.setDoInput(true);
-      ((HttpURLConnection) URLConn).setRequestMethod("POST");
-      URLConn.setUseCaches(false);
-      URLConn.setAllowUserInteraction(true);
+      URL url = new URL(sourceUrl);
+      HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+      urlConn.setDoOutput(true);
+      urlConn.setDoInput(true);
+      ((HttpURLConnection) urlConn).setRequestMethod("POST");
+      urlConn.setUseCaches(false);
+      urlConn.setAllowUserInteraction(true);
       HttpURLConnection.setFollowRedirects(true);
-      URLConn.setInstanceFollowRedirects(true);
-      URLConn.setRequestProperty("User-agent", "Mozilla/5.0");
-      URLConn.setRequestProperty(
+      urlConn.setInstanceFollowRedirects(true);
+      urlConn.setRequestProperty("User-agent", "Mozilla/5.0");
+      urlConn.setRequestProperty(
           "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-      URLConn.setRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
-      URLConn.setRequestProperty("Accept-Charse", "Big5,utf-8;q=0.7,*;q=0.7");
-      URLConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-      URLConn.setRequestProperty("Content-Length", String.valueOf(data.getBytes().length));
-      java.io.DataOutputStream dos = new java.io.DataOutputStream(URLConn.getOutputStream());
+      urlConn.setRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
+      urlConn.setRequestProperty("Accept-Charse", "Big5,utf-8;q=0.7,*;q=0.7");
+      urlConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+      urlConn.setRequestProperty("Content-Length", String.valueOf(data.getBytes().length));
+      java.io.DataOutputStream dos = new java.io.DataOutputStream(urlConn.getOutputStream());
       dos.writeBytes(data);
     } catch (java.io.IOException e) {
       doSuccess = false;
@@ -116,21 +144,22 @@ public class IntegrityTest {
     return doSuccess;
   }
 
-  public boolean doGet(String sURL) {
+  /** get url. */
+  public boolean doGet(String sourceUrl) {
     boolean doSuccess = false;
     BufferedReader in = null;
     try {
-      URL url = new URL(sURL);
-      HttpURLConnection URLConn = (HttpURLConnection) url.openConnection();
-      URLConn.setRequestProperty("User-agent", "Mozilla/5.0");
-      URLConn.setRequestProperty(
+      URL url = new URL(sourceUrl);
+      HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+      urlConn.setRequestProperty("User-agent", "Mozilla/5.0");
+      urlConn.setRequestProperty(
           "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-      URLConn.setRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
-      URLConn.setRequestProperty("Accept-Charse", "Big5,utf-8;q=0.7,*;q=0.7");
-      URLConn.setDoInput(true);
-      URLConn.setDoOutput(true);
-      URLConn.connect();
-      URLConn.getOutputStream().flush();
+      urlConn.setRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
+      urlConn.setRequestProperty("Accept-Charse", "Big5,utf-8;q=0.7,*;q=0.7");
+      urlConn.setDoInput(true);
+      urlConn.setDoOutput(true);
+      urlConn.connect();
+      urlConn.getOutputStream().flush();
     } catch (IOException e) {
       doSuccess = false;
       System.out.println(e);
