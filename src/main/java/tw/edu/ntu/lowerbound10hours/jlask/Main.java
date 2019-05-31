@@ -12,6 +12,7 @@ import tw.edu.ntu.lowerbound10hours.jlask.wrappers.*;
 import tw.edu.ntu.lowerbound10hours.jlaskhibernate.Hibernate;
 import tw.edu.ntu.lowerbound10hours.jlaskhibernate.Post;
 import tw.edu.ntu.lowerbound10hours.jlaskhibernate.User;
+import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSession;
 
 class Main {
   public static void main(String[] args) throws Exception {
@@ -44,6 +45,8 @@ class RegisterView extends View {
   public String dispatchRequest(Map<String, Object> args) {
     Request request = Global.request();
     Map<String, Object> context = new HashMap<>();
+    SecureCookieSession session = (SecureCookieSession) Global.session();
+    String errMsg = new String();
     if (request.method == "POST") {
       String username = request.getParameter("username");
       String password = request.getParameter("password");
@@ -51,6 +54,7 @@ class RegisterView extends View {
       Criteria criteria = _db.getSession().createCriteria(User.class);
       if (criteria.add(Restrictions.eq("username", username)).list().size() != 0) {
         // TODO: raise insert error if the username has existed
+        errMsg = String.format("username %s has existed", username);
         System.out.println("Register fail.");
       } else {
         // test user
@@ -69,7 +73,8 @@ class RegisterView extends View {
     }
 
     // TODO session.user
-    context.put("user", BlogGlobal.getLoginUser());
+    context.put("user", session);
+    context.put("errMsg", errMsg);
     return _templateEngine.renderTemplate("auth/register.html", context);
   }
 
@@ -85,7 +90,9 @@ class LoginView extends View {
 
   public String dispatchRequest(Map<String, Object> args) {
     Request request = Global.request();
+    SecureCookieSession session = (SecureCookieSession)Global.session();
     Map<String, Object> context = new HashMap<>();
+    String errMsg = new String();
     if (request.method == "POST") {
       String username = request.getParameter("username");
       String password = request.getParameter("password");
@@ -98,17 +105,20 @@ class LoginView extends View {
         // autheticate successfully
         User user = (User) criteria.list().get(0);
         System.out.println(user.getUsername());
-        BlogGlobal.setLoginUser(user);
+        session.set("username", username);
+        session.set("id", String.valueOf(user.getId()));
         try {
           Response response = new Response("", request.environ, 302);
           response.sendRedirect("/");
         } catch (Exception e) {
         }
       }
+      errMsg = "Incorrect username or password";
     }
 
     // TODO session.user
-    context.put("user", BlogGlobal.getLoginUser());
+    context.put("user", session);
+    context.put("errMsg", errMsg);
     return _templateEngine.renderTemplate("auth/login.html", context);
   }
 
@@ -124,6 +134,7 @@ class CreateView extends View {
 
   public String dispatchRequest(Map<String, Object> args) {
     Map<String, Object> context = new HashMap<String, Object>();
+    SecureCookieSession session = (SecureCookieSession)Global.session();
     Request request = Global.request();
     String title = request.getParameter("title");
     String body = request.getParameter("body");
@@ -137,8 +148,8 @@ class CreateView extends View {
           new Post(
               title,
               body,
-              BlogGlobal.getLoginUser().getId(),
-              BlogGlobal.getLoginUser().getUsername());
+              Integer.valueOf(session.get("id")),
+              session.get("username"));
       _db.beginTransaction();
       _db.getSession().save(post);
       _db.getTransaction().commit();
@@ -151,7 +162,7 @@ class CreateView extends View {
     }
 
     // TODO session.user
-    context.put("user", BlogGlobal.getLoginUser());
+    context.put("user", session);
     return _templateEngine.renderTemplate("blog/create.html", context);
   }
 
@@ -167,6 +178,7 @@ class BlogView extends View {
 
   public String dispatchRequest(Map<String, Object> args) {
     ArrayList<Object> postList = new ArrayList<>();
+    SecureCookieSession session = (SecureCookieSession)Global.session();
 
     Criteria criteria = _db.getSession().createCriteria(Post.class);
     criteria.addOrder(Order.asc("created"));
@@ -180,7 +192,12 @@ class BlogView extends View {
     context.put("postList", postList);
 
     // TODO session.user
-    context.put("user", BlogGlobal.getLoginUser());
+    if(session.contains("username")){
+        System.out.println("#############################");
+        System.out.printf("%s %s\n", session.get("username"), session.get("id"));
+        System.out.println("#############################");
+    }
+    context.put("user", session);
     return _templateEngine.renderTemplate("blog/index.html", context);
   }
 
@@ -196,6 +213,7 @@ class UpdateView extends View {
 
   public String dispatchRequest(Map<String, Object> args) {
     Map<String, Object> context = new HashMap<String, Object>();
+    SecureCookieSession session = (SecureCookieSession)Global.session();
     Request request = Global.request();
     // test post database
     Criteria criteria = _db.getSession().createCriteria(Post.class);
@@ -224,7 +242,7 @@ class UpdateView extends View {
     context.put("post", post);
 
     // TODO session.user
-    context.put("user", BlogGlobal.getLoginUser());
+    context.put("user", session);
     return _templateEngine.renderTemplate("blog/update.html", context);
   }
 
@@ -272,7 +290,9 @@ class LogOutView extends View {
   public String dispatchRequest(Map<String, Object> args) {
 
     // TODO session.user
-    BlogGlobal.setLoginUser(null);
+    SecureCookieSession session = (SecureCookieSession)Global.session();
+    session.pop("username");
+    session.pop("id");
     try {
       Response response = new Response("", Global.request().environ, 302);
       response.sendRedirect("/");

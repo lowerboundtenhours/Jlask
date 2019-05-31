@@ -2,7 +2,7 @@
 
 {% block header %}
   <h1>{% block title %}Posts{% endblock %}</h1>
-  {% if user %}
+  {% if user.contains("username") %}
     <a class="action" href="/create">New</a>
   {% endif %}
 {% endblock %}
@@ -15,8 +15,8 @@
           <h1>{{ post.getTitle() }}</h1>
           <div class="about">by {{ post.getUsername() }} on {{ post.getCreated() }}</div>
         </div>
-        {% if user %}
-            {%if post.getAuthorId() == user.getId() %}
+        {% if user.contains("username") %}
+            {%if post.getAuthorId() == user.get("id") %}
             <a class="action" href="update/{{post.getId()}}">Edit</a>
             {% endif %}
         {% endif %}

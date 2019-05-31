@@ -18,6 +18,7 @@ public class BlogGlobal {
     return postId++;
   }
 
+
   private static User loginUser = null;
   private static int postId = 0;
 }
