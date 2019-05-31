@@ -1,0 +1,27 @@
+package tw.edu.ntu.lowerbound10hours.jlask;
+
+import java.util.HashMap;
+import java.util.Map;
+import tw.edu.ntu.lowerbound10hours.jlaskhibernate.User;
+
+public class BlogGlobal {
+
+  public static User getLoginUser() {
+    return loginUser;
+  }
+
+  public static void setLoginUser(User user) {
+    loginUser = user;
+  }
+
+  public static int getPostId() {
+    return postId++;
+  }
+
+<<<<<<< HEAD
+
+=======
+>>>>>>> a2572e9c4544849bd4a63c08acfe7142aab65b1b
+  private static User loginUser = null;
+  private static int postId = 0;
+}
