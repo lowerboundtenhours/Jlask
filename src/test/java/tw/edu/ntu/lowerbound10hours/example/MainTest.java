@@ -14,7 +14,7 @@ import tw.edu.ntu.lowerbound10hours.jlaskhibernate.Hibernate;
 
 public class MainTest {
   private static final String name = "localhost";
-  private static final int port = 8011;
+  private static final int port = 8015;
 
   @Test
   public void testBlog() throws Exception {
