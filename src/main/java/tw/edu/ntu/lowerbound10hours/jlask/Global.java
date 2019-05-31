@@ -1,6 +1,5 @@
 package tw.edu.ntu.lowerbound10hours.jlask;
 
-import tw.edu.ntu.lowerbound10hours.jlask.context.AppContextStack;
 import tw.edu.ntu.lowerbound10hours.jlask.context.RequestContextStack;
 import tw.edu.ntu.lowerbound10hours.jlask.session.Session;
 import tw.edu.ntu.lowerbound10hours.jlask.wrappers.Request;
@@ -15,10 +14,10 @@ public class Global {
   }
 
   public static Jlask app() {
-    return _app; 
+    return _app;
   }
 
-  public static void setApp(Jlask app){
+  public static void setApp(Jlask app) {
     _app = app;
   }
 

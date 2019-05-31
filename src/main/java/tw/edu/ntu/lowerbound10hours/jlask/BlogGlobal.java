@@ -1,7 +1,5 @@
 package tw.edu.ntu.lowerbound10hours.jlask;
 
-import java.util.HashMap;
-import java.util.Map;
 import tw.edu.ntu.lowerbound10hours.jlaskhibernate.User;
 
 public class BlogGlobal {
