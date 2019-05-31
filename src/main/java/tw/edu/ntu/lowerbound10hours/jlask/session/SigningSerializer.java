@@ -2,13 +2,24 @@ package tw.edu.ntu.lowerbound10hours.jlask.session;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -25,11 +36,22 @@ public class SigningSerializer {
   private Gson gson;
   private Type dictType;
 
-  private SigningSerializer() {
+  /** Construct a SigningSerializer. */
+  public SigningSerializer(String keyStoragePath) {
     try {
       secureRandom = new SecureRandom();
-      keyPairGenerator = KeyPairGenerator.getInstance("DSA");
-      keyPair = keyPairGenerator.generateKeyPair();
+      if (keyStoragePath == null) {
+        keyPairGenerator = KeyPairGenerator.getInstance("DSA");
+        keyPair = keyPairGenerator.generateKeyPair();
+      } else {
+        try {
+          keyPair = loadKeyPair(keyStoragePath, "DSA");
+        } catch (Exception e) {
+          keyPairGenerator = KeyPairGenerator.getInstance("DSA");
+          keyPair = keyPairGenerator.generateKeyPair();
+          saveKeyPair(keyStoragePath, keyPair);
+        }
+      }
       gson = new Gson();
       dictType = new TypeToken<HashMap<String, String>>() {}.getType();
 
@@ -49,9 +71,9 @@ public class SigningSerializer {
   private static SigningSerializer instance = null;
 
   /** Singleton of SigningSerializer. */
-  public static SigningSerializer getInstance() {
+  public static SigningSerializer getInstance(String keyStoragePath) {
     if (instance == null) {
-      instance = new SigningSerializer();
+      instance = new SigningSerializer(keyStoragePath);
     }
     return instance;
   }
@@ -134,5 +156,49 @@ public class SigningSerializer {
 
   private String stringFromBase64(String base64str) {
     return new String(this.bytesFromBase64(base64str));
+  }
+
+  private void saveKeyPair(String path, KeyPair keyPair) throws IOException {
+    PrivateKey privateKey = keyPair.getPrivate();
+    PublicKey publicKey = keyPair.getPublic();
+
+    // Store Public Key.
+    X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
+    FileOutputStream fos = new FileOutputStream(path + "/public.key");
+    fos.write(x509EncodedKeySpec.getEncoded());
+    fos.close();
+
+    // Store Private Key.
+    PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
+    fos = new FileOutputStream(path + "/private.key");
+    fos.write(pkcs8EncodedKeySpec.getEncoded());
+    fos.close();
+  }
+
+  private KeyPair loadKeyPair(String path, String algorithm)
+      throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+    // Read Public Key.
+    File filePublicKey = new File(path + "/public.key");
+    FileInputStream fis = new FileInputStream(path + "/public.key");
+    byte[] encodedPublicKey = new byte[(int) filePublicKey.length()];
+    fis.read(encodedPublicKey);
+    fis.close();
+
+    // Read Private Key.
+    File filePrivateKey = new File(path + "/private.key");
+    fis = new FileInputStream(path + "/private.key");
+    byte[] encodedPrivateKey = new byte[(int) filePrivateKey.length()];
+    fis.read(encodedPrivateKey);
+    fis.close();
+
+    // Generate KeyPair.
+    KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
+    X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(encodedPublicKey);
+    PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+
+    PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(encodedPrivateKey);
+    PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+
+    return new KeyPair(publicKey, privateKey);
   }
 }

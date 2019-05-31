@@ -75,6 +75,12 @@ public class SecureCookieSessionInterfaceTest {
   }
 
   @Test
+  public void testLoadKeyPair() {
+    SigningSerializer ss = new SigningSerializer("./src/main/resources/");
+    SigningSerializer ss2 = new SigningSerializer("./src/main/resources/");
+  }
+
+  @Test
   public void testSentCookie() {
     SecureCookieSession session = app.open_session(request);
     session.set("username2", "Bob");

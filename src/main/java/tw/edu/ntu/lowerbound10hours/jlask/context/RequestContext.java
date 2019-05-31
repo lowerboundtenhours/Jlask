@@ -48,6 +48,7 @@ public class RequestContext {
 
   /** Binds the request context to the current context. */
   public void push() {
+    this.session = this.app.open_session(this.request);
     RequestContextStack.push(this);
   }
 

@@ -13,12 +13,16 @@ public class SecureCookieSessionInterface extends SessionInterface {
 
   private SigningSerializer getSigningSerializer(Jlask app) {
     // TODO: use private key provided by app if exists
-    return SigningSerializer.getInstance();
+    String keyStoragePath = app.getConfig().get("SESSION_KEY_STORE_PATH");
+    keyStoragePath = (keyStoragePath == null) ? "./src/main/resources/" : keyStoragePath;
+    return SigningSerializer.getInstance(keyStoragePath);
   }
 
   private String getSessionCookieName(Jlask app) {
-    String sessionCookieName = (String) app.getConfig().get("SESSION_COOKIE_NAME");
-    sessionCookieName = (sessionCookieName == null) ? "session" : sessionCookieName;
+    String sessionCookieName = app.getConfig().get("SESSION_COOKIE_NAME");
+    // Add a random session cookie suffix (base64) to avoid cookie key collision
+    sessionCookieName =
+        (sessionCookieName == null) ? "Jlask-session-IUuArEBYeWgXdg" : sessionCookieName;
     return sessionCookieName;
   }
 
@@ -29,13 +33,16 @@ public class SecureCookieSessionInterface extends SessionInterface {
       return null;
     }
     // val is a encoded string
-    Cookie cookie = request.cookies.get(this.getSessionCookieName(app));
-    String val = cookie.getValue();
-
-    if (val == null) {
+    if (request.cookies == null) {
       // empty session
       return new SecureCookieSession(new HashMap<>());
     }
+    Cookie cookie = request.cookies.get(this.getSessionCookieName(app));
+    if (cookie == null) {
+      // empty session
+      return new SecureCookieSession(new HashMap<>());
+    }
+    String val = cookie.getValue();
 
     HashMap<String, String> data = serializer.loads(val);
     return new SecureCookieSession(data);
@@ -64,6 +71,7 @@ public class SecureCookieSessionInterface extends SessionInterface {
     int maxAge = this.getCookieMaxAge(app);
 
     String val = this.getSigningSerializer(app).dumps(session.getDict());
+    String key = this.getSessionCookieName(app);
     response.setCookie(this.getSessionCookieName(app), val, domain, path, maxAge);
   }
 }
