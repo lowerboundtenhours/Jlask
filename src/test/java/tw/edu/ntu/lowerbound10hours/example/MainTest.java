@@ -42,26 +42,22 @@ public class MainTest {
     // GET register
     if (!doGet(String.format("%s/register", baseUrl))) {
       System.err.println("Fail Get register");
-      return;
     }
     // POST register with username="t" password = "1"
     if (!doPost(
         String.format("%s/register", baseUrl),
         String.format("username=%s&password=%s", "t", "1"))) {
       System.err.println("Fail post register");
-      return;
     }
 
     // GET login
     if (!doGet(String.format("%s/login", baseUrl))) {
       System.err.println("Fail get login");
-      return;
     }
     // POST login with username="t" password = "1"
     if (!doPost(
         String.format("%s/login", baseUrl), String.format("username=%s&password=%s", "t", "1"))) {
       System.err.println("Fail post login");
-      return;
     }
 
     // GET create
@@ -72,7 +68,6 @@ public class MainTest {
     if (!doPost(
         String.format("%s/create", baseUrl), String.format("title=%s&body=%s", "Hello", "World"))) {
       System.err.println("Fail Post register");
-      return;
     }
 
     // GET blog index
@@ -89,7 +84,6 @@ public class MainTest {
         String.format("%s/update/%s", baseUrl, "1"),
         String.format("title=%s&body=%s", "Hello!", "World!"))) {
       System.err.println("Fail Post /update/1");
-      return;
     }
 
     // GET delete
