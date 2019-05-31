@@ -18,10 +18,6 @@ public class BlogGlobal {
     return postId++;
   }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> a2572e9c4544849bd4a63c08acfe7142aab65b1b
   private static User loginUser = null;
   private static int postId = 0;
 }
