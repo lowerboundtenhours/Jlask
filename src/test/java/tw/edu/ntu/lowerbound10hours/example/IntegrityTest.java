@@ -1,5 +1,7 @@
 package tw.edu.ntu.lowerbound10hours.example;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
@@ -9,15 +11,13 @@ import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
 import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 import tw.edu.ntu.lowerbound10hours.jlask.TemplateEngine;
 import tw.edu.ntu.lowerbound10hours.jlaskhibernate.Hibernate;
-import java.io.BufferedReader;
-import java.io.IOException;
 
-public class IntegrityTest{
+public class IntegrityTest {
   private static final String name = "localhost";
   private static final int port = 8011;
 
-  @Test 
-  public void testBlog() throws Exception{
+  @Test
+  public void testBlog() throws Exception {
     Jlask application = new Jlask();
     Hibernate db = new Hibernate();
     TemplateEngine templateEngine = new TemplateEngine();
@@ -40,13 +40,41 @@ public class IntegrityTest{
     String baseURL = String.format("http://%s:%d", name, port);
 
     // GET register
-    if(!doGet(String.format("%s/register", baseURL))) {
+    if (!doGet(String.format("%s/register", baseURL))) {
+      System.err.println("Fail Get register");
       return;
     }
-    // POST register with username="t" password = "1" 
-    if(!doPost(String.format("%s/register", baseURL), String.format("username=%s&password=%s", "t", "1"))){
+    // POST register with username="t" password = "1"
+    if (!doPost(
+        String.format("%s/register", baseURL),
+        String.format("username=%s&password=%s", "t", "1"))) {
+      System.err.println("Fail post register");
       return;
     }
+
+    // GET login
+    if (!doGet(String.format("%s/login", baseURL))) {
+      System.err.println("Fail get login");
+      return;
+    }
+    // POST login with username="t" password = "1"
+    if (!doPost(
+        String.format("%s/login", baseURL), String.format("username=%s&password=%s", "t", "1"))) {
+      System.err.println("Fail post login");
+      return;
+    }
+
+    // GET create
+    if (!doGet(String.format("%s/create", baseURL))) {
+      System.err.println("Fail get create");
+    }
+    // POST create
+    if (!doPost(
+        String.format("%s/create", baseURL), String.format("title=%s&body=%s", "Hello", "World"))) {
+      System.err.println("Fail Post register");
+      return;
+    }
+
     server.getServer().stop();
   }
 
@@ -55,8 +83,7 @@ public class IntegrityTest{
     java.io.BufferedWriter wr = null;
     try {
       URL url = new URL(sURL);
-      HttpURLConnection URLConn = (HttpURLConnection) url
-          .openConnection();
+      HttpURLConnection URLConn = (HttpURLConnection) url.openConnection();
       URLConn.setDoOutput(true);
       URLConn.setDoInput(true);
       ((HttpURLConnection) URLConn).setRequestMethod("POST");
@@ -64,19 +91,14 @@ public class IntegrityTest{
       URLConn.setAllowUserInteraction(true);
       HttpURLConnection.setFollowRedirects(true);
       URLConn.setInstanceFollowRedirects(true);
-      URLConn.setRequestProperty("User-agent", "Mozilla/5.0"); 
-      URLConn.setRequestProperty("Accept",
-              "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-      URLConn.setRequestProperty("Accept-Language",
-          "zh-tw,en-us;q=0.7,en;q=0.3");
-      URLConn.setRequestProperty("Accept-Charse",
-          "Big5,utf-8;q=0.7,*;q=0.7");
-      URLConn.setRequestProperty("Content-Type",
-          "application/x-www-form-urlencoded");
-      URLConn.setRequestProperty("Content-Length", String.valueOf(data
-          .getBytes().length));
-      java.io.DataOutputStream dos = new java.io.DataOutputStream(URLConn
-          .getOutputStream());
+      URLConn.setRequestProperty("User-agent", "Mozilla/5.0");
+      URLConn.setRequestProperty(
+          "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+      URLConn.setRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
+      URLConn.setRequestProperty("Accept-Charse", "Big5,utf-8;q=0.7,*;q=0.7");
+      URLConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+      URLConn.setRequestProperty("Content-Length", String.valueOf(data.getBytes().length));
+      java.io.DataOutputStream dos = new java.io.DataOutputStream(URLConn.getOutputStream());
       dos.writeBytes(data);
     } catch (java.io.IOException e) {
       doSuccess = false;
@@ -93,6 +115,7 @@ public class IntegrityTest{
     }
     return doSuccess;
   }
+
   public boolean doGet(String sURL) {
     boolean doSuccess = false;
     BufferedReader in = null;
@@ -100,7 +123,8 @@ public class IntegrityTest{
       URL url = new URL(sURL);
       HttpURLConnection URLConn = (HttpURLConnection) url.openConnection();
       URLConn.setRequestProperty("User-agent", "Mozilla/5.0");
-      URLConn.setRequestProperty("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+      URLConn.setRequestProperty(
+          "Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
       URLConn.setRequestProperty("Accept-Language", "zh-tw,en-us;q=0.7,en;q=0.3");
       URLConn.setRequestProperty("Accept-Charse", "Big5,utf-8;q=0.7,*;q=0.7");
       URLConn.setDoInput(true);
@@ -123,5 +147,4 @@ public class IntegrityTest{
     }
     return doSuccess;
   }
-
 }
