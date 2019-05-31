@@ -18,7 +18,7 @@ public class BlogView extends View {
     this.db = db;
   }
 
-  /** override dispatchRequest.  */
+  /** override dispatchRequest. */
   public String dispatchRequest(Map<String, Object> args) {
     ArrayList<Object> postList = new ArrayList<>();
 

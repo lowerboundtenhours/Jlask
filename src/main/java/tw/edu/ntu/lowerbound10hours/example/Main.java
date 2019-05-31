@@ -1,13 +1,6 @@
 package tw.edu.ntu.lowerbound10hours.example;
 
 import java.net.InetAddress;
-import tw.edu.ntu.lowerbound10hours.example.BlogView;
-import tw.edu.ntu.lowerbound10hours.example.CreateView;
-import tw.edu.ntu.lowerbound10hours.example.DeleteView;
-import tw.edu.ntu.lowerbound10hours.example.LogOutView;
-import tw.edu.ntu.lowerbound10hours.example.LoginView;
-import tw.edu.ntu.lowerbound10hours.example.RegisterView;
-import tw.edu.ntu.lowerbound10hours.example.UpdateView;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
 import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 import tw.edu.ntu.lowerbound10hours.jlask.TemplateEngine;
@@ -34,10 +27,3 @@ class Main {
     Serving.runSimple(host, 8013, application);
   }
 }
-
-
-
-
-
-
-

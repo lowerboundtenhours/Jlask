@@ -1,4 +1,3 @@
-
 package tw.edu.ntu.lowerbound10hours.example;
 
 import java.util.HashMap;
