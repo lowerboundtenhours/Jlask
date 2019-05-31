@@ -22,13 +22,13 @@ public class CreateViewTest {
 
     // initilize database
     db.initApp(application);
-    application.addUrlRule("/", "index", new CreateView(templateEngine, db));
+    application.addUrlRule("/<int:id>", "index", new CreateView(templateEngine, db));
 
     InetAddress host = InetAddress.getByName(name);
     BaseWsgiServer server = Serving.makeServer(host, port, application);
     server.getServer().start();
     HttpURLConnection http =
-        (HttpURLConnection) new URL(String.format("http://%s:%d/", name, port)).openConnection();
+        (HttpURLConnection) new URL(String.format("http://%s:%d/1", name, port)).openConnection();
     http.setRequestMethod("GET");
     http.setUseCaches(false);
     http.setAllowUserInteraction(false);
@@ -51,16 +51,17 @@ public class CreateViewTest {
 
     // initilize database
     db.initApp(application);
-    application.addUrlRule("/", "index", new CreateView(templateEngine, db));
+    application.addUrlRule("/<int:id>", "index", new CreateView(templateEngine, db));
 
     InetAddress host = InetAddress.getByName(name);
     BaseWsgiServer server = Serving.makeServer(host, port, application);
     server.getServer().start();
     HttpURLConnection http =
-        (HttpURLConnection) new URL(String.format("http://%s:%d/", name, port)).openConnection();
+        (HttpURLConnection) new URL(String.format("http://%s:%d/1", name, port)).openConnection();
     http.setRequestMethod("POST");
+    http.setDoOutput(true);
+    http.setDoInput(true);
     http.setUseCaches(false);
-    http.setAllowUserInteraction(false);
     http.setRequestProperty("User-Agent", "Mozilla/5.0");
     http.connect();
     // TODO: pass this check
