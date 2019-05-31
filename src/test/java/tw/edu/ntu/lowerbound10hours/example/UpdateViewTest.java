@@ -6,8 +6,10 @@ import java.net.URL;
 import org.testng.annotations.Test;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.BaseWsgiServer;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
+import tw.edu.ntu.lowerbound10hours.jlask.Global;
 import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 import tw.edu.ntu.lowerbound10hours.jlask.TemplateEngine;
+import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSession;
 import tw.edu.ntu.lowerbound10hours.jlaskhibernate.Hibernate;
 
 public class UpdateViewTest {
@@ -22,13 +24,16 @@ public class UpdateViewTest {
 
     // initilize database
     db.initApp(application);
-    application.addUrlRule("/", "index", new UpdateView(templateEngine, db));
+    application.addUrlRule("/<int:id>", "index", new UpdateView(templateEngine, db));
 
     InetAddress host = InetAddress.getByName(name);
     BaseWsgiServer server = Serving.makeServer(host, port, application);
     server.getServer().start();
+    SecureCookieSession session = (SecureCookieSession) Global.session();
+    session.set("username", "t");
+    session.set("id", "1");
     HttpURLConnection http =
-        (HttpURLConnection) new URL(String.format("http://%s:%d/", name, port)).openConnection();
+        (HttpURLConnection) new URL(String.format("http://%s:%d/1", name, port)).openConnection();
     http.setRequestMethod("GET");
     http.setUseCaches(false);
     http.setAllowUserInteraction(false);
@@ -51,13 +56,16 @@ public class UpdateViewTest {
 
     // initilize database
     db.initApp(application);
-    application.addUrlRule("/", "index", new UpdateView(templateEngine, db));
+    application.addUrlRule("/<int:id>", "index", new UpdateView(templateEngine, db));
 
     InetAddress host = InetAddress.getByName(name);
     BaseWsgiServer server = Serving.makeServer(host, port, application);
     server.getServer().start();
+    SecureCookieSession session = (SecureCookieSession) Global.session();
+    session.set("username", "t");
+    session.set("id", "1");
     HttpURLConnection http =
-        (HttpURLConnection) new URL(String.format("http://%s:%d/", name, port)).openConnection();
+        (HttpURLConnection) new URL(String.format("http://%s:%d/1", name, port)).openConnection();
     http.setRequestMethod("POST");
     http.setUseCaches(false);
     http.setAllowUserInteraction(false);

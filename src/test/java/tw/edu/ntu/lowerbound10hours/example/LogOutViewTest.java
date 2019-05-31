@@ -6,8 +6,10 @@ import java.net.URL;
 import org.testng.annotations.Test;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.BaseWsgiServer;
 import tw.edu.ntu.lowerbound10hours.jerkzeug.serving.Serving;
+import tw.edu.ntu.lowerbound10hours.jlask.Global;
 import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 import tw.edu.ntu.lowerbound10hours.jlask.TemplateEngine;
+import tw.edu.ntu.lowerbound10hours.jlask.session.SecureCookieSession;
 import tw.edu.ntu.lowerbound10hours.jlaskhibernate.Hibernate;
 
 public class LogOutViewTest {
@@ -21,6 +23,9 @@ public class LogOutViewTest {
 
     // initilize database
     application.addUrlRule("/", "index", new LogOutView(templateEngine));
+    SecureCookieSession session = (SecureCookieSession) Global.session();
+    session.set("username", "t");
+    session.set("id", "1");
 
     InetAddress host = InetAddress.getByName(name);
     BaseWsgiServer server = Serving.makeServer(host, port, application);
