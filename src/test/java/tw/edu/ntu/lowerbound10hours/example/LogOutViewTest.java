@@ -10,19 +10,17 @@ import tw.edu.ntu.lowerbound10hours.jlask.Jlask;
 import tw.edu.ntu.lowerbound10hours.jlask.TemplateEngine;
 import tw.edu.ntu.lowerbound10hours.jlaskhibernate.Hibernate;
 
-public class BlogViewTest {
+public class LogOutViewTest {
   private static final String name = "localhost";
   private static final int port = 8001;
 
   @Test
   public void testGetDispatchRequest() throws Exception {
     Jlask application = new Jlask();
-    Hibernate db = new Hibernate();
     TemplateEngine templateEngine = new TemplateEngine();
 
     // initilize database
-    db.initApp(application);
-    application.addUrlRule("/", "index", new BlogView(templateEngine, db));
+    application.addUrlRule("/", "index", new LogOutView(templateEngine));
 
     InetAddress host = InetAddress.getByName(name);
     BaseWsgiServer server = Serving.makeServer(host, port, application);
@@ -38,7 +36,6 @@ public class BlogViewTest {
     // assertEquals(http.getResponseMessage(), "This is a test response from TestApplication");
     // assertEquals(http.getResponseCode(), 200);
     http.connect();
-    int status = http.getResponseCode();
 
     server.getServer().stop();
   }
@@ -51,7 +48,7 @@ public class BlogViewTest {
 
     // initilize database
     db.initApp(application);
-    application.addUrlRule("/", "index", new BlogView(templateEngine, db));
+    application.addUrlRule("/", "index", new LogOutView(templateEngine));
 
     InetAddress host = InetAddress.getByName(name);
     BaseWsgiServer server = Serving.makeServer(host, port, application);
@@ -67,7 +64,6 @@ public class BlogViewTest {
     // assertEquals(http.getResponseMessage(), "This is a test response from TestApplication");
     // assertEquals(http.getResponseCode(), 200);
     http.connect();
-    int status = http.getResponseCode();
 
     server.getServer().stop();
   }
