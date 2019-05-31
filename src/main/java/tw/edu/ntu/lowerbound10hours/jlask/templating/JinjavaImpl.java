@@ -1,25 +1,22 @@
-package tw.edu.ntu.lowerbound10hours.jlask;
+package tw.edu.ntu.lowerbound10hours.jlask.templating;
 
 import com.google.common.base.Charsets;
 import com.hubspot.jinjava.Jinjava;
-import com.hubspot.jinjava.interpret.JinjavaInterpreter;
 import com.hubspot.jinjava.loader.FileLocator;
 import com.hubspot.jinjava.loader.ResourceLocator;
 import java.io.IOException;
 import java.util.Map;
 
-/** Implements Flask's templating.py functionality. */
-public class TemplateEngine {
+/** Implements TemplateEngineImpl with Jinjava. */
+public class JinjavaImpl implements TemplateEngineImpl {
   private Jinjava jinjava;
   private ResourceLocator loader;
-  private JinjavaInterpreter interpreter;
 
   /** Basic constructor. */
-  public TemplateEngine() {
+  public JinjavaImpl() {
     this.jinjava = new Jinjava();
     this.jinjava.setResourceLocator(new FileLocator());
     this.loader = this.jinjava.getResourceLocator();
-    this.interpreter = this.jinjava.newInterpreter();
   }
 
   /**
@@ -32,7 +29,7 @@ public class TemplateEngine {
   public String renderTemplate(String templateName, Map<String, Object> context) {
     String template = "";
     try {
-      template = this.loader.getString(templateName, Charsets.UTF_8, this.interpreter);
+      template = this.loader.getString(templateName, Charsets.UTF_8, null);
     } catch (IOException e) {
       e.printStackTrace();
     }
