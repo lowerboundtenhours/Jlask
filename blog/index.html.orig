@@ -2,11 +2,7 @@
 
 {% block header %}
   <h1>{% block title %}Posts{% endblock %}</h1>
-<<<<<<< HEAD
   {% if user.contains("username") %}
-=======
-  {% if user %}
->>>>>>> a2572e9c4544849bd4a63c08acfe7142aab65b1b
     <a class="action" href="/create">New</a>
   {% endif %}
 {% endblock %}
@@ -19,13 +15,8 @@
           <h1>{{ post.getTitle() }}</h1>
           <div class="about">by {{ post.getUsername() }} on {{ post.getCreated() }}</div>
         </div>
-<<<<<<< HEAD
         {% if user.contains("username") %}
             {%if post.getAuthorId() == user.get("id") %}
-=======
-        {% if user %}
-            {%if post.getAuthorId() == user.getId() %}
->>>>>>> a2572e9c4544849bd4a63c08acfe7142aab65b1b
             <a class="action" href="update/{{post.getId()}}">Edit</a>
             {% endif %}
         {% endif %}

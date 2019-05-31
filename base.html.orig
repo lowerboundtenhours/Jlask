@@ -4,13 +4,8 @@
 <nav>
   <h1><a href="/">Jlaskr</a></h1>
   <ul>
-<<<<<<< HEAD
     {% if user.contains("username") %}
       <li><span>{{ user.get("username") }}</span>
-=======
-    {% if user %}
-      <li><span>{{ user.getUsername() }}</span>
->>>>>>> a2572e9c4544849bd4a63c08acfe7142aab65b1b
       <li><a href="/logout" >Log Out</a>
     {% else %}
       <li><a href="/register">Register</a>
@@ -22,11 +17,8 @@
   <header>
     {% block header %}{% endblock %}
   </header>
-<<<<<<< HEAD
   {% if errMsg and !errMsg.equals("") %}
     <div class="flash">{{ errMsg }}</div>
   {% endif %}
-=======
->>>>>>> a2572e9c4544849bd4a63c08acfe7142aab65b1b
   {% block content %}{% endblock %}
 </section>
