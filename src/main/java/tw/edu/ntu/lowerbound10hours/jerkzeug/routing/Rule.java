@@ -186,9 +186,12 @@ public class Rule implements RuleFactory {
       }
       if (converterStr.equals("int")) {
         return new RegexIntegerConverter();
+      } else if (converterStr.equals("string")) {
+        return new RegexStringConverter();
+      } else if (converterStr.equals("float")) {
+        return new RegexFloatConverter();
       } else {
-        // TODO: throw a converter not found exception
-        return new RegexIntegerConverter();
+        return new RegexStringConverter();
       }
     }
   }
@@ -204,7 +207,7 @@ public class Rule implements RuleFactory {
 
     @Override
     public String getRegex() {
-      return "-?\\d+";
+      return this.regex;
     }
 
     @Override
@@ -212,5 +215,32 @@ public class Rule implements RuleFactory {
       return Integer.parseInt(variableStr);
     }
   }
-  // TODO: implement more converters, e.g. float, path, uuid...
+
+  class RegexStringConverter implements RegexConverter {
+    private String regex = "[^\\/]{1,}";
+
+    @Override
+    public String getRegex() {
+      return this.regex;
+    }
+
+    @Override
+    public Object parse(String variableStr) {
+      return variableStr;
+    }
+  }
+
+  class RegexFloatConverter implements RegexConverter {
+    private String regex = "-?\\d+\\.\\d+";
+
+    @Override
+    public String getRegex() {
+      return this.regex;
+    }
+
+    @Override
+    public Object parse(String variableStr) {
+      return Float.parseFloat(variableStr);
+    }
+  }
 }
