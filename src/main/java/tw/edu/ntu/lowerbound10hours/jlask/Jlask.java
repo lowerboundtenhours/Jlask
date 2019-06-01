@@ -50,6 +50,7 @@ public class Jlask extends Application {
     this.config = new Config();
     this.viewFunctions = new HashMap<String, View>();
     this.ruleMap = new RuleMap();
+    Global.setApp(this);
   }
 
   /** Run api for client. */

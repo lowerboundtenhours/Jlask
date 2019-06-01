@@ -13,5 +13,7 @@
         <property name="hibernate.connection.autocommit">false</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
+        <mapping class="tw.edu.ntu.lowerbound10hours.jlaskhibernate.User" />
+        <mapping class="tw.edu.ntu.lowerbound10hours.jlaskhibernate.Post" />
     </session-factory>
 </hibernate-configuration>
