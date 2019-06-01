@@ -43,6 +43,7 @@ dependencies {
     compile group: 'com.github.gwenn', name: 'sqlite-dialect', version: '0.1.0'
     testCompile "org.mockito:mockito-core:2.+"
     implementation 'com.google.code.gson:gson:2.8.5'
+    compile 'com.heroku.sdk:heroku-deploy:2.0.6'
 }
 
 repositories {
